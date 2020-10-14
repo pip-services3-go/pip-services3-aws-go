@@ -152,16 +152,7 @@ func (c *CloudWatchCounters) Open(correlationId string) error {
 		connection, err := c.connectionResolver.Resolve(correlationId)
 		c.connection = connection
 		errGlobal = err
-	}()
-	wg.Wait()
-	if errGlobal != nil {
-		c.opened = false
-		return errGlobal
-	}
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
 		awsCred := credentials.NewStaticCredentials(c.connection.GetAccessId(), c.connection.GetAccessKey(), "")
 		sess := session.Must(session.NewSession(&aws.Config{
 			MaxRetries:  aws.Int(3),
@@ -234,7 +225,7 @@ func (c *CloudWatchCounters) getCounterData(counter *ccount.Counter, now time.Ti
 		value.Value = aws.Float64((float64)(counter.Last))
 		break
 	case ccount.Timestamp:
-		value.Value = aws.Float64((float64)(counter.Time.UnixNano()) / (float64)(time.Millisecond.Milliseconds())) // Convert to milliseconds UnixTimeStamp
+		value.Value = aws.Float64((float64)(counter.Time.UnixNano()) / (float64)(time.Millisecond)) // Convert to milliseconds UnixTimeStamp
 		break
 	}
 

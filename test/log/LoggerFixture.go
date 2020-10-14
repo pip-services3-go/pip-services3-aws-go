@@ -1,49 +1,51 @@
 package test
 
-// let assert = require('chai').assert;
+import (
+	"errors"
+	"testing"
+	"time"
 
-// import { LogLevel } from 'pip-services3-components-node';
-// import { CachedLogger } from 'pip-services3-components-node';
+	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	"github.com/stretchr/testify/assert"
+)
 
-// export class LoggerFixture {
-//     private _logger: CachedLogger;
+type LoggerFixture struct {
+	logger *clog.CachedLogger
+}
 
-//     public constructor(logger: CachedLogger) {
-//         this._logger = logger;
-//     }
+func NewLoggerFixture(logger *clog.CachedLogger) *LoggerFixture {
+	return &LoggerFixture{
+		logger: logger,
+	}
 
-//     public testLogLevel() {
-//         assert.isTrue(this._logger.getLevel() >= LogLevel.None);
-//         assert.isTrue(this._logger.getLevel() <= LogLevel.Trace);
-//     }
+}
 
-//     public testSimpleLogging(done) {
-//         this._logger.setLevel(LogLevel.Trace);
+func (c *LoggerFixture) TestLogLevel(t *testing.T) {
+	assert.True(t, c.logger.Level() >= clog.None)
+	assert.True(t, c.logger.Level() <= clog.Trace)
+}
 
-//         this._logger.fatal(null, null, "Fatal error message");
-//         this._logger.error(null, null, "Error message");
-//         this._logger.warn(null, "Warning message");
-//         this._logger.info(null, "Information message");
-//         this._logger.debug(null, "Debug message");
-//         this._logger.trace(null, "Trace message");
+func (c *LoggerFixture) TestSimpleLogging(t *testing.T) {
+	c.logger.SetLevel(clog.Trace)
 
-//         this._logger.dump();
-//         setTimeout(done, 1000);
-//     }
+	c.logger.Fatal("", nil, "Fatal error message")
+	c.logger.Error("", nil, "Error message")
+	c.logger.Warn("", "Warning message")
+	c.logger.Info("", "Information message")
+	c.logger.Debug("", "Debug message")
+	c.logger.Trace("", "Trace message")
 
-//     public testErrorLogging(done) {
-//         try {
-//             // Raise an exception
-//             throw new Error();
-//         } catch (ex) {
-//             this._logger.fatal("123", ex, "Fatal error");
-//             this._logger.error("123", ex, "Recoverable error");
+	c.logger.Dump()
+	time.Sleep(1000 * time.Millisecond)
+}
 
-//             assert.isNotNull(ex);
-//         }
+func (c *LoggerFixture) TestErrorLogging(t *testing.T) {
+	var ex error = errors.New("Testing error throw")
+	c.logger.Fatal("123", ex, "Fatal error")
+	c.logger.Error("123", ex, "Recoverable error")
 
-//         this._logger.dump();
-//         setTimeout(done, 1000);
-//     }
+	assert.NotNil(t, ex)
 
-// }
+	c.logger.Dump()
+	time.Sleep(1000 * time.Millisecond)
+}

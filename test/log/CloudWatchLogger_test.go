@@ -1,65 +1,52 @@
 package test
 
-// import { ConfigParams } from 'pip-services3-commons-node';
-// import { References } from 'pip-services3-commons-node';
-// import { ContextInfo } from 'pip-services3-components-node';
-// import { Descriptor } from 'pip-services3-commons-node';
+import (
+	"os"
+	"testing"
 
-// import { CloudWatchLogger } from '../../src/log/CloudWatchLogger';
-// import { LoggerFixture } from './LoggerFixture';
+	awslog "github.com/pip-services3-go/pip-services3-aws-go/log"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	cinfo "github.com/pip-services3-go/pip-services3-components-go/info"
+)
 
-// suite('CloudWatchLogger', ()=> {
-//     let _logger: CloudWatchLogger;
-//     let _fixture: LoggerFixture;
+func TestCloudWatchLogger(t *testing.T) {
 
-//     let AWS_REGION = process.env["AWS_REGION"] || "";
-//     let AWS_ACCESS_ID = process.env["AWS_ACCESS_ID"] || "";
-//     let AWS_ACCESS_KEY = process.env["AWS_ACCESS_KEY"] || "";
+	var loggers *awslog.CloudWatchLogger
+	var fixture *LoggerFixture
 
-//     if (!AWS_REGION || !AWS_ACCESS_ID || !AWS_ACCESS_KEY)
-//         return;
+	AWS_REGION := os.Getenv("AWS_REGION")
+	AWS_ACCESS_ID := os.Getenv("AWS_ACCESS_ID")
+	AWS_ACCESS_KEY := os.Getenv("AWS_ACCESS_KEY")
 
-//     setup((done) => {
+	if AWS_REGION == "" || AWS_ACCESS_ID == "" || AWS_ACCESS_KEY == "" {
+		panic("AWS keys not sets!")
+	}
 
-//         _logger = new CloudWatchLogger();
-//         _fixture = new LoggerFixture(_logger);
+	loggers = awslog.NewCloudWatchLogger()
+	fixture = NewLoggerFixture(loggers.CachedLogger)
 
-//         let config = ConfigParams.fromTuples(
-//             "group", "TestGroup",
-//             "connection.region", AWS_REGION,
-//             "credential.access_id", AWS_ACCESS_ID,
-//             "credential.access_key", AWS_ACCESS_KEY
-//         );
-//         _logger.configure(config);
+	config := cconf.NewConfigParamsFromTuples(
+		"group", "TestGroup",
+		"connection.region", AWS_REGION,
+		"credential.access_id", AWS_ACCESS_ID,
+		"credential.access_key", AWS_ACCESS_KEY,
+	)
+	loggers.Configure(config)
 
-//         var contextInfo = new ContextInfo();
-//         contextInfo.name = "TestStream";
+	contextInfo := cinfo.NewContextInfo()
+	contextInfo.Name = "TestStream"
+	contextInfo.Description = "This is a test container"
 
-//         var references = References.fromTuples(
-//             new Descriptor("pip-services", "context-info", "default", "default", "1.0"), contextInfo,
-//             new Descriptor("pip-services", "counters", "cloudwatch", "default", "1.0"), _logger
-//         );
-//         _logger.setReferences(references);
+	var references = cref.NewReferencesFromTuples(
+		cref.NewDescriptor("pip-services", "context-info", "default", "default", "1.0"), contextInfo,
+		cref.NewDescriptor("pip-services", "loggers", "cloudwatch", "default", "1.0"), loggers,
+	)
+	loggers.SetReferences(references)
+	loggers.Open("")
+	defer loggers.Close("")
 
-//         _logger.open(null, (err) => {
-//              done(err);
-//         });
-//     });
-
-//     teardown((done) => {
-//         _logger.close(null, done);
-//     });
-
-//     test('Log Level', () => {
-//         _fixture.testLogLevel();
-//     });
-
-//     test('Simple Logging', (done) => {
-//         _fixture.testSimpleLogging(done);
-//     });
-
-//     test('Error Logging', (done) => {
-//         _fixture.testErrorLogging(done);
-//     });
-
-// });
+	t.Run("Log Level", fixture.TestLogLevel)
+	t.Run("Simple Logging", fixture.TestSimpleLogging)
+	t.Run("Error Logging", fixture.TestErrorLogging)
+}
