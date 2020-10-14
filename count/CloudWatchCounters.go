@@ -116,7 +116,7 @@ func (c *CloudWatchCounters) SetReferences(references cref.IReferences) {
 	contextInfo, ok := ref.(*cinfo.ContextInfo)
 
 	if ok && c.source == "" {
-		c.source = contextInfo.Properties["name"]
+		c.source = contextInfo.Name
 	}
 
 	if ok && c.instance == "" {
@@ -198,9 +198,13 @@ func (c *CloudWatchCounters) getCounterData(counter *ccount.Counter, now time.Ti
 	value := &cloudwatch.MetricDatum{
 		MetricName: aws.String(counter.Name),
 		Unit:       aws.String(None),
-		Timestamp:  aws.Time(counter.Time),
 		Dimensions: dimensions,
 	}
+	tm := counter.Time
+	if tm.IsZero() {
+		tm = time.Now()
+	}
+	value.SetTimestamp(tm)
 
 	switch counter.Type {
 	case ccount.Increment:

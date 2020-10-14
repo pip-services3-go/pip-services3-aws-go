@@ -93,7 +93,7 @@ func (c *AwsConnectionResolver) SetReferences(references cref.IReferences) {
    See [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/connect.idiscovery.html IDiscovery]] (in the Pip.Services components package)
 */
 func (c *AwsConnectionResolver) Resolve(correlationId string) (connection *AwsConnectionParams, err error) {
-	result := NewEmptyAwsConnectionParams()
+	connection = NewEmptyAwsConnectionParams()
 	//var credential *cauth.CredentialParams
 	var globalErr error
 
@@ -131,10 +131,10 @@ func (c *AwsConnectionResolver) Resolve(correlationId string) (connection *AwsCo
 	// Force ARN parsing
 	connection.SetArn(connection.GetArn())
 	// Perform validation
-	globalErr = connection.Validate(correlationId)
+	validErr := connection.Validate(correlationId)
 
-	if globalErr != nil {
-		return nil, globalErr
+	if validErr != nil {
+		return nil, validErr
 	}
-	return result, nil
+	return connection, nil
 }

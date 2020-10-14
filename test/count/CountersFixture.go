@@ -26,7 +26,7 @@ func (c *CountersFixture) TestSimpleCounters(t *testing.T) {
 	var counter = c.counters.Get("Test.LastValue", ccount.LastValue)
 	assert.NotNil(t, counter)
 	assert.NotNil(t, counter.Last)
-	assert.Equal(t, counter.Last, 123456, 3)
+	assert.Equal(t, counter.Last, (float32)(123456))
 
 	c.counters.IncrementOne("Test.Increment")
 	c.counters.Increment("Test.Increment", 3)
@@ -48,7 +48,7 @@ func (c *CountersFixture) TestSimpleCounters(t *testing.T) {
 
 	counter = c.counters.Get("Test.Statistics", ccount.Statistics)
 	assert.NotNil(t, counter)
-	assert.Equal(t, counter.Average, 2, 3)
+	assert.Equal(t, counter.Average, (float32)(2))
 
 	c.counters.Dump()
 
