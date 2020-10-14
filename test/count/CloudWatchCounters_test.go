@@ -1,62 +1,51 @@
 package test
 
-// import { ConfigParams } from 'pip-services3-commons-node';
-// import { References } from 'pip-services3-commons-node';
-// import { ContextInfo } from 'pip-services3-components-node';
-// import { Descriptor } from 'pip-services3-commons-node';
+import (
+	"os"
+	"testing"
 
-// import { CloudWatchCounters } from '../../src/count/CloudWatchCounters';
-// import { CountersFixture } from './CountersFixture';
+	awscount "github.com/pip-services3-go/pip-services3-aws-go/count"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	cinfo "github.com/pip-services3-go/pip-services3-components-go/info"
+)
 
-// suite('CloudWatchCounters', ()=> {
-//     let _counters: CloudWatchCounters;
-//     let _fixture: CountersFixture;
+func TestCloudWatchCounters(t *testing.T) {
 
-//     let AWS_REGION = process.env["AWS_REGION"] || "";
-//     let AWS_ACCESS_ID = process.env["AWS_ACCESS_ID"] || "";
-//     let AWS_ACCESS_KEY = process.env["AWS_ACCESS_KEY"] || "";
+	var counters *awscount.CloudWatchCounters
+	var fixture *CountersFixture
 
-//     if (!AWS_REGION || !AWS_ACCESS_ID || !AWS_ACCESS_KEY)
-//         return;
+	AWS_REGION := os.Getenv("AWS_REGION")
+	AWS_ACCESS_ID := os.Getenv("AWS_ACCESS_ID")
+	AWS_ACCESS_KEY := os.Getenv("AWS_ACCESS_KEY")
 
-//     setup((done) => {
+	if AWS_REGION == "" || AWS_ACCESS_ID == "" || AWS_ACCESS_KEY == "" {
+		panic("AWS keys not sets!")
+	}
 
-//         _counters = new CloudWatchCounters();
-//         _fixture = new CountersFixture(_counters);
+	counters = awscount.NewCloudWatchCounters()
+	fixture = NewCountersFixture(counters.CachedCounters)
 
-//         let config = ConfigParams.fromTuples(
-//             "interval", "5000",
-//             "connection.region", AWS_REGION,
-//             "credential.access_id", AWS_ACCESS_ID,
-//             "credential.access_key", AWS_ACCESS_KEY
-//         );
-//         _counters.configure(config);
+	config := cconf.NewConfigParamsFromTuples(
+		"interval", "5000",
+		"connection.region", AWS_REGION,
+		"credential.access_id", AWS_ACCESS_ID,
+		"credential.access_key", AWS_ACCESS_KEY,
+	)
+	counters.Configure(config)
 
-//         var contextInfo = new ContextInfo();
-//         contextInfo.name = "Test";
-//         contextInfo.description = "This is a test container";
+	contextInfo := cinfo.NewContextInfo()
+	contextInfo.Name = "Test"
+	contextInfo.Description = "This is a test container"
 
-//         var references = References.fromTuples(
-//             new Descriptor("pip-services", "context-info", "default", "default", "1.0"), contextInfo,
-//             new Descriptor("pip-services", "counters", "cloudwatch", "default", "1.0"), _counters
-//         );
-//         _counters.setReferences(references);
+	var references = cref.NewReferencesFromTuples(
+		cref.NewDescriptor("pip-services", "context-info", "default", "default", "1.0"), contextInfo,
+		cref.NewDescriptor("pip-services", "counters", "cloudwatch", "default", "1.0"), counters,
+	)
+	counters.SetReferences(references)
+	counters.Open("")
+	defer counters.Close("")
 
-//         _counters.open(null, (err) => {
-//              done(err);
-//         });
-//     });
-
-//     teardown((done) => {
-//         _counters.close(null, done);
-//     });
-
-//     test('Simple Counters', (done) => {
-//         _fixture.testSimpleCounters(done);
-//     });
-
-//     test('Measure Elapsed Time', (done) => {
-//         _fixture.testMeasureElapsedTime(done);
-//     });
-
-// });
+	t.Run("Simple Counters", fixture.TestSimpleCounters)
+	t.Run("Measure Elapsed Time", fixture.TestMeasureElapsedTime)
+}

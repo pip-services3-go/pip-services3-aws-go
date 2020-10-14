@@ -1,66 +1,73 @@
 package test
-// let assert = require('chai').assert;
 
-// import { CounterType } from 'pip-services3-components-node';
-// import { CachedCounters } from 'pip-services3-components-node';
+import (
+	"testing"
+	"time"
 
-// export class CountersFixture {
-//     private _counters: CachedCounters;
+	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
+	"github.com/stretchr/testify/assert"
+)
 
-//     public constructor(counters: CachedCounters) {
-//         this._counters = counters;
-//     }
+type CountersFixture struct {
+	counters *ccount.CachedCounters
+}
 
-//     public testSimpleCounters(done) {
-//         this._counters.last("Test.LastValue", 123);
-//         this._counters.last("Test.LastValue", 123456);
+func NewCountersFixture(counters *ccount.CachedCounters) *CountersFixture {
+	c := CountersFixture{
+		counters: counters,
+	}
+	return &c
+}
 
-//         var counter = this._counters.get("Test.LastValue", CounterType.LastValue);
-//         assert.isNotNull(counter);
-//         assert.isNotNull(counter.last);
-//         assert.equal(counter.last, 123456, 3);
+func (c *CountersFixture) TestSimpleCounters(t *testing.T) {
+	c.counters.Last("Test.LastValue", 123)
+	c.counters.Last("Test.LastValue", 123456)
 
-//         this._counters.incrementOne("Test.Increment");
-//         this._counters.increment("Test.Increment", 3);
+	var counter = c.counters.Get("Test.LastValue", ccount.LastValue)
+	assert.NotNil(t, counter)
+	assert.NotNil(t, counter.Last)
+	assert.Equal(t, counter.Last, 123456, 3)
 
-//         counter = this._counters.get("Test.Increment", CounterType.Increment);
-//         assert.isNotNull(counter);
-//         assert.equal(counter.count, 4);
+	c.counters.IncrementOne("Test.Increment")
+	c.counters.Increment("Test.Increment", 3)
 
-//         this._counters.timestampNow("Test.Timestamp");
-//         this._counters.timestampNow("Test.Timestamp");
+	counter = c.counters.Get("Test.Increment", ccount.Increment)
+	assert.NotNil(t, counter)
+	assert.Equal(t, counter.Count, 4)
 
-//         counter = this._counters.get("Test.Timestamp", CounterType.Timestamp);
-//         assert.isNotNull(counter);
-//         assert.isNotNull(counter.time);
+	c.counters.TimestampNow("Test.Timestamp")
+	c.counters.TimestampNow("Test.Timestamp")
 
-//         this._counters.stats("Test.Statistics", 1);
-//         this._counters.stats("Test.Statistics", 2);
-//         this._counters.stats("Test.Statistics", 3);
+	counter = c.counters.Get("Test.Timestamp", ccount.Timestamp)
+	assert.NotNil(t, counter)
+	assert.NotNil(t, counter.Time)
 
-//         counter = this._counters.get("Test.Statistics", CounterType.Statistics);
-//         assert.isNotNull(counter);
-//         assert.equal(counter.average, 2, 3);
+	c.counters.Stats("Test.Statistics", 1)
+	c.counters.Stats("Test.Statistics", 2)
+	c.counters.Stats("Test.Statistics", 3)
 
-//         this._counters.dump();
+	counter = c.counters.Get("Test.Statistics", ccount.Statistics)
+	assert.NotNil(t, counter)
+	assert.Equal(t, counter.Average, 2, 3)
 
-//         setTimeout(done, 1000);
-//     }
+	c.counters.Dump()
 
-//     public testMeasureElapsedTime(done) {
-//         let timer = this._counters.beginTiming("Test.Elapsed");
+	time.Sleep(1000 * time.Millisecond)
+}
 
-//         setTimeout(() => {
-//             timer.endTiming();
+func (c *CountersFixture) TestMeasureElapsedTime(t *testing.T) {
+	timer := c.counters.BeginTiming("Test.Elapsed")
 
-//             let counter = this._counters.get("Test.Elapsed", CounterType.Interval);
-//             assert.isTrue(counter.last > 50);
-//             assert.isTrue(counter.last < 5000);
+	time.Sleep(100 * time.Millisecond)
 
-//             this._counters.dump();
+	timer.EndTiming()
 
-//             setTimeout(done, 1000);
-//         }, 100);
-//     }
-    
-// }
+	counter := c.counters.Get("Test.Elapsed", ccount.Interval)
+	assert.True(t, counter.Last > 50)
+	assert.True(t, counter.Last < 5000)
+
+	c.counters.Dump()
+
+	time.Sleep(1000 * time.Millisecond)
+
+}
