@@ -34,43 +34,48 @@ func (c *DummyLambdaFunction) SetReferences(references cref.IReferences) {
 }
 
 func (c *DummyLambdaFunction) getPageByFilter(params map[string]interface{}) (interface{}, error) {
+	correlationId, _ := params["correlation_id"].(string)
 	return c.controller.GetPageByFilter(
-		params["correlation_id"].(string),
+		correlationId,
 		cdata.NewFilterParamsFromValue(params["filter"]),
 		cdata.NewPagingParamsFromValue(params["paging"]),
 	)
 }
 
 func (c *DummyLambdaFunction) getOneById(params map[string]interface{}) (interface{}, error) {
+	correlationId, _ := params["correlation_id"].(string)
 	return c.controller.GetOneById(
-		params["correlation_id"].(string),
+		correlationId,
 		params["dummy_id"].(string),
 	)
 }
 
 func (c *DummyLambdaFunction) create(params map[string]interface{}) (interface{}, error) {
+	correlationId, _ := params["correlation_id"].(string)
 	val, _ := json.Marshal(params["dummy"])
 	var entity awstest.Dummy
 	json.Unmarshal(val, &entity)
 	return c.controller.Create(
-		params["correlation_id"].(string),
+		correlationId,
 		entity,
 	)
 }
 
 func (c *DummyLambdaFunction) update(params map[string]interface{}) (interface{}, error) {
+	correlationId, _ := params["correlation_id"].(string)
 	val, _ := json.Marshal(params["dummy"])
 	var entity awstest.Dummy
 	json.Unmarshal(val, &entity)
 	return c.controller.Update(
-		params["correlation_id"].(string),
+		correlationId,
 		entity,
 	)
 }
 
 func (c *DummyLambdaFunction) deleteById(params map[string]interface{}) (interface{}, error) {
+	correlationId, _ := params["correlation_id"].(string)
 	return c.controller.DeleteById(
-		params["correlation_id"].(string),
+		correlationId,
 		params["dummy_id"].(string),
 	)
 }
@@ -108,4 +113,6 @@ func (c *DummyLambdaFunction) Register() {
 		c.deleteById)
 }
 
-// export const handler = new DummyLambdaFunction().getHandler();
+// func main() {
+// 	lambda.Start(NewDummyLambdaFunction().GetHandler())
+// }

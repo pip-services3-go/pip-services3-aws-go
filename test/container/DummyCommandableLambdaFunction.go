@@ -1,15 +1,24 @@
 package test_container
 
-// import { Descriptor } from 'pip-services3-commons-node';
-// import { CommandableLambdaFunction } from '../../src/container/CommandableLambdaFunction';
-// import { DummyFactory } from '../DummyFactory';
+import (
+	awscont "github.com/pip-services3-go/pip-services3-aws-go/container"
+	awstest "github.com/pip-services3-go/pip-services3-aws-go/test"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+)
 
-// export class DummyCommandableLambdaFunction extends CommandableLambdaFunction {
-//     public constructor() {
-//         super("dummy", "Dummy lambda function");
-//         this._dependencyResolver.put('controller', new Descriptor('pip-services-dummies', 'controller', 'default', '*', '*'));
-//         this._factories.add(new DummyFactory());
-//     }
+type DummyCommandableLambdaFunction struct {
+	*awscont.CommandableLambdaFunction
+}
+
+func NewDummyCommandableLambdaFunction() *DummyCommandableLambdaFunction {
+	c := &DummyCommandableLambdaFunction{}
+	c.CommandableLambdaFunction = awscont.NewCommandableLambdaFunction("dummy", "Dummy lambda function")
+
+	c.DependencyResolver.Put("controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
+	c.AddFactory(awstest.NewDummyFactory())
+	return c
+}
+
+// func main() {
+// 	lambda.Start(NewDummyLambdaFunction().GetHandler())
 // }
-
-// export const handler = new DummyCommandableLambdaFunction().getHandler();

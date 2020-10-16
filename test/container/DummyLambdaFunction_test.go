@@ -1,146 +1,125 @@
 package test_container
 
-// let assert = require('chai').assert;
-// let async = require('async');
+import (
+	"encoding/json"
+	"testing"
 
-// import { ConfigParams } from 'pip-services3-commons-node';
+	awstest "github.com/pip-services3-go/pip-services3-aws-go/test"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	"github.com/stretchr/testify/assert"
+)
 
-// import { Dummy } from '../Dummy';
-// import { DummyController } from '../DummyController';
-// import { DummyLambdaFunction } from './DummyLambdaFunction';
+func TestDummyLambdaFunction(t *testing.T) {
 
-// suite('DummyLambdaFunction', () => {
-//     let DUMMY1: Dummy = { id: null, key: "Key 1", content: "Content 1" };
-//     let DUMMY2: Dummy = { id: null, key: "Key 2", content: "Content 2" };
+	restConfig := cconf.NewConfigParamsFromTuples(
+		"logger.descriptor", "pip-services:logger:console:default:1.0",
+		"controller.descriptor", "pip-services-dummies:controller:default:default:1.0",
+	)
 
-//     let lambda: DummyLambdaFunction;
+	var _dummy1 awstest.Dummy
+	var _dummy2 awstest.Dummy
+	var lambda *DummyLambdaFunction
+	ctrl := awstest.NewDummyController()
 
-//     suiteSetup((done) => {
-//         let config = ConfigParams.fromTuples(
-//             'logger.descriptor', 'pip-services:logger:console:default:1.0',
-//             'controller.descriptor', 'pip-services-dummies:controller:default:default:1.0'
-//         );
+	lambda = NewDummyLambdaFunction()
+	lambda.Configure(restConfig)
 
-//         lambda = new DummyLambdaFunction();
-//         lambda.configure(config);
-//         lambda.open(null, done);
-//     });
+	var references *cref.References = cref.NewReferencesFromTuples(
+		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
+		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), lambda,
+	)
+	lambda.SetReferences(references)
+	opnErr := lambda.Open("")
+	assert.Nil(t, opnErr)
+	defer lambda.Close("")
 
-//     suiteTeardown((done) => {
-//         lambda.close(null, done);
-//     });
+	_dummy1 = awstest.Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
+	_dummy2 = awstest.Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
 
-//     test('CRUD Operations', (done) => {
-//         var dummy1, dummy2;
+	var dummy1 awstest.Dummy
 
-//         async.series([
-//             // Create one dummy
-//             (callback) => {
-//                 lambda.act(
-//                     {
-//                         cmd: 'create_dummy',
-//                         dummy: DUMMY1
-//                     },
-//                     (err, dummy) => {
-//                         assert.isNull(err);
+	params := make(map[string]interface{})
 
-//                         assert.isObject(dummy);
-//                         assert.equal(dummy.content, DUMMY1.content);
-//                         assert.equal(dummy.key, DUMMY1.key);
+	// Create one dummy
+	params["dummy"] = _dummy1
+	params["cmd"] = "create_dummy"
 
-//                         dummy1 = dummy;
+	resBody, bodyErr := lambda.Act(params)
+	assert.Nil(t, bodyErr)
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Create another dummy
-//             (callback) => {
-//                 lambda.act(
-//                     {
-//                         cmd: 'create_dummy',
-//                         dummy: DUMMY2
-//                     },
-//                     (err, dummy) => {
-//                         assert.isNull(err);
+	var dummy awstest.Dummy
+	jsonErr := json.Unmarshal([]byte(resBody), &dummy)
 
-//                         assert.isObject(dummy);
-//                         assert.equal(dummy.content, DUMMY2.content);
-//                         assert.equal(dummy.key, DUMMY2.key);
+	assert.Nil(t, jsonErr)
+	assert.NotNil(t, dummy)
+	assert.Equal(t, dummy.Content, _dummy1.Content)
+	assert.Equal(t, dummy.Key, _dummy1.Key)
 
-//                         dummy2 = dummy;
+	dummy1 = dummy
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Get all dummies
-//             (callback) => {
-//                 lambda.act(
-//                     {
-//                         cmd: 'get_dummies'
-//                     },
-//                     (err, dummies) => {
-//                         assert.isNull(err);
+	// Create another dummy
+	params["dummy"] = _dummy2
+	params["cmd"] = "create_dummy"
 
-//                         assert.isObject(dummies);
-//                         assert.lengthOf(dummies.data, 2);
+	resBody, bodyErr = lambda.Act(params)
+	assert.Nil(t, bodyErr)
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Update the dummy
-//             (callback) => {
-//                 dummy1.content = 'Updated Content 1'
-//                 lambda.act(
-//                     {
-//                         cmd: 'update_dummy',
-//                         dummy: dummy1
-//                     },
-//                     (err, dummy) => {
-//                         assert.isNull(err);
+	jsonErr = json.Unmarshal([]byte(resBody), &dummy)
 
-//                         assert.isObject(dummy);
-//                         assert.equal(dummy.id, dummy1.id);
-//                         assert.equal(dummy.content, dummy1.content);
-//                         assert.equal(dummy.key, dummy1.key);
+	assert.Nil(t, jsonErr)
+	assert.NotNil(t, dummy)
+	assert.Equal(t, dummy.Content, _dummy2.Content)
+	assert.Equal(t, dummy.Key, _dummy2.Key)
+	//dummy2 = dummy
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Delete dummy
-//             (callback) => {
-//                 lambda.act(
-//                     {
-//                         cmd: 'delete_dummy',
-//                         dummy_id: dummy1.id
-//                     },
-//                     (err) => {
-//                         assert.isNull(err);
+	// Get all dummies
+	delete(params, "dummy")
+	params["cmd"] = "get_dummies"
+	resBody, bodyErr = lambda.Act(params)
+	assert.Nil(t, bodyErr)
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Try to get delete dummy
-//             (callback) => {
-//                 lambda.act(
-//                     {
-//                         cmd: 'get_dummy_by_id',
-//                         dummy_id: dummy1.id
-//                     },
-//                     (err, dummy) => {
-//                         assert.isNull(err);
+	var dummies awstest.DummyDataPage
+	jsonErr = json.Unmarshal([]byte(resBody), &dummies)
+	assert.Nil(t, jsonErr)
+	assert.NotNil(t, dummies)
+	assert.Len(t, dummies.Data, 2)
 
-//                         assert.isNull(dummy || null);
+	// Update the dummy
 
-//                         callback();
-//                     }
-//                 );
-//             }
-//         ], done);
-//     });
+	dummy1.Content = "Updated Content 1"
 
-// });
+	params["dummy"] = dummy1
+	params["cmd"] = "update_dummy"
+
+	resBody, bodyErr = lambda.Act(params)
+	assert.Nil(t, bodyErr)
+	jsonErr = json.Unmarshal([]byte(resBody), &dummy)
+	assert.Nil(t, jsonErr)
+	assert.NotNil(t, dummy)
+
+	assert.Equal(t, dummy.Content, "Updated Content 1")
+	assert.Equal(t, dummy.Key, _dummy1.Key)
+	dummy1 = dummy
+
+	// Delete dummy
+	delete(params, "dummy")
+	params["dummy_id"] = dummy1.Id
+	params["cmd"] = "delete_dummy"
+	resBody, bodyErr = lambda.Act(params)
+	assert.Nil(t, bodyErr)
+
+	// Try to get delete dummy
+	dummies.Data = dummies.Data[:0]
+	*dummies.Total = 0
+
+	params["dummy_id"] = dummy1.Id
+	params["cmd"] = "get_dummy_by_id"
+
+	resBody, bodyErr = lambda.Act(params)
+	assert.Nil(t, bodyErr)
+	jsonErr = json.Unmarshal([]byte(resBody), &dummies)
+	assert.Nil(t, jsonErr)
+	assert.NotNil(t, dummies)
+	assert.Len(t, dummies.Data, 0)
+}

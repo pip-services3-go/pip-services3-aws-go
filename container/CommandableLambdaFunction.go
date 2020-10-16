@@ -78,7 +78,7 @@ func (c *CommandableLambdaFunction) registerCommandSet(commandSet *ccomands.Comm
 
 		c.RegisterAction(command.Name(), nil, func(params map[string]interface{}) (result interface{}, err error) {
 
-			correlationId := params["correlation_id"].(string)
+			correlationId, _ := params["correlation_id"].(string)
 
 			args := crun.NewParametersFromValue(params)
 			timing := c.Instrument(correlationId, c.Info().Name+"."+command.Name())

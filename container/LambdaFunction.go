@@ -264,7 +264,7 @@ func (c *LambdaFunction) RegisterAction(cmd string, schema *cvalid.Schema,
 func (c *LambdaFunction) execute(ctx context.Context, params map[string]interface{}) (string, error) {
 
 	cmd, ok := params["cmd"].(string)
-	correlationId := params["correlation_id"].(string)
+	correlationId, _ := params["correlation_id"].(string)
 
 	if !ok || cmd == "" {
 		err := cerr.NewBadRequestError(
@@ -292,7 +292,7 @@ func (c *LambdaFunction) execute(ctx context.Context, params map[string]interfac
 	resStr := "ERROR"
 	if res != nil {
 		convRes, convErr := json.Marshal(res)
-		if convRes != nil {
+		if convRes == nil || convErr != nil {
 			err = convErr
 		} else {
 			resStr = (string)(convRes)
