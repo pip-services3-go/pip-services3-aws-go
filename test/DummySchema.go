@@ -1,15 +1,18 @@
 package test
 
-// import { TypeCode } from 'pip-services3-commons-node';
-// import { ObjectSchema } from 'pip-services3-commons-node';
+import (
+	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
+	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
+)
 
-// export class DummySchema extends ObjectSchema {
+type DummySchema struct {
+	cvalid.ObjectSchema
+}
 
-//     public constructor() {
-//         super();
-//         this.withOptionalProperty("id", TypeCode.String);
-//         this.withRequiredProperty("key", TypeCode.String);
-//         this.withOptionalProperty("content", TypeCode.String);
-//     }
-
-// }
+func NewDummySchema() *DummySchema {
+	ds := DummySchema{}
+	ds.WithOptionalProperty("id", cconv.String)
+	ds.WithRequiredProperty("key", cconv.String)
+	ds.WithOptionalProperty("content", cconv.String)
+	return &ds
+}

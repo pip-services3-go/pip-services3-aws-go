@@ -1,17 +1,24 @@
 package test
 
-// import { Factory } from 'pip-services3-components-node';
-// import { Descriptor } from 'pip-services3-commons-node';
+import (
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	cbuild "github.com/pip-services3-go/pip-services3-components-go/build"
+)
 
-// import { DummyController } from './DummyController';
+type DummyFactory struct {
+	cbuild.Factory
+	Descriptor           *cref.Descriptor
+	ControllerDescriptor *cref.Descriptor
+}
 
-// export class DummyFactory extends Factory {
-// 	public static Descriptor = new Descriptor("pip-services-dummies", "factory", "default", "default", "1.0");
-// 	public static ControllerDescriptor = new Descriptor("pip-services-dummies", "controller", "default", "*", "1.0");
+func NewDummyFactory() *DummyFactory {
 
-// 	public constructor() {
-// 		super();
-// 		this.registerAsType(DummyFactory.ControllerDescriptor, DummyController);
-// 	}
+	c := &DummyFactory{
+		Factory:              *cbuild.NewFactory(),
+		Descriptor:           cref.NewDescriptor("pip-services-dummies", "factory", "default", "default", "1.0"),
+		ControllerDescriptor: cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "1.0"),
+	}
 
-// }
+	c.RegisterType(c.ControllerDescriptor, NewDummyController)
+	return c
+}

@@ -1,4 +1,4 @@
-package test
+package test_container
 
 // import { Descriptor } from 'pip-services3-commons-node';
 // import { CommandableLambdaFunction } from '../../src/container/CommandableLambdaFunction';

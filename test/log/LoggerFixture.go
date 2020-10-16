@@ -17,7 +17,6 @@ func NewLoggerFixture(logger *clog.CachedLogger) *LoggerFixture {
 	return &LoggerFixture{
 		logger: logger,
 	}
-
 }
 
 func (c *LoggerFixture) TestLogLevel(t *testing.T) {

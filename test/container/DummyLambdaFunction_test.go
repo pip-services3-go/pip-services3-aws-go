@@ -1,4 +1,4 @@
-package test
+package test_container
 
 // let assert = require('chai').assert;
 // let async = require('async');

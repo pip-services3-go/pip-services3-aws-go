@@ -1,30 +1,37 @@
 package build
 
-// /*@module build */
-// import { Factory } from 'pip-services3-components-node';
-// import { Descriptor } from 'pip-services3-commons-node';
+import (
+	awscount "github.com/pip-services3-go/pip-services3-aws-go/count"
+	awslog "github.com/pip-services3-go/pip-services3-aws-go/log"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	cbuild "github.com/pip-services3-go/pip-services3-components-go/build"
+)
 
-// import { CloudWatchLogger } from '../log/CloudWatchLogger';
-// import { CloudWatchCounters } from '../count/CloudWatchCounters';
+/*
+ Creates AWS components by their descriptors.
+ *
+ See [[CloudWatchLogger]]
+ See [[CloudWatchCounters]]
+*/
+type DefaultAwsFactory struct {
+	cbuild.Factory
 
-// /*
-//  Creates AWS components by their descriptors.
-//  *
-//  See [[CloudWatchLogger]]
-//  See [[CloudWatchCounters]]
-//  */
-// export class DefaultAwsFactory extends Factory {
-//     public static readonly Descriptor = new Descriptor("pip-services", "factory", "aws", "default", "1.0");
+	Descriptor                   *cref.Descriptor
+	CloudWatchLoggerDescriptor   *cref.Descriptor
+	CloudWatchCountersDescriptor *cref.Descriptor
+}
 
-// 	public static readonly CloudWatchLoggerDescriptor = new Descriptor("pip-services", "logger", "cloudwatch", "*", "1.0");
-// 	public static readonly CloudWatchCountersDescriptor = new Descriptor("pip-services", "counters", "cloudwatch", "*", "1.0");
+// NewDefaultAwsFactory method are create a new instance of the factory.
+func NewDefaultAwsFactory() *DefaultAwsFactory {
 
-// 	/*
-// 	 Create a new instance of the factory.
-// 	 */
-// 	public constructor() {
-//         super();
-// 		this.registerAsType(DefaultAwsFactory.CloudWatchLoggerDescriptor, CloudWatchLogger);
-// 		this.registerAsType(DefaultAwsFactory.CloudWatchCountersDescriptor, CloudWatchCounters);
-// 	}
-// }
+	c := &DefaultAwsFactory{
+		Factory:                      *cbuild.NewFactory(),
+		Descriptor:                   cref.NewDescriptor("pip-services", "factory", "aws", "default", "1.0"),
+		CloudWatchLoggerDescriptor:   cref.NewDescriptor("pip-services", "logger", "cloudwatch", "*", "1.0"),
+		CloudWatchCountersDescriptor: cref.NewDescriptor("pip-services", "counters", "cloudwatch", "*", "1.0"),
+	}
+
+	c.RegisterType(c.CloudWatchLoggerDescriptor, awslog.NewCloudWatchLogger)
+	c.RegisterType(c.CloudWatchCountersDescriptor, awscount.NewCloudWatchCounters)
+	return c
+}

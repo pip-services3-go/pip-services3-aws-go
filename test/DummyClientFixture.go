@@ -1,124 +1,64 @@
 package test
 
-// let assert = require('chai').assert;
-// let async = require('async');
+import (
+	"testing"
 
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+	"github.com/stretchr/testify/assert"
+)
 
-// import { Dummy } from './Dummy';
-// import { IDummyClient } from './IDummyClient';
+type DummyClientFixture struct {
+	client IDummyClient
+}
 
-// export class DummyClientFixture {
-//     private _client: IDummyClient;
+func NewDummyClientFixture(client IDummyClient) *DummyClientFixture {
+	dcf := DummyClientFixture{client: client}
+	return &dcf
+}
 
-//     public constructor(client: IDummyClient) {
-//         this._client = client;
-//     }
+func (c *DummyClientFixture) TestCrudOperations(t *testing.T) {
 
-//     public testCrudOperations(done: any): void {
-//         let dummy1 = { id: null, key: "Key 1", content: "Content 1" };
-//         let dummy2 = { id: null, key: "Key 2", content: "Content 2" };
+	dummy1 := Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
+	dummy2 := Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
 
-//         async.series([
-//             // Create one dummy
-//             (callback) => {
-//                 this._client.createDummy(
-//                     null,
-//                     dummy1,
-//                     (err, dummy) => {
-//                         assert.isNull(err);
+	// Create one dummy
+	dummy, err := c.client.CreateDummy("", dummy1)
+	assert.Nil(t, err)
+	assert.NotNil(t, dummy)
+	assert.Equal(t, dummy.Content, dummy1.Content)
+	assert.Equal(t, dummy.Key, dummy1.Key)
+	dummy1 = *dummy
 
-//                         assert.isObject(dummy);
-//                         assert.equal(dummy.content, dummy1.content);
-//                         assert.equal(dummy.key, dummy1.key);
+	// Create another dummy
+	dummy, err = c.client.CreateDummy("", dummy2)
+	assert.Nil(t, err)
+	assert.NotNil(t, dummy)
+	assert.Equal(t, dummy.Content, dummy2.Content)
+	assert.Equal(t, dummy.Key, dummy2.Key)
+	dummy2 = *dummy
 
-//                         dummy1 = dummy;
+	// Get all dummies
+	dummies, err := c.client.GetDummies("", cdata.NewEmptyFilterParams(), cdata.NewPagingParams(0, 5, false))
+	assert.Nil(t, err)
+	assert.NotNil(t, dummies)
+	assert.Len(t, dummies.Data, 2)
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Create another dummy
-//             (callback) => {
-//                 this._client.createDummy(
-//                     null,
-//                     dummy2,
-//                     (err, dummy) => {
-//                         assert.isNull(err);
+	// Update the dummy
+	dummy1.Content = "Updated Content 1"
+	dummy, err = c.client.UpdateDummy("", dummy1)
+	assert.Nil(t, err)
+	assert.NotNil(t, dummy)
+	assert.Equal(t, dummy.Content, "Updated Content 1")
+	assert.Equal(t, dummy.Key, dummy1.Key)
+	dummy1 = *dummy
 
-//                         assert.isObject(dummy);
-//                         assert.equal(dummy.content, dummy2.content);
-//                         assert.equal(dummy.key, dummy2.key);
+	// Delete dummy
+	dummy, err = c.client.DeleteDummy("", dummy1.Id)
+	assert.Nil(t, err)
 
-//                         dummy2 = dummy;
+	// Try to get delete dummy
+	dummy, err = c.client.GetDummyById("", dummy1.Id)
+	assert.Nil(t, err)
+	assert.Nil(t, dummy)
 
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Get all dummies
-//             (callback) => {
-//                 this._client.getDummies(
-//                     null,
-//                     new FilterParams(),
-//                     new PagingParams(0, 5, false),
-//                     (err, dummies) => {
-//                         assert.isNull(err);
-
-//                         assert.isObject(dummies);
-//                         assert.isTrue(dummies.data.length >= 2);
-
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Update the dummy
-//             (callback) => {
-//                 dummy1.content = 'Updated Content 1';
-//                 this._client.updateDummy(
-//                     null,
-//                     dummy1,
-//                     (err, dummy) => {
-//                         assert.isNull(err);
-
-//                         assert.isObject(dummy);
-//                         assert.equal(dummy.content, 'Updated Content 1');
-//                         assert.equal(dummy.key, dummy1.key);
-
-//                         dummy1 = dummy;
-
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Delete dummy
-//             (callback) => {
-//                 this._client.deleteDummy(
-//                     null,
-//                     dummy1.id,
-//                     (err) => {
-//                         assert.isNull(err);
-
-//                         callback();
-//                     }
-//                 );
-//             },
-//             // Try to get delete dummy
-//             (callback) => {
-//                 this._client.getDummyById(
-//                     null,
-//                     dummy1.id,
-//                     (err, dummy) => {
-//                         assert.isNull(err);
-
-//                         assert.isNull(dummy || null);
-
-//                         callback();
-//                     }
-//                 );
-//             }
-//         ], done);
-//     }
-
-// }
+}

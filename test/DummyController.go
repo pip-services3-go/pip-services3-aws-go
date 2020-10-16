@@ -1,96 +1,109 @@
 package test
 
-// import { Descriptor } from 'pip-services3-commons-node';
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
-// import { DataPage } from 'pip-services3-commons-node';
-// import { IdGenerator } from 'pip-services3-commons-node';
-// import { ICommandable } from 'pip-services3-commons-node';
-// import { CommandSet } from 'pip-services3-commons-node';
+import (
+	ccomand "github.com/pip-services3-go/pip-services3-commons-go/commands"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+)
 
-// import { IDummyController } from './IDummyController';
-// import { DummyCommandSet } from './DummyCommandSet';
-// import { Dummy } from './Dummy';
+type DummyController struct {
+	commandSet *DummyCommandSet
+	entities   []Dummy
+}
 
-// export class DummyController implements IDummyController, ICommandable {
-// 	private _commandSet: DummyCommandSet;
-//     private readonly _entities: Dummy[] = [];
+func NewDummyController() *DummyController {
+	dc := DummyController{}
+	dc.entities = make([]Dummy, 0)
+	return &dc
+}
 
-// 	public getCommandSet(): CommandSet {
-// 		if (this._commandSet == null)
-// 			this._commandSet = new DummyCommandSet(this);
-// 		return this._commandSet;
-// 	}
+func (c *DummyController) GetCommandSet() *ccomand.CommandSet {
+	if c.commandSet == nil {
+		c.commandSet = NewDummyCommandSet(c)
+	}
+	return &c.commandSet.CommandSet
+}
 
-// 	public getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams,
-// 		callback: (err: any, result: DataPage<Dummy>) => void): void {
+func (c *DummyController) GetPageByFilter(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (items *DummyDataPage, err error) {
 
-// 		filter = filter != null ? filter : new FilterParams();
-// 		let key: string = filter.getAsNullableString("key");
+	if filter == nil {
+		filter = cdata.NewEmptyFilterParams()
+	}
+	var key string = filter.GetAsString("key")
 
-// 		paging = paging != null ? paging : new PagingParams();
-// 		let skip: number = paging.getSkip(0);
-// 		let take: number = paging.getTake(100);
+	if paging == nil {
+		paging = cdata.NewEmptyPagingParams()
+	}
+	var skip int64 = paging.GetSkip(0)
+	var take int64 = paging.GetTake(100)
 
-// 		let result: Dummy[] = [];
-// 		for (var i = 0; i < this._entities.length; i++) {
-//             let entity: Dummy = this._entities[i];
-// 			if (key != null && key != entity.key)
-// 				continue;
+	var result []Dummy
+	for i := 0; i < len(c.entities); i++ {
+		var entity Dummy = c.entities[i]
+		if key != "" && key != entity.Key {
+			continue
+		}
 
-// 			skip--;
-// 			if (skip >= 0) continue;
+		skip--
+		if skip >= 0 {
+			continue
+		}
 
-// 			take--;
-// 			if (take < 0) break;
+		take--
+		if take < 0 {
+			break
+		}
 
-// 			result.push(entity);
-// 		}
+		result = append(result, entity)
+	}
+	var total int64 = (int64)(len(result))
+	return NewDummyDataPage(&total, result), nil
+}
 
-// 		callback(null,  new DataPage<Dummy>(result));
-// 	}
+func (c *DummyController) GetOneById(correlationId string, id string) (result *Dummy, err error) {
+	for i := 0; i < len(c.entities); i++ {
+		var entity Dummy = c.entities[i]
+		if id == entity.Id {
+			return &entity, nil
+		}
+	}
+	return nil, nil
+}
 
-// 	public getOneById(correlationId: string, id: string, callback: (err: any, result: Dummy) => void): void {
-// 		for (var i = 0; i < this._entities.length; i++) {
-//             let entity: Dummy = this._entities[i];
-// 			if (id == entity.id) {
-// 				callback(null, entity);
-// 				return;
-// 			}
-// 		}
-// 		callback(null, null);
-// 	}
+func (c *DummyController) Create(correlationId string, entity Dummy) (result *Dummy, err error) {
+	if entity.Id == "" {
+		entity.Id = cdata.IdGenerator.NextLong()
+		c.entities = append(c.entities, entity)
+	}
+	return &entity, nil
+}
 
-// 	public create(correlationId: string, entity: Dummy, callback: (err: any, result: Dummy) => void): void {
-// 		if (entity.id == null) {
-//             entity.id = IdGenerator.nextLong();
-//             this._entities.push(entity);
-//         }
-// 		callback(null, entity);
-// 	}
+func (c *DummyController) Update(correlationId string, newEntity Dummy) (result *Dummy, err error) {
+	for index := 0; index < len(c.entities); index++ {
+		var entity Dummy = c.entities[index]
+		if entity.Id == newEntity.Id {
+			c.entities[index] = newEntity
+			return &newEntity, nil
 
-// 	public update(correlationId: string, newEntity: Dummy, callback: (err: any, result: Dummy) => void): void {
-// 		for(var index = 0; index < this._entities.length; index++) {
-// 			let entity: Dummy = this._entities[index];
-// 			if (entity.id == newEntity.id) {
-// 				this._entities[index] = newEntity;
-// 				callback(null, newEntity);
-// 				return;
-// 			}
-// 		}
-// 		callback(null, null);
-// 	}
+		}
+	}
+	return nil, nil
+}
 
-// 	public deleteById(correlationId: string, id: string, callback: (err: any, result: Dummy) => void): void {
-// 		for (var index = 0; index < this._entities.length; index++) {
-// 			let entity: Dummy = this._entities[index];
-// 			if (entity.id == id) {
-// 				this._entities.splice(index, 1);
-// 				callback(null, entity);
-// 				return;
-// 			}
-// 		}
-// 		callback(null, null);
-// 	}
+func (c *DummyController) DeleteById(correlationId string, id string) (result *Dummy, err error) {
+	var entity Dummy
 
-// }
+	for i := 0; i < len(c.entities); {
+		entity = c.entities[i]
+		if entity.Id == id {
+			if i == len(c.entities)-1 {
+				c.entities = c.entities[:i]
+			} else {
+				c.entities = append(c.entities[:i], c.entities[i+1:]...)
+			}
+		} else {
+			i++
+		}
+		return &entity, nil
+	}
+	return nil, nil
+}

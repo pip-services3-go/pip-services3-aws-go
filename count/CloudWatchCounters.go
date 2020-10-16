@@ -68,7 +68,7 @@ import (
      counters.Dump();
 */
 type CloudWatchCounters struct {
-	*ccount.CachedCounters
+	ccount.CachedCounters
 	logger *clog.CompositeLogger
 
 	connectionResolver *awsconn.AwsConnectionResolver
@@ -88,7 +88,7 @@ func NewCloudWatchCounters() *CloudWatchCounters {
 		connectTimeout:     30000,
 		opened:             false,
 	}
-	c.CachedCounters = ccount.InheritCacheCounters(c)
+	c.CachedCounters = *ccount.InheritCacheCounters(c)
 	return c
 }
 
@@ -193,7 +193,7 @@ func (c *CloudWatchCounters) getCounterData(counter *ccount.Counter, now time.Ti
 	}
 	tm := counter.Time
 	if tm.IsZero() {
-		tm = time.Now()
+		tm = time.Now().UTC()
 	}
 	value.SetTimestamp(tm)
 

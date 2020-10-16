@@ -1,110 +1,111 @@
-package test
+package test_container
 
-// let _ = require('lodash');
+import (
+	"encoding/json"
 
-// import { Descriptor } from 'pip-services3-commons-node';
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams} from 'pip-services3-commons-node';
-// import { IReferences } from 'pip-services3-commons-node';
-// import { ObjectSchema } from 'pip-services3-commons-node';
-// import { Schema} from 'pip-services3-commons-node';
-// import { MapSchema } from 'pip-services3-commons-node';
-// import { TypeCode } from 'pip-services3-commons-node';
-// import { FilterParamsSchema } from 'pip-services3-commons-node';
-// import { PagingParamsSchema } from 'pip-services3-commons-node';
+	awscont "github.com/pip-services3-go/pip-services3-aws-go/container"
+	awstest "github.com/pip-services3-go/pip-services3-aws-go/test"
+	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
+)
 
-// import { LambdaFunction } from '../../src/container/LambdaFunction';
-// import { IDummyController } from '../IDummyController';
-// import { DummyFactory } from '../DummyFactory';
-// import { DummySchema } from '../DummySchema';
+type DummyLambdaFunction struct {
+	*awscont.LambdaFunction
+	controller awstest.IDummyController
+}
 
-// export class DummyLambdaFunction extends LambdaFunction {
-//     private _controller: IDummyController;
+func NewDummyLambdaFunction() *DummyLambdaFunction {
+	c := &DummyLambdaFunction{}
+	c.LambdaFunction = awscont.InheriteLambdaFunction("dummy", "Dummy lambda function", c)
 
-//     public constructor() {
-//         super("dummy", "Dummy lambda function");
-//         this._dependencyResolver.put('controller', new Descriptor('pip-services-dummies', 'controller', 'default', '*', '*'));
-//         this._factories.add(new DummyFactory());
-//     }
+	c.DependencyResolver.Put("controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
+	c.AddFactory(awstest.NewDummyFactory())
+	return c
+}
 
-//     public setReferences(references: IReferences): void {
-//         super.setReferences(references);
-//         this._controller = this._dependencyResolver.getOneRequired<IDummyController>('controller');
-//     }
+func (c *DummyLambdaFunction) SetReferences(references cref.IReferences) {
+	c.LambdaFunction.SetReferences(references)
+	depRes, depErr := c.DependencyResolver.GetOneRequired("controller")
+	if depErr == nil && depRes != nil {
+		c.controller = depRes.(awstest.IDummyController)
+	}
+}
 
-//     private getPageByFilter(params: any, callback: (err: any, result?: any) => void): void {
-//         this._controller.getPageByFilter(
-//             params.correlation_id,
-//             new FilterParams(params.filter),
-//             new PagingParams(params.paging),
-//             callback
-//         );
-//     }
+func (c *DummyLambdaFunction) getPageByFilter(params map[string]interface{}) (interface{}, error) {
+	return c.controller.GetPageByFilter(
+		params["correlation_id"].(string),
+		cdata.NewFilterParamsFromValue(params["filter"]),
+		cdata.NewPagingParamsFromValue(params["paging"]),
+	)
+}
 
-//     private getOneById(params: any, callback: (err: any, result?: any) => void): void {
-//         this._controller.getOneById(
-//             params.correlation_id,
-//             params.dummy_id,
-//             callback
-//         );
-//     }
+func (c *DummyLambdaFunction) getOneById(params map[string]interface{}) (interface{}, error) {
+	return c.controller.GetOneById(
+		params["correlation_id"].(string),
+		params["dummy_id"].(string),
+	)
+}
 
-//     private create(params: any, callback: (err: any, result?: any) => void): void {
-//         this._controller.create(
-//             params.correlation_id,
-//             params.dummy,
-//             callback
-//         );
-//     }
+func (c *DummyLambdaFunction) create(params map[string]interface{}) (interface{}, error) {
+	val, _ := json.Marshal(params["dummy"])
+	var entity awstest.Dummy
+	json.Unmarshal(val, &entity)
+	return c.controller.Create(
+		params["correlation_id"].(string),
+		entity,
+	)
+}
 
-//     private update(params: any, callback: (err: any, result?: any) => void): void {
-//         this._controller.update(
-//             params.correlation_id,
-//             params.dummy,
-//             callback
-//         );
-//     }
+func (c *DummyLambdaFunction) update(params map[string]interface{}) (interface{}, error) {
+	val, _ := json.Marshal(params["dummy"])
+	var entity awstest.Dummy
+	json.Unmarshal(val, &entity)
+	return c.controller.Update(
+		params["correlation_id"].(string),
+		entity,
+	)
+}
 
-//     private deleteById(params: any, callback: (err: any, result?: any) => void): void {
-//         this._controller.deleteById(
-//             params.correlation_id,
-//             params.dummy_id,
-//             callback
-//         );
-//     }
+func (c *DummyLambdaFunction) deleteById(params map[string]interface{}) (interface{}, error) {
+	return c.controller.DeleteById(
+		params["correlation_id"].(string),
+		params["dummy_id"].(string),
+	)
+}
 
-//     protected register() {
-//         this.registerAction(
-//             'get_dummies',
-//             new ObjectSchema(true)
-//                 .withOptionalProperty("filter", new FilterParamsSchema())
-//                 .withOptionalProperty("paging", new PagingParamsSchema())
-//             , this.getPageByFilter);
+func (c *DummyLambdaFunction) Register() {
+	c.RegisterAction(
+		"get_dummies",
+		&cvalid.NewObjectSchema().
+			WithOptionalProperty("filter", cvalid.NewFilterParamsSchema()).
+			WithOptionalProperty("paging", cvalid.NewPagingParamsSchema()).Schema,
+		c.getPageByFilter)
 
-//         this.registerAction(
-//             'get_dummy_by_id',
-//             new ObjectSchema(true)
-//                 .withOptionalProperty("dummy_id", TypeCode.String)
-//             , this.getOneById);
+	c.RegisterAction(
+		"get_dummy_by_id",
+		&cvalid.NewObjectSchema().
+			WithOptionalProperty("dummy_id", cconv.String).Schema,
+		c.getOneById)
 
-//         this.registerAction(
-//             'create_dummy',
-//             new ObjectSchema(true)
-//                 .withRequiredProperty("dummy", new DummySchema())
-//             , this.create);
+	c.RegisterAction(
+		"create_dummy",
+		&cvalid.NewObjectSchema().
+			WithRequiredProperty("dummy", awstest.NewDummySchema()).Schema,
+		c.create)
 
-//         this.registerAction(
-//             'update_dummy',
-//             new ObjectSchema(true)
-//                 .withRequiredProperty("dummy", new DummySchema())
-//             , this.update);
+	c.RegisterAction(
+		"update_dummy",
+		&cvalid.NewObjectSchema().
+			WithRequiredProperty("dummy", awstest.NewDummySchema()).Schema,
+		c.update)
 
-//         this.registerAction(
-//             'delete_dummy',
-//             new ObjectSchema(true)
-//                 .withOptionalProperty("dummy_id", TypeCode.String)
-//             , this.deleteById);
-//     }
-// }
+	c.RegisterAction(
+		"delete_dummy",
+		&cvalid.NewObjectSchema().
+			WithOptionalProperty("dummy_id", cconv.String).Schema,
+		c.deleteById)
+}
 
 // export const handler = new DummyLambdaFunction().getHandler();

@@ -1,15 +1,15 @@
 package test
 
-// import { IStringIdentifiable } from 'pip-services3-commons-node';
+type Dummy struct {
+	Id      string `json:"id"`
+	Key     string `json:"key"`
+	Content string `json:"content"`
+}
 
-// export class Dummy implements IStringIdentifiable {
-// 	public constructor(id: string, key: string, content: string) {
-// 		this.id = id;
-// 		this.key = key;
-// 		this.content = content;
-// 	}
-
-// 	public id: string;
-// 	public key: string;
-// 	public content: string;
-// }
+func NewDummy(id string, key string, content string) *Dummy {
+	return &Dummy{
+		Id:      id,
+		Key:     key,
+		Content: content,
+	}
+}

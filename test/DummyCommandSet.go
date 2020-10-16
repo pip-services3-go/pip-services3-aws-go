@@ -1,97 +1,91 @@
 package test
 
-// import { CommandSet } from 'pip-services3-commons-node';
-// import { ICommand } from 'pip-services3-commons-node';
-// import { Command } from 'pip-services3-commons-node';
-// import { Parameters } from 'pip-services3-commons-node';
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
-// import { ObjectSchema } from 'pip-services3-commons-node';
-// import { Schema} from 'pip-services3-commons-node';
-// import { MapSchema } from 'pip-services3-commons-node';
-// import { TypeCode } from 'pip-services3-commons-node';
-// import { FilterParamsSchema } from 'pip-services3-commons-node';
-// import { PagingParamsSchema } from 'pip-services3-commons-node';
+import (
+	"encoding/json"
 
-// import { Dummy } from './Dummy';
-// import { IDummyController } from './IDummyController';
-// import { DummySchema } from './DummySchema';
+	ccomand "github.com/pip-services3-go/pip-services3-commons-go/commands"
+	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
+	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
+)
 
-// export class DummyCommandSet extends CommandSet {
-//     private _controller: IDummyController;
+type DummyCommandSet struct {
+	ccomand.CommandSet
+	controller IDummyController
+}
 
-// 	constructor(controller: IDummyController) {
-// 		super();
+func NewDummyCommandSet(controller IDummyController) *DummyCommandSet {
+	c := DummyCommandSet{}
+	c.CommandSet = *ccomand.NewCommandSet()
 
-// 		this._controller = controller;
+	c.controller = controller
 
-// 		this.addCommand(this.makeGetPageByFilterCommand());
-// 		this.addCommand(this.makeGetOneByIdCommand());
-// 		this.addCommand(this.makeCreateCommand());
-// 		this.addCommand(this.makeUpdateCommand());
-// 		this.addCommand(this.makeDeleteByIdCommand());
-// 	}
+	c.AddCommand(c.makeGetPageByFilterCommand())
+	c.AddCommand(c.makeGetOneByIdCommand())
+	c.AddCommand(c.makeCreateCommand())
+	c.AddCommand(c.makeUpdateCommand())
+	c.AddCommand(c.makeDeleteByIdCommand())
+	return &c
+}
 
-// 	private makeGetPageByFilterCommand(): ICommand {
-// 		return new Command(
-// 			"get_dummies",
-// 			new ObjectSchema(true)
-//                 .withOptionalProperty("filter", new FilterParamsSchema())
-//                 .withOptionalProperty("paging", new PagingParamsSchema()),
-// 			(correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
-// 				let filter = FilterParams.fromValue(args.get("filter"));
-// 				let paging = PagingParams.fromValue(args.get("paging"));
-// 				this._controller.getPageByFilter(correlationId, filter, paging, callback);
-// 			}
-// 		);
-// 	}
+func (c *DummyCommandSet) makeGetPageByFilterCommand() ccomand.ICommand {
+	return ccomand.NewCommand(
+		"get_dummies",
+		cvalid.NewObjectSchema().WithOptionalProperty("filter", cvalid.NewFilterParamsSchema()).WithOptionalProperty("paging", cvalid.NewPagingParamsSchema()),
+		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
+			filter := cdata.NewFilterParamsFromValue(args.Get("filter"))
+			paging := cdata.NewPagingParamsFromValue(args.Get("paging"))
+			return c.controller.GetPageByFilter(correlationId, filter, paging)
+		},
+	)
+}
 
-// 	private makeGetOneByIdCommand(): ICommand {
-// 		return new Command(
-// 			"get_dummy_by_id",
-//             new ObjectSchema(true)
-//                 .withRequiredProperty("dummy_id", TypeCode.String),
-// 			(correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
-// 				let id = args.getAsString("dummy_id");
-// 				this._controller.getOneById(correlationId, id, callback);
-// 			}
-// 		);
-// 	}
+func (c *DummyCommandSet) makeGetOneByIdCommand() ccomand.ICommand {
+	return ccomand.NewCommand(
+		"get_dummy_by_id",
+		cvalid.NewObjectSchema().WithRequiredProperty("dummy_id", cconv.String),
+		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
+			id := args.GetAsString("dummy_id")
+			return c.controller.GetOneById(correlationId, id)
+		},
+	)
+}
 
-// 	private makeCreateCommand(): ICommand {
-// 		return new Command(
-// 			"create_dummy",
-//             new ObjectSchema(true)
-//                 .withRequiredProperty("dummy", new DummySchema()),
-// 			(correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
-// 				let entity: Dummy = args.get("dummy");
-// 				this._controller.create(correlationId, entity, callback);
-// 			}
-// 		);
-// 	}
+func (c *DummyCommandSet) makeCreateCommand() ccomand.ICommand {
+	return ccomand.NewCommand(
+		"create_dummy",
+		cvalid.NewObjectSchema().WithRequiredProperty("dummy", NewDummySchema()),
+		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
+			val, _ := json.Marshal(args.Get("dummy"))
+			var entity Dummy
+			json.Unmarshal(val, &entity)
 
-// 	private makeUpdateCommand(): ICommand {
-// 		return new Command(
-// 			"update_dummy",
-//             new ObjectSchema(true)
-//                 .withRequiredProperty("dummy", new DummySchema()),
-// 			(correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
-// 				let entity: Dummy = args.get("dummy");
-// 				this._controller.update(correlationId, entity, callback);
-// 			}
-// 		);
-// 	}
+			return c.controller.Create(correlationId, entity)
+		},
+	)
+}
 
-// 	private makeDeleteByIdCommand(): ICommand {
-// 		return new Command(
-// 			"delete_dummy",
-//             new ObjectSchema(true)
-//                 .withRequiredProperty("dummy_id", TypeCode.String),
-// 			(correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
-// 				let id = args.getAsString("dummy_id");
-// 				this._controller.deleteById(correlationId, id, callback);
-// 			}
-// 		);
-// 	}
+func (c *DummyCommandSet) makeUpdateCommand() ccomand.ICommand {
+	return ccomand.NewCommand(
+		"update_dummy",
+		cvalid.NewObjectSchema().WithRequiredProperty("dummy", NewDummySchema()),
+		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
+			val, _ := json.Marshal(args.Get("dummy"))
+			var entity Dummy
+			json.Unmarshal(val, &entity)
+			return c.controller.Update(correlationId, entity)
+		},
+	)
+}
 
-// }
+func (c *DummyCommandSet) makeDeleteByIdCommand() ccomand.ICommand {
+	return ccomand.NewCommand(
+		"delete_dummy",
+		cvalid.NewObjectSchema().WithRequiredProperty("dummy_id", cconv.String),
+		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
+			id := args.GetAsString("dummy_id")
+			return c.controller.DeleteById(correlationId, id)
+		},
+	)
+}

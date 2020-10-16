@@ -1,15 +1,13 @@
 package test
 
-// import { DataPage } from 'pip-services3-commons-node';
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
+import (
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+)
 
-// import { Dummy } from './Dummy';
-
-// export interface IDummyController {
-//     getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams, callback: (err: any, result: DataPage<Dummy>) => void): void;
-//     getOneById(correlationId: string, id: string, callback: (err: any, result: Dummy) => void): void;
-//     create(correlationId: string, entity: Dummy, callback: (err: any, result: Dummy) => void): void;
-//     update(correlationId: string, entity: Dummy, callback: (err: any, result: Dummy) => void): void;
-//     deleteById(correlationId: string, id: string, callback: (err: any, result: Dummy) => void): void;
-// }
+type IDummyController interface {
+	GetPageByFilter(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (result *DummyDataPage, err error)
+	GetOneById(correlationId string, id string) (result *Dummy, err error)
+	Create(correlationId string, entity Dummy) (result *Dummy, err error)
+	Update(correlationId string, entity Dummy) (result *Dummy, err error)
+	DeleteById(correlationId string, id string) (result *Dummy, err error)
+}

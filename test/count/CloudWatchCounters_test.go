@@ -24,7 +24,7 @@ func TestCloudWatchCounters(t *testing.T) {
 	}
 
 	counters = awscount.NewCloudWatchCounters()
-	fixture = NewCountersFixture(counters.CachedCounters)
+	fixture = NewCountersFixture(&counters.CachedCounters)
 
 	config := cconf.NewConfigParamsFromTuples(
 		"interval", "5000",
