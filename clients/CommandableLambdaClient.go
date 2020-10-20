@@ -4,64 +4,60 @@ import "reflect"
 
 /*
  Abstract client that calls commandable AWS Lambda Functions.
- *
- Commandable services are generated automatically for [[https://rawgit.com/pip-services-node/pip-services3-commons-node/master/doc/api/interfaces/commands.icommandable.html ICommandable objects]].
+
+ Commandable services are generated automatically for [[ICommandable objects]].
  Each command is exposed as action determined by "cmd" parameter.
- *
+
  ### Configuration parameters ###
- *
+
  - connections:
-     - discovery_key:               (optional) a key to retrieve the connection from [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/connect.idiscovery.html IDiscovery]]
+     - discovery_key:               (optional) a key to retrieve the connection from [[IDiscovery]]
      - region:                      (optional) AWS region
  - credentials:
-     - store_key:                   (optional) a key to retrieve the credentials from [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/auth.icredentialstore.html ICredentialStore]]
+     - store_key:                   (optional) a key to retrieve the credentials from [[ICredentialStore]]
      - access_id:                   AWS access/client id
      - access_key:                  AWS access/client id
  - options:
      - connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
- *
+
  ### References ###
- *
- - \*:logger:\*:\*:1.0            (optional) [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/log.ilogger.html ILogger]] components to pass log messages
- - \*:counters:\*:\*:1.0          (optional) [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/count.icounters.html ICounters]] components to pass collected measurements
- - \*:discovery:\*:\*:1.0         (optional) [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/connect.idiscovery.html IDiscovery]] services to resolve connection
+
+ - \*:logger:\*:\*:1.0            (optional) [[ILogger]] components to pass log messages
+ - \*:counters:\*:\*:1.0          (optional) [[ICounters]] components to pass collected measurements
+ - \*:discovery:\*:\*:1.0         (optional) [[IDiscovery]] services to resolve connection
  - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
- *
+
  See [[LambdaFunction]]
- *
+
  ### Example ###
- *
+
      type MyLambdaClient struct {
 		 *CommandableLambdaClient
 	 }
          ...
- *
-         public getData(correlationId string, id string,
-             callback: (err: any, result: MyData) => void): void {
- *
-             this.callCommand(
+
+         func (c* MyLambdaClient) GetData(correlationId string, id string)(result MyDataPage, err error) {
+
+           return c.callCommand(MyDataPageType,
                  "get_data",
                  correlationId,
-                 { id: id },
-                 (err, result) => {
-                     callback(err, result);
-                 }
-             );
+                 map[string]interface{}{ "id": id })
+
          }
          ...
 
- *
-     let client = new MyLambdaClient();
-     client.configure(ConfigParams.fromTuples(
+
+      client := NewMyLambdaClient();
+     client.Configure(NewConfigParamsFromTuples(
          "connection.region", "us-east-1",
          "connection.access_id", "XXXXXXXXXXX",
          "connection.access_key", "XXXXXXXXXXX",
          "connection.arn", "YYYYYYYYYYYYY"
      ));
- *
-     client.getData("123", "1", (err, result) => {
+
+     res, err := client.GetData("123", "1")
          ...
-     });
+
 */
 type CommandableLambdaClient struct {
 	*LambdaClient

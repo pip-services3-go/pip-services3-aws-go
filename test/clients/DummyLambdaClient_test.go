@@ -1,45 +1,42 @@
 package test
 
-// let process = require('process');
+import (
+	"os"
+	"testing"
 
-// import { ConfigParams } from 'pip-services3-commons-node';
-// import { DummyClientFixture } from '../DummyClientFixture';
-// import { DummyLambdaClient } from './DummyLambdaClient';
+	awstest "github.com/pip-services3-go/pip-services3-aws-go/test"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+)
 
-// let awsAccessId = process.env['AWS_ACCESS_ID'];
-// let awsAccessKey = process.env['AWS_ACCESS_KEY'];
-// let lambdaArn = process.env['LAMBDA_ARN'];
+func TestDummyLambdaClient(t *testing.T) {
 
-// suite('DummyLambdaClient', ()=> {
-//     if (!awsAccessId || !awsAccessKey || !lambdaArn)
-//         return;
+	lambdaArn := os.Getenv("LAMBDA_ARN")
+	awsAccessId := os.Getenv("AWS_ACCESS_ID")
+	awsAccessKey := os.Getenv("AWS_ACCESS_KEY")
 
-//     let lambdaConfig = ConfigParams.fromTuples(
-//         'connection.protocol', 'aws',
-//         'connection.arn', lambdaArn,
-//         'credential.access_id', awsAccessId,
-//         'credential.access_key', awsAccessKey,
-//         'options.connection_timeout', 30000
-//     );
+	if lambdaArn == "" || awsAccessId == "" || awsAccessKey == "" {
+		panic("AWS keys not sets!")
+	}
 
-//     let client: DummyLambdaClient;
-//     let fixture: DummyClientFixture;
+	lambdaConfig := cconf.NewConfigParamsFromTuples(
+		"connection.protocol", "aws",
+		"connection.arn", lambdaArn,
+		"credential.access_id", awsAccessId,
+		"credential.access_key", awsAccessKey,
+		"options.connection_timeout", 30000,
+	)
 
-//     setup((done) => {
-//         client = new DummyLambdaClient();
-//         client.configure(lambdaConfig);
+	var client *DummyLambdaClient
+	var fixture *awstest.DummyClientFixture
 
-//         fixture = new DummyClientFixture(client);
+	client = NewDummyLambdaClient()
+	client.Configure(lambdaConfig)
 
-//         client.open(null, done);
-//     });
+	fixture = awstest.NewDummyClientFixture(client)
 
-//     teardown((done) => {
-//         client.close(null, done);
-//     });
+	client.Open("")
 
-//     test('Crud Operations', (done) => {
-//         fixture.testCrudOperations(done);
-//     });
+	defer client.Close("")
 
-// });
+	t.Run("DummyLambdaClient.CrudOperations", fixture.TestCrudOperations)
+}

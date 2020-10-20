@@ -1,89 +1,94 @@
 package test
 
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
-// import { DataPage } from 'pip-services3-commons-node';
+import (
+	awsclient "github.com/pip-services3-go/pip-services3-aws-go/clients"
+	awstest "github.com/pip-services3-go/pip-services3-aws-go/test"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+)
 
-// import { CommandableLambdaClient } from '../../src/clients/CommandableLambdaClient';
-// import { IDummyClient } from '../IDummyClient';
-// import { Dummy } from '../Dummy';
+type DummyCommandableLambdaClient struct {
+	*awsclient.CommandableLambdaClient
+}
 
-// export class DummyCommandableLambdaClient extends CommandableLambdaClient implements IDummyClient {
+func NewDummyCommandableLambdaClient() *DummyCommandableLambdaClient {
+	c := &DummyCommandableLambdaClient{
+		CommandableLambdaClient: awsclient.NewCommandableLambdaClient("dummy"),
+	}
+	return c
+}
+func (c *DummyCommandableLambdaClient) GetDummies(correlationId string, filter *cdata.FilterParams,
+	paging *cdata.PagingParams) (result *awstest.DummyDataPage, err error) {
 
-//     public constructor() {
-//         super("dummy");
-//     }
+	params := cdata.NewEmptyAnyValueMap()
+	params.SetAsObject("filter", filter)
+	params.SetAsObject("paging", paging)
 
-//     public getDummies(correlationId: string, filter: FilterParams, paging: PagingParams,
-//         callback: (err: any, result: DataPage<Dummy>) => void): void {
-//         this.call(
-//             'get_dummies',
-//             correlationId,
-//             {
-//                 filter: filter,
-//                 paging: paging
-//             },
-//             (err, result) => {
-//                 callback(err, result);
-//             }
-//         );
-//     }
+	calValue, calErr := c.CallCommand(dummyDataPageType, "get_dummies", correlationId, params.Value())
+	if calErr != nil {
+		return nil, calErr
+	}
 
-//     public getDummyById(correlationId: string, dummyId: string,
-//         callback: (err: any, result: Dummy) => void): void {
-//         this.call(
-//             'get_dummy_by_id',
-//             correlationId,
-//             {
-//                 dummy_id: dummyId
-//             },
-//             (err, result) => {
-//                 callback(err, result);
-//             }
-//         );
-//     }
+	result, _ = calValue.(*awstest.DummyDataPage)
+	c.Instrument(correlationId, "dummy.get_dummies")
+	return result, nil
+}
 
-//     public createDummy(correlationId: string, dummy: any,
-//         callback: (err: any, result: Dummy) => void): void {
-//         this.call(
-//             'create_dummy',
-//             correlationId,
-//             {
-//                 dummy: dummy
-//             },
-//             (err, result) => {
-//                 callback(err, result);
-//             }
-//         );
-//     }
+func (c *DummyCommandableLambdaClient) GetDummyById(correlationId string, dummyId string) (result *awstest.Dummy, err error) {
 
-//     public updateDummy(correlationId: string, dummy: any,
-//         callback: (err: any, result: Dummy) => void): void {
-//         this.call(
-//             'update_dummy',
-//             correlationId,
-//             {
-//                 dummy: dummy
-//             },
-//             (err, result) => {
-//                 callback(err, result);
-//             }
+	params := cdata.NewEmptyAnyValueMap()
+	params.SetAsObject("dummy_id", dummyId)
 
-//         );
-//     }
+	calValue, calErr := c.CallCommand(dummyType, "get_dummy_by_id", correlationId, params.Value())
 
-//     public deleteDummy(correlationId: string, dummyId: string,
-//         callback: (err: any, result: Dummy) => void): void {
-//         this.call(
-//             'delete_dummy',
-//             correlationId,
-//             {
-//                 dummy_id: dummyId
-//             },
-//             (err, result) => {
-//                 callback(err, result);
-//             }
-//         );
-//     }
+	if calErr != nil {
+		return nil, calErr
+	}
 
-// }
+	result, _ = calValue.(*awstest.Dummy)
+	c.Instrument(correlationId, "dummy.get_one_by_id")
+	return result, nil
+}
+
+func (c *DummyCommandableLambdaClient) CreateDummy(correlationId string, dummy awstest.Dummy) (result *awstest.Dummy, err error) {
+
+	params := cdata.NewEmptyAnyValueMap()
+	params.SetAsObject("dummy", dummy)
+
+	calValue, calErr := c.CallCommand(dummyType, "create_dummy", correlationId, params.Value())
+	if calErr != nil {
+		return nil, calErr
+	}
+
+	result, _ = calValue.(*awstest.Dummy)
+	c.Instrument(correlationId, "dummy.create_dummy")
+	return result, nil
+}
+
+func (c *DummyCommandableLambdaClient) UpdateDummy(correlationId string, dummy awstest.Dummy) (result *awstest.Dummy, err error) {
+
+	params := cdata.NewEmptyAnyValueMap()
+	params.SetAsObject("dummy", dummy)
+
+	calValue, calErr := c.CallCommand(dummyType, "update_dummy", correlationId, params.Value())
+	if calErr != nil {
+		return nil, calErr
+	}
+
+	result, _ = calValue.(*awstest.Dummy)
+	c.Instrument(correlationId, "dummy.update_dummy")
+	return result, nil
+}
+
+func (c *DummyCommandableLambdaClient) DeleteDummy(correlationId string, dummyId string) (result *awstest.Dummy, err error) {
+
+	params := cdata.NewEmptyAnyValueMap()
+	params.SetAsObject("dummy_id", dummyId)
+	calValue, calErr := c.CallCommand(dummyType, "delete_dummy", correlationId, params.Value())
+	if calErr != nil {
+		return nil, calErr
+	}
+
+	result, _ = calValue.(*awstest.Dummy)
+	c.Instrument(correlationId, "dummy.delete_dummy")
+	return result, nil
+}

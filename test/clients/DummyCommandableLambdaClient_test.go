@@ -1,44 +1,44 @@
 package test
-// let process = require('process');
 
-// import { ConfigParams } from 'pip-services3-commons-node';
-// import { DummyClientFixture } from '../DummyClientFixture';
-// import { DummyCommandableLambdaClient } from './DummyCommandableLambdaClient';
+import (
+	"os"
+	"testing"
 
-// let awsAccessId = process.env['AWS_ACCESS_ID'];
-// let awsAccessKey = process.env['AWS_ACCESS_KEY'];
-// let lambdaArn = process.env['LAMBDA_ARN'];
+	awstest "github.com/pip-services3-go/pip-services3-aws-go/test"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	"github.com/stretchr/testify/assert"
+)
 
-// suite('DummyCommandableLambdaClient', ()=> {
-//     if (!awsAccessId || !awsAccessKey || !lambdaArn)
-//         return;
+func TestDummyCommandableLambdaClient(t *testing.T) {
 
-//     let lambdaConfig = ConfigParams.fromTuples(
-//         'connection.protocol', 'aws',
-//         'connection.arn', lambdaArn,
-//         'credential.access_id', awsAccessId,
-//         'credential.access_key', awsAccessKey,
-//         'options.connection_timeout', 30000
-//     );
+	lambdaArn := os.Getenv("LAMBDA_ARN")
+	awsAccessId := os.Getenv("AWS_ACCESS_ID")
+	awsAccessKey := os.Getenv("AWS_ACCESS_KEY")
 
-//     let client: DummyCommandableLambdaClient;
-//     let fixture: DummyClientFixture;
+	if lambdaArn == "" || awsAccessId == "" || awsAccessKey == "" {
+		panic("AWS keys not sets!")
+	}
 
-//     setup((done) => {
-//         client = new DummyCommandableLambdaClient();
-//         client.configure(lambdaConfig);
+	lambdaConfig := cconf.NewConfigParamsFromTuples(
+		"connection.protocol", "aws",
+		"connection.arn", lambdaArn,
+		"credential.access_id", awsAccessId,
+		"credential.access_key", awsAccessKey,
+		"options.connection_timeout", 30000,
+	)
 
-//         fixture = new DummyClientFixture(client);
+	var client *DummyCommandableLambdaClient
+	var fixture *awstest.DummyClientFixture
 
-//         client.open(null, done);
-//     });
+	client = NewDummyCommandableLambdaClient()
+	client.Configure(lambdaConfig)
 
-//     teardown((done) => {
-//         client.close(null, done);
-//     });
+	fixture = awstest.NewDummyClientFixture(client)
 
-//     test('Crud Operations', (done) => {
-//         fixture.testCrudOperations(done);
-//     });
+	err := client.Open("")
+	assert.Nil(t, err)
 
-// });
+	defer client.Close("")
+
+	t.Run("DummyCommandableLambdaClient.CrudOperations", fixture.TestCrudOperations)
+}

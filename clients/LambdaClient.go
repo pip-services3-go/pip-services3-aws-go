@@ -56,7 +56,7 @@ import (
          func (c* MyLambdaClient) getData(correlationId string, id string)(result MyData, err error){
 
             timing := c.Instrument(correlationId, "myclient.get_data");
-            callRes, callErr := c.Call("get_data" correlationId, { id: id })
+            callRes, callErr := c.Call(MyDataPageType ,"get_data" correlationId, map[string]interface{ "id": id })
             timing.EndTiming();
             return callRes, callErr
          }
@@ -211,7 +211,7 @@ func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd
 	if correlationId != "" {
 		args["correlation_id"] = correlationId
 	} else {
-		cdata.IdGenerator.NextLong()
+		args["correlation_id"] = cdata.IdGenerator.NextLong()
 	}
 	payloads, jsonErr := json.Marshal(args)
 
