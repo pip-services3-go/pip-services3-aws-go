@@ -6,19 +6,19 @@ import (
 )
 
 type DummyFactory struct {
-	cbuild.Factory
+	*cbuild.Factory
 	Descriptor           *cref.Descriptor
 	ControllerDescriptor *cref.Descriptor
 }
 
 func NewDummyFactory() *DummyFactory {
 
-	c := &DummyFactory{
-		Factory:              *cbuild.NewFactory(),
+	c := DummyFactory{
+		Factory:              cbuild.NewFactory(),
 		Descriptor:           cref.NewDescriptor("pip-services-dummies", "factory", "default", "default", "1.0"),
 		ControllerDescriptor: cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "1.0"),
 	}
 
 	c.RegisterType(c.ControllerDescriptor, NewDummyController)
-	return c
+	return &c
 }

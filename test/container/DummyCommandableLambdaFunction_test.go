@@ -14,7 +14,6 @@ func TestDummyCommandableLambdaFunction(t *testing.T) {
 
 	restConfig := cconf.NewConfigParamsFromTuples(
 		"logger.descriptor", "pip-services:logger:console:default:1.0",
-		"controller.descriptor", "pip-services-dummies:controller:default:default:1.0",
 	)
 
 	var _dummy1 awstest.Dummy
@@ -27,7 +26,6 @@ func TestDummyCommandableLambdaFunction(t *testing.T) {
 
 	var references *cref.References = cref.NewReferencesFromTuples(
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
-		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), lambda,
 	)
 	lambda.SetReferences(references)
 	opnErr := lambda.Open("")

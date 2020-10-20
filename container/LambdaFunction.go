@@ -120,7 +120,7 @@ func InheriteLambdaFunction(name string, description string, register IRegistera
 		configPath:         "./config/config.yml",
 		IRegisterable:      register,
 	}
-	c.Container = cproc.NewContainer(name, description)
+	c.Container = cproc.InheritContainer(name, description, c)
 	c.SetLogger(log.NewConsoleLogger())
 	return c
 }

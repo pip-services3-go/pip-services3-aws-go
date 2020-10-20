@@ -27,7 +27,6 @@ func TestDummyLambdaFunction(t *testing.T) {
 
 	var references *cref.References = cref.NewReferencesFromTuples(
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
-		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), lambda,
 	)
 	lambda.SetReferences(references)
 	opnErr := lambda.Open("")
