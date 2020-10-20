@@ -81,6 +81,7 @@ func (c *DummyLambdaFunction) deleteById(params map[string]interface{}) (interfa
 }
 
 func (c *DummyLambdaFunction) Register() {
+
 	c.RegisterAction(
 		"get_dummies",
 		&cvalid.NewObjectSchema().

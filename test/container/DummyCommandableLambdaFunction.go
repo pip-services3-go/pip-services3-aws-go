@@ -20,5 +20,5 @@ func NewDummyCommandableLambdaFunction() *DummyCommandableLambdaFunction {
 }
 
 // func main() {
-// 	lambda.Start(NewDummyLambdaFunction().GetHandler())
+// 	lambda.Start(NewDummyCommandableLambdaFunction().GetHandler())
 // }

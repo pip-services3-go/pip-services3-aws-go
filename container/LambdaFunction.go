@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/aws/aws-lambda-go/events"
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
@@ -301,34 +300,26 @@ func (c *LambdaFunction) execute(ctx context.Context, params map[string]interfac
 	return resStr, err
 }
 
-func (c *LambdaFunction) handler(ctx context.Context, event events.SQSEvent) (string, error) { //handler(event: any, context: any) {
+func (c *LambdaFunction) Handler(ctx context.Context, event map[string]interface{}) (string, error) { //handler(event: any, context: any) {
 	// If already started then execute
 	if c.IsOpen() {
-		if len(event.Records) > 0 {
-			params := make(map[string]interface{}, 0)
-			convErr := json.Unmarshal([]byte(event.Records[0].Body), &params)
-			if convErr == nil {
-				return c.execute(ctx, params)
-			}
+		if event != nil {
+			return c.execute(ctx, event)
 		}
 	} else { // Start before execute
 		err := c.Run()
 		if err != nil {
 			ctx.Done()
-			return "ERROR", err
+			return "", err
 		}
-		if len(event.Records) > 0 {
-			params := make(map[string]interface{}, 0)
-			convErr := json.Unmarshal([]byte(event.Records[0].Body), &params)
-			if convErr == nil {
-				return c.execute(ctx, params)
-			}
+		if event != nil {
+			return c.execute(ctx, event)
 		}
 	}
 	err := cerr.NewBadRequestError(
 		"Lambda",
-		"NO_BODY",
-		"Body was not found")
+		"NO_EVENT",
+		"Event is empty")
 	return "ERROR", err
 }
 
@@ -338,12 +329,13 @@ func (c *LambdaFunction) handler(ctx context.Context, event events.SQSEvent) (st
    - event     an incoming event object with invocation parameters.
    - context   a context object with local references.
 */
-func (c *LambdaFunction) GetHandler() func(ctx context.Context, event events.SQSEvent) (string, error) {
+
+func (c *LambdaFunction) GetHandler() func(ctx context.Context, event map[string]interface{}) (string, error) {
 
 	// Return plugin function
-	return func(ctx context.Context, event events.SQSEvent) (string, error) {
+	return func(ctx context.Context, event map[string]interface{}) (string, error) {
 		// Calling run with changed context
-		return c.handler(ctx, event)
+		return c.Handler(ctx, event)
 	}
 }
 
@@ -357,15 +349,8 @@ func (c *LambdaFunction) GetHandler() func(ctx context.Context, event events.SQS
    - params action parameters.
    - callback callback function that receives action result or error.
 */
+
 func (c *LambdaFunction) Act(params map[string]interface{}) (string, error) {
-
-	convRes, _ := json.Marshal(params)
-
 	ctx := context.TODO()
-	event := events.SQSEvent{}
-	event.Records = append(event.Records, events.SQSMessage{
-		Body: (string)(convRes),
-	})
-
-	return c.GetHandler()(ctx, event)
+	return c.GetHandler()(ctx, params)
 }

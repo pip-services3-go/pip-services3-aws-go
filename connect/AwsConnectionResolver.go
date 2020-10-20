@@ -68,7 +68,6 @@ func NewAwsConnectionResolver() *AwsConnectionResolver {
 		connectionResolver: ccon.NewEmptyConnectionResolver(),
 		credentialResolver: cauth.NewEmptyCredentialResolver(),
 	}
-
 }
 
 // Configures component by passing configuration parameters.

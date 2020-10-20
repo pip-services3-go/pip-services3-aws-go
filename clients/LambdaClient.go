@@ -1,304 +1,265 @@
 package clients
 
-// /*@module clients */
-// /*@hidden */
-// let _ = require('lodash');
-// /*@hidden */
-// let async = require('async');
+import (
+	"encoding/json"
+	"reflect"
+	"sync"
+	"time"
 
-// import { IOpenable } from 'pip-services3-commons-node';
-// import { IConfigurable } from 'pip-services3-commons-node';
-// import { IReferenceable } from 'pip-services3-commons-node';
-// import { IReferences } from 'pip-services3-commons-node';
-// import { ConfigParams } from 'pip-services3-commons-node';
-// import { IdGenerator } from 'pip-services3-commons-node';
-// import { UnknownException } from 'pip-services3-commons-node';
-// import { InvocationException } from 'pip-services3-commons-node';
-// import { DependencyResolver } from 'pip-services3-commons-node';
-// import { CompositeLogger } from 'pip-services3-components-node';
-// import { CompositeCounters } from 'pip-services3-components-node';
-// import { Timing } from 'pip-services3-components-node';
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/lambda"
+	awscon "github.com/pip-services3-go/pip-services3-aws-go/connect"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
+	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+)
 
-// import { AwsConnectionParams } from '../connect/AwsConnectionParams';
-// import { AwsConnectionResolver } from '../connect/AwsConnectionResolver';
+/*
+ Abstract client that calls AWS Lambda Functions.
 
-// /*
-//  Abstract client that calls AWS Lambda Functions.
-//  
-//  When making calls "cmd" parameter determines which what action shall be called, while
-//  other parameters are passed to the action itself.
-//  
-//  ### Configuration parameters ###
-//  
-//  - connections:                   
-//      - discovery_key:               (optional) a key to retrieve the connection from [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/connect.idiscovery.html IDiscovery]]
-//      - region:                      (optional) AWS region
-//  - credentials:    
-//      - store_key:                   (optional) a key to retrieve the credentials from [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/auth.icredentialstore.html ICredentialStore]]
-//      - access_id:                   AWS access/client id
-//      - access_key:                  AWS access/client id
-//  - options:
-//      - connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
-//   
-//  ### References ###
-//  
-//  - \*:logger:\*:\*:1.0            (optional) [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/log.ilogger.html ILogger]] components to pass log messages
-//  - \*:counters:\*:\*:1.0          (optional) [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/count.icounters.html ICounters]] components to pass collected measurements
-//  - \*:discovery:\*:\*:1.0         (optional) [[https://rawgit.com/pip-services-node/pip-services3-components-node/master/doc/api/interfaces/connect.idiscovery.html IDiscovery]] services to resolve connection
-//  - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
-//  
-//  See [[LambdaFunction]]
-//  See [[CommandableLambdaClient]]
-//  
-//  ### Example ###
-//  
-//      class MyLambdaClient extends LambdaClient implements IMyClient {
-//          ...
-//       
-//          public getData(correlationId: string, id: string, 
-//              callback: (err: any, result: MyData) => void): void {
-//              
-//              let timing = this.instrument(correlationId, 'myclient.get_data');
-//              this.call("get_data" correlationId, { id: id }, (err, result) => {
-//                  timing.endTiming();
-//                  callback(err, result);
-//              });        
-//          }
-//          ...
-//      }
-//  
-//      let client = new MyLambdaClient();
-//      client.configure(ConfigParams.fromTuples(
-//          "connection.region", "us-east-1",
-//          "connection.access_id", "XXXXXXXXXXX",
-//          "connection.access_key", "XXXXXXXXXXX",
-//          "connection.arn", "YYYYYYYYYYYYY"
-//      ));
-//      
-//      client.getData("123", "1", (err, result) => {
-//          ...
-//      });
-//  */
-// export abstract class LambdaClient implements IOpenable, IConfigurable, IReferenceable {
-//     /*
-//      The reference to AWS Lambda Function.
-//      */
-//     protected _lambda: any;
-//     /*
-//      The opened flag.
-//      */
-//     protected _opened: boolean = false;
-//     /*
-//      The AWS connection parameters
-//      */
-//     protected _connection: AwsConnectionParams;
-//     private _connectTimeout: number = 10000;
+ When making calls "cmd" parameter determines which what action shall be called, while
+ other parameters are passed to the action itself.
 
-//     /*
-//      The dependencies resolver.
-//      */
-//     protected _dependencyResolver: DependencyResolver = new DependencyResolver();
-//     /*
-//      The connection resolver.
-//      */
-//     protected _connectionResolver: AwsConnectionResolver = new AwsConnectionResolver();
-//     /*
-//      The logger.
-//      */
-//     protected _logger: CompositeLogger = new CompositeLogger();
-//     /*
-//      The performance counters.
-//      */
-//     protected _counters: CompositeCounters = new CompositeCounters();
+ ### Configuration parameters ###
 
-//     /*
-//      Configures component by passing configuration parameters.
-//      
-//      - config    configuration parameters to be set.
-//      */
-//     public configure(config: ConfigParams): void {
-//         this._connectionResolver.configure(config);
-// 		this._dependencyResolver.configure(config);
+ - connections:
+     - discovery_key:               (optional) a key to retrieve the connection from [[IDiscovery]]
+     - region:                      (optional) AWS region
+ - credentials:
+     - store_key:                   (optional) a key to retrieve the credentials from [[ICredentialStore]]
+     - access_id:                   AWS access/client id
+     - access_key:                  AWS access/client id
+ - options:
+     - connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
 
-//         this._connectTimeout = config.getAsIntegerWithDefault('options.connect_timeout', this._connectTimeout);
-//     }
+ ### References ###
 
-//     /*
-// 	 Sets references to dependent components.
-// 	 
-// 	 - references 	references to locate the component dependencies. 
-//      */
-//     public setReferences(references: IReferences): void {
-//         this._logger.setReferences(references);
-//         this._counters.setReferences(references);
-//         this._connectionResolver.setReferences(references);
-//         this._dependencyResolver.setReferences(references);
-//     }
+ - \*:logger:\*:\*:1.0            (optional) [[ILogger]] components to pass log messages
+ - \*:counters:\*:\*:1.0          (optional) [[ICounters]] components to pass collected measurements
+ - \*:discovery:\*:\*:1.0         (optional) [[IDiscovery]] services to resolve connection
+ - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
 
-//     /*
-//      Adds instrumentation to log calls and measure call time.
-//      It returns a Timing object that is used to end the time measurement.
-//      
-//      - correlationId     (optional) transaction id to trace execution through call chain.
-//      - name              a method name.
-//      Returns Timing object to end the time measurement.
-//      */
-//     protected instrument(correlationId: string, name: string): Timing {
-//         this._logger.trace(correlationId, "Executing %s method", name);
-//         return this._counters.beginTiming(name + ".exec_time");
-//     }
+ See [[LambdaFunction]]
+ See [[CommandableLambdaClient]]
 
-//     /*
-// 	 Checks if the component is opened.
-// 	 
-// 	 Returns true if the component has been opened and false otherwise.
-//      */
-//     public isOpen(): boolean {
-//         return this._opened;
-//     }
+ ### Example ###
 
-//     /*
-// 	 Opens the component.
-// 	 
-// 	 - correlationId 	(optional) transaction id to trace execution through call chain.
-//      - callback 			callback function that receives error or null no errors occured.
-//      */
-//     public open(correlationId: string, callback: (err?: any) => void): void {
-//         if (this.isOpen()) {
-//             if (callback) callback();
-//             return;
-//         }
+     type MyLambdaClient struct  {
+		*LambdaClient
+         ...
+	 }
+         func (c* MyLambdaClient) getData(correlationId string, id string)(result MyData, err error){
 
-//         async.series([
-//             (callback) => {
-//                 this._connectionResolver.resolve(correlationId, (err, connection) => {
-//                     this._connection = connection;
-//                     callback(err);
-//                 });
-//             },
-//             (callback) => {
-//                 let aws = require('aws-sdk');
-                
-//                 aws.config.update({
-//                     accessKeyId: this._connection.getAccessId(),
-//                     secretAccessKey: this._connection.getAccessKey(),
-//                     region: this._connection.getRegion()
-//                 });
+            timing := c.Instrument(correlationId, "myclient.get_data");
+            callRes, callErr := c.Call("get_data" correlationId, { id: id })
+            timing.EndTiming();
+            return callRes, callErr
+         }
+         ...
 
-//                 aws.config.httpOptions = {
-//                     timeout: this._connectTimeout
-//                 };
 
-//                 this._lambda = new aws.Lambda();
+    client = NewMyLambdaClient();
+     client.Configure(NewConfigParamsFromTuples(
+         "connection.region", "us-east-1",
+         "connection.access_id", "XXXXXXXXXXX",
+         "connection.access_key", "XXXXXXXXXXX",
+         "connection.arn", "YYYYYYYYYYYYY"
+     ));
 
-//                 this._opened = true;
-//                 this._logger.debug(correlationId, "Lambda client connected to %s", this._connection.getArn());
+     data, err := client.GetData("123", "1",)
+         ...
 
-//                 callback();
-//             }
-//         ], callback);
-//     }
+*/
+type LambdaClient struct {
+	// The reference to AWS Lambda Function.
+	Lambda *lambda.Lambda
+	// The opened flag.
+	Opened bool
+	// The AWS connection parameters
+	Connection     *awscon.AwsConnectionParams
+	connectTimeout int
+	// The dependencies resolver.
+	DependencyResolver *cref.DependencyResolver
+	// The connection resolver.
+	ConnectionResolver *awscon.AwsConnectionResolver
+	// The logger.
+	Logger *clog.CompositeLogger
+	//The performance counters.
+	Counters *ccount.CompositeCounters
+}
 
-//     /*
-// 	 Closes component and frees used resources.
-// 	 
-// 	 - correlationId 	(optional) transaction id to trace execution through call chain.
-//      - callback 			callback function that receives error or null no errors occured.
-//      */
-//     public close(correlationId: string, callback?: (err?: any) => void): void {
-//         // Todo: close listening?
-//         this._opened = false;
-//         if (callback) callback();
-//     }
+func NewLambdaClient() *LambdaClient {
+	c := &LambdaClient{
+		Opened:             false,
+		connectTimeout:     10000,
+		DependencyResolver: cref.NewDependencyResolver(),
+		ConnectionResolver: awscon.NewAwsConnectionResolver(),
+		Logger:             clog.NewCompositeLogger(),
+		Counters:           ccount.NewCompositeCounters(),
+	}
+	return c
+}
 
-//     /*
-//      Performs AWS Lambda Function invocation.
-//      
-//      - invocationType    an invocation type: "RequestResponse" or "Event"
-//      - cmd               an action name to be called.
-// 	 - correlationId 	(optional) transaction id to trace execution through call chain.
-//      - args              action arguments
-//      - callback          callback function that receives action result or error.
-//      */
-//     protected invoke(invocationType: string, cmd: string, correlationId: string, args: any,
-//         callback?: (err: any, result: any) => void): void {
+//  Configures component by passing configuration parameters.
+//  - config    configuration parameters to be set.
+func (c *LambdaClient) Configure(config *cconf.ConfigParams) {
+	c.ConnectionResolver.Configure(config)
+	c.DependencyResolver.Configure(config)
+	c.connectTimeout = config.GetAsIntegerWithDefault("options.connect_timeout", c.connectTimeout)
+}
 
-//         if (cmd == null) {
-//             let err = new UnknownException(null, 'NO_COMMAND', 'Missing Seneca pattern cmd');
-//             if (callback) callback(err, null);
-//             else this._logger.error(correlationId, err, 'Failed to call %s', cmd);
-//             return;
-//         }
+/*
+ Sets references to dependent components.
 
-//         args = _.clone(args);
-//         args.cmd = cmd;
-//         args.correlation_id = correlationId || IdGenerator.nextShort();
+ - references 	references to locate the component dependencies.
+*/
+func (c *LambdaClient) SetReferences(references cref.IReferences) {
+	c.Logger.SetReferences(references)
+	c.Counters.SetReferences(references)
+	c.ConnectionResolver.SetReferences(references)
+	c.DependencyResolver.SetReferences(references)
+}
 
-//         let params = {
-//             FunctionName: this._connection.getArn(),
-//             InvocationType: invocationType,
-//             LogType: 'None',
-//             Payload: JSON.stringify(args)
-//         }                        
-                        
-//         this._lambda.invoke(params, (err, data) => {
-//             if (callback == null) {
-//                 if (err) this._logger.error(correlationId, err, 'Failed to invoke lambda function');
-//                 return;
-//             }
-            
-//             if (err) {
-//                 err = new InvocationException(
-//                     correlationId, 
-//                     'CALL_FAILED', 
-//                     'Failed to invoke lambda function'
-//                 ).withCause(err);
+//  Adds instrumentation to log calls and measure call time.
+//  It returns a Timing object that is used to end the time measurement.
+//  - correlationId     (optional) transaction id to trace execution through call chain.
+//  - name              a method name.
+//  Returns Timing object to end the time measurement.
+func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.Timing {
+	c.Logger.Trace(correlationId, "Executing %s method", name)
+	return c.Counters.BeginTiming(name + ".exec_time")
+}
 
-//                 if (callback) callback(err, null);
-//             } else {
-//                 let result: any = data.Payload;
-//                 if (_.isString(result)) {
-//                     try {
-//                         result = JSON.parse(result);
-//                     } catch (err) {
-//                         err = new InvocationException(
-//                             correlationId,
-//                             'DESERIALIZATION_FAILED',
-//                             'Failed to deserialize result'
-//                         ).withCause(err);
+//  Checks if the component is opened.
+//  Returns true if the component has been opened and false otherwise.
+func (c *LambdaClient) IsOpen() bool {
+	return c.Opened
+}
 
-//                         callback(err, null);
-//                     }
-//                 }
-//                 callback(null, result);
-//             }
-//         });
-//     }    
+//  Opens the component.
+//  - correlationId 	(optional) transaction id to trace execution through call chain.
+//  - Return 			 error or nil no errors occured.
+func (c *LambdaClient) Open(correlationId string) error {
+	if c.IsOpen() {
+		return nil
+	}
 
-//     /*
-//      Calls a AWS Lambda Function action.
-//      
-//      - cmd               an action name to be called.
-//      - correlationId     (optional) transaction id to trace execution through call chain.
-//      - params            (optional) action parameters.
-//      - callback          (optional) callback function that receives result object or error.
-//      */
-//     protected call(cmd: string, correlationId: string, params: any = {},
-//         callback?: (err: any, result: any) => void): void {
-//         this.invoke('RequestResponse', cmd, correlationId, params, callback);
-//     }
+	wg := sync.WaitGroup{}
+	var errGlobal error
 
-//     /*
-//      Calls a AWS Lambda Function action asynchronously without waiting for response.
-//      
-//      - cmd               an action name to be called.
-//      - correlationId     (optional) transaction id to trace execution through call chain.
-//      - params            (optional) action parameters.
-//      - callback          (optional) callback function that receives error or null for success.
-//      */
-//     protected callOneWay(cmd: string, correlationId: string, params: any = {},
-//         callback?: (err: any) => void): void {
-//         this.invoke('Event', cmd, correlationId, params, callback);
-//     }
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		connection, err := c.ConnectionResolver.Resolve(correlationId)
+		c.Connection = connection
+		errGlobal = err
 
-// }
+		awsCred := credentials.NewStaticCredentials(c.Connection.GetAccessId(), c.Connection.GetAccessKey(), "")
+		sess := session.Must(session.NewSession(&aws.Config{
+			MaxRetries:  aws.Int(3),
+			Region:      aws.String(c.Connection.GetRegion()),
+			Credentials: awsCred,
+		}))
+		// Create new cloudwatch client.
+		c.Lambda = lambda.New(sess)
+		c.Lambda.Config.HTTPClient.Timeout = time.Duration((int64)(c.connectTimeout)) * time.Millisecond
+		c.Logger.Debug(correlationId, "Lambda client connected to %s", c.Connection.GetArn())
+
+	}()
+	wg.Wait()
+	if errGlobal != nil {
+		c.Opened = false
+		return errGlobal
+	}
+	return nil
+}
+
+//  Closes component and frees used resources.
+//  - correlationId 	(optional) transaction id to trace execution through call chain.
+//  - Returns 			 error or null no errors occured.
+func (c *LambdaClient) Close(correlationId string) error {
+	// Todo: close listening?
+	c.Opened = false
+	c.Lambda = nil
+	return nil
+}
+
+//  Performs AWS Lambda Function invocation.
+// 	- prototype reflect.Type type for convert result. Set nil for return raw []byte
+//  - invocationType    an invocation type: "RequestResponse" or "Event"
+//  - cmd               an action name to be called.
+//  - correlationId 	(optional) transaction id to trace execution through call chain.
+//  - args              action arguments
+// Returns           result or error.
+
+func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd string, correlationId string, args map[string]interface{}) (result interface{}, err error) {
+
+	if cmd == "" {
+		err = cerr.NewUnknownError("", "NO_COMMAND", "Missing cmd")
+		c.Logger.Error(correlationId, err, "Failed to call %s", cmd)
+		return nil, err
+	}
+
+	//args = _.clone(args)
+
+	args["cmd"] = cmd
+	if correlationId != "" {
+		args["correlation_id"] = correlationId
+	} else {
+		cdata.IdGenerator.NextLong()
+	}
+	payloads, jsonErr := json.Marshal(args)
+
+	if jsonErr != nil {
+		c.Logger.Error(correlationId, jsonErr, "Failed to call %s", cmd)
+		return nil, jsonErr
+	}
+
+	params := &lambda.InvokeInput{
+		FunctionName:   aws.String(c.Connection.GetArn()),
+		InvocationType: aws.String(invocationType),
+		LogType:        aws.String("None"),
+		Payload:        payloads,
+	}
+
+	data, lambdaErr := c.Lambda.Invoke(params)
+
+	if lambdaErr != nil {
+		err = cerr.NewInvocationError(
+			correlationId,
+			"CALL_FAILED",
+			"Failed to invoke lambda function").WithCause(err)
+		return nil, err
+	}
+	if prototype != nil {
+		return ConvertComandResult(data.Payload, prototype)
+	}
+	return data.Payload, nil
+
+}
+
+//  Calls a AWS Lambda Function action.
+// 	- prototype reflect.Type type for convert result. Set nil for return raw []byte
+//  - cmd               an action name to be called.
+//  - correlationId     (optional) transaction id to trace execution through call chain.
+//  - params            (optional) action parameters.
+//  - Returns           result and error.
+func (c *LambdaClient) Call(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) (result interface{}, err error) {
+	return c.Invoke(prototype, "RequestResponse", cmd, correlationId, params)
+}
+
+//  Calls a AWS Lambda Function action asynchronously without waiting for response.
+// 	- prototype reflect.Type type for convert result. Set nil for return raw []byte
+//  - cmd               an action name to be called.
+//  - correlationId     (optional) transaction id to trace execution through call chain.
+//  - params            (optional) action parameters.
+//  - Returns           error or null for success.
+func (c *LambdaClient) CallOneWay(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) error {
+	_, err := c.Invoke(prototype, "Event", cmd, correlationId, params)
+	return err
+}
