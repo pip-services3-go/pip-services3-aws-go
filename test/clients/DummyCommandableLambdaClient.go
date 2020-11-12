@@ -20,10 +20,10 @@ func (c *DummyCommandableLambdaClient) GetDummies(correlationId string, filter *
 	paging *cdata.PagingParams) (result *awstest.DummyDataPage, err error) {
 
 	params := cdata.NewEmptyAnyValueMap()
-	params.SetAsObject("filter", filter)
+	params.SetAsObject("filter", filter.Value())
 	params.SetAsObject("paging", paging)
 
-	calValue, calErr := c.CallCommand(dummyDataPageType, "get_dummies", correlationId, params.Value())
+	calValue, calErr := c.CallCommand(dummyDataPageType, "get_dummies", correlationId, params)
 	if calErr != nil {
 		return nil, calErr
 	}
@@ -38,7 +38,7 @@ func (c *DummyCommandableLambdaClient) GetDummyById(correlationId string, dummyI
 	params := cdata.NewEmptyAnyValueMap()
 	params.SetAsObject("dummy_id", dummyId)
 
-	calValue, calErr := c.CallCommand(dummyType, "get_dummy_by_id", correlationId, params.Value())
+	calValue, calErr := c.CallCommand(dummyType, "get_dummy_by_id", correlationId, params)
 
 	if calErr != nil {
 		return nil, calErr
@@ -54,7 +54,7 @@ func (c *DummyCommandableLambdaClient) CreateDummy(correlationId string, dummy a
 	params := cdata.NewEmptyAnyValueMap()
 	params.SetAsObject("dummy", dummy)
 
-	calValue, calErr := c.CallCommand(dummyType, "create_dummy", correlationId, params.Value())
+	calValue, calErr := c.CallCommand(dummyType, "create_dummy", correlationId, params)
 	if calErr != nil {
 		return nil, calErr
 	}
@@ -69,7 +69,7 @@ func (c *DummyCommandableLambdaClient) UpdateDummy(correlationId string, dummy a
 	params := cdata.NewEmptyAnyValueMap()
 	params.SetAsObject("dummy", dummy)
 
-	calValue, calErr := c.CallCommand(dummyType, "update_dummy", correlationId, params.Value())
+	calValue, calErr := c.CallCommand(dummyType, "update_dummy", correlationId, params)
 	if calErr != nil {
 		return nil, calErr
 	}
@@ -83,7 +83,7 @@ func (c *DummyCommandableLambdaClient) DeleteDummy(correlationId string, dummyId
 
 	params := cdata.NewEmptyAnyValueMap()
 	params.SetAsObject("dummy_id", dummyId)
-	calValue, calErr := c.CallCommand(dummyType, "delete_dummy", correlationId, params.Value())
+	calValue, calErr := c.CallCommand(dummyType, "delete_dummy", correlationId, params)
 	if calErr != nil {
 		return nil, calErr
 	}

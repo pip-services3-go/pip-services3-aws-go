@@ -1,6 +1,10 @@
 package clients
 
-import "reflect"
+import (
+	"reflect"
+
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+)
 
 /*
  Abstract client that calls commandable AWS Lambda Functions.
@@ -82,9 +86,9 @@ func NewCommandableLambdaClient(name string) *CommandableLambdaClient {
 //    - correlationId     (optional) transaction id to trace execution through call chain.
 //    - params            command parameters.
 //    - Return           result or error.
-func (c *CommandableLambdaClient) CallCommand(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) (result interface{}, err error) {
+func (c *CommandableLambdaClient) CallCommand(prototype reflect.Type, cmd string, correlationId string, params *cdata.AnyValueMap) (result interface{}, err error) {
 	timing := c.Instrument(correlationId, c.name+"."+cmd)
-	callRes, callErr := c.Call(prototype, cmd, correlationId, params)
+	callRes, callErr := c.Call(prototype, cmd, correlationId, params.Value())
 	timing.EndTiming()
 	return callRes, callErr
 
