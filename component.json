@@ -1,6 +1,6 @@
 {
-    "name": "pip-services3-aws",
-    "registry": "pipdevs",
+    "name": "pip-services3-aws-go",
+    "registry": "github.com/pip-services3-go",
     "version": "3.0.5",
-    "build": "0"
+    "build": 0
 }

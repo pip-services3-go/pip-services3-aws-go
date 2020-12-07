@@ -1,14 +1,22 @@
-FROM node:8
+FROM golang:1.13
 
-# set working directory
+# Set environment variables for Go
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+# Set a working directory
 WORKDIR /app
-# copy project file
-COPY package.json .
- 
-# install ALL node_modules, including 'devDependencies'
-RUN npm install
 
-# copy all project
+# Copy the package files
+COPY go.mod ./
+
+# Install all go_modules
+RUN go mod download
+
+# Copy the entire project
 COPY . .
- 
-CMD [ "npm", "test" ]
+
+# Specify the command from running tests
+CMD go test -v ./test/...

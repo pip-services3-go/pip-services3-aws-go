@@ -1,0 +1,6 @@
+/vendor
+/temp/*
+/docker/Dockerfile*
+/docker/docker-compose*.yml
+/*.ps1
+/.github
