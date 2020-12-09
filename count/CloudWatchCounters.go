@@ -22,10 +22,10 @@ import (
  ### Configuration parameters ###
 
  - connections:
-     - discovery_key:         (optional) a key to retrieve the connection from [[IDiscovery]]
+     - discovery_key:         (optional) a key to retrieve the connection from IDiscovery
      - region:                (optional) AWS region
  - credentials:
-     - store_key:             (optional) a key to retrieve the credentials from [[ICredentialStore]]
+     - store_key:             (optional) a key to retrieve the credentials from ICredentialStore
      - access_id:             AWS access/client id
      - access_key:            AWS access/client id
  - options:
@@ -34,38 +34,38 @@ import (
 
  ### References ###
 
- - \*:context-info:\*:\*:1.0      (optional) [[ContextInfo]] to detect the context id and specify counters source
- - \*:discovery:\*:\*:1.0         (optional) [[IDiscovery]] services to resolve connections
+ - \*:context-info:\*:\*:1.0      (optional) ContextInfo to detect the context id and specify counters source
+ - \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connections
  - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
 
- See [[Counter]] (in the Pip.Services components package)
- See [[CachedCounters]] (in the Pip.Services components package)
- See [[CompositeLogger]] (in the Pip.Services components package)
+ See Counter (in the Pip.Services components package)
+ See CachedCounters (in the Pip.Services components package)
+ See CompositeLogger (in the Pip.Services components package)
 
  ### Example ###
 
-      counters := NewCloudWatchCounters();
-     counters.Config(ConfigParams.fromTuples(
-         "connection.region", "us-east-1",
-         "connection.access_id", "XXXXXXXXXXX",
-         "connection.access_key", "XXXXXXXXXXX"
-     ));
-     counters.SetReferences(NewReferencesFromTuples(
-         NewDescriptor("pip-services", "logger", "console", "default", "1.0"),
-         NewConsoleLogger()
-     ));
+    counters := NewCloudWatchCounters();
+    counters.Config(ConfigParams.fromTuples(
+        "connection.region", "us-east-1",
+        "connection.access_id", "XXXXXXXXXXX",
+        "connection.access_key", "XXXXXXXXXXX"
+    ));
+    counters.SetReferences(NewReferencesFromTuples(
+        NewDescriptor("pip-services", "logger", "console", "default", "1.0"),
+        NewConsoleLogger()
+    ));
 
-     err := counters.Open("123")
-         ...
+    err := counters.Open("123")
+        ...
 
-     counters.Increment("mycomponent.mymethod.calls");
-      timing:= counters.BeginTiming("mycomponent.mymethod.exec_time");
+    counters.Increment("mycomponent.mymethod.calls");
+    timing:= counters.BeginTiming("mycomponent.mymethod.exec_time");
 
-         ...
+        ...
 
-         timing.endTiming();
+        timing.endTiming();
 
-     counters.Dump();
+    counters.Dump();
 */
 type CloudWatchCounters struct {
 	ccount.CachedCounters
@@ -92,8 +92,8 @@ func NewCloudWatchCounters() *CloudWatchCounters {
 	return c
 }
 
-//  Configures component by passing configuration parameters.
-//  - config    configuration parameters to be set.
+// Configures component by passing configuration parameters.
+//   - config    configuration parameters to be set.
 func (c *CloudWatchCounters) Configure(config *cconf.ConfigParams) {
 	c.CachedCounters.Configure(config)
 	c.connectionResolver.Configure(config)
@@ -105,8 +105,8 @@ func (c *CloudWatchCounters) Configure(config *cconf.ConfigParams) {
 
 /*
  Sets references to dependent components.
- - references 	references to locate the component dependencies.
- See [[IReferences]] (in the Pip.Services commons package)
+   - references 	references to locate the component dependencies.
+ See IReferences (in the Pip.Services commons package)
 */
 func (c *CloudWatchCounters) SetReferences(references cref.IReferences) {
 	c.logger.SetReferences(references)
@@ -133,8 +133,8 @@ func (c *CloudWatchCounters) IsOpen() bool {
 
 /*
  Opens the component.
- - correlationId 	(optional) transaction id to trace execution through call chain.
- - Returns 			 error or null no errors occured.
+   - correlationId    (optional) transaction id to trace execution through call chain.
+   - Returns          error or null no errors occured.
 */
 func (c *CloudWatchCounters) Open(correlationId string) error {
 	if c.opened {
@@ -175,8 +175,8 @@ func (c *CloudWatchCounters) Open(correlationId string) error {
 
 /*
  Closes component and frees used resources.
- - correlationId 	(optional) transaction id to trace execution through call chain.
- - Return 			 error or nil no errors occured.
+   - correlationId  (optional) transaction id to trace execution through call chain.
+   - Return         error or nil no errors occured.
 */
 func (c *CloudWatchCounters) Close(correlationId string) error {
 	c.opened = false
@@ -234,7 +234,7 @@ func (c *CloudWatchCounters) getCounterData(counter *ccount.Counter, now time.Ti
 
 /*
  Saves the current counters measurements.
- - counters      current counters measurements to be saves.
+   - counters      current counters measurements to be saves.
 */
 func (c *CloudWatchCounters) Save(counters []*ccount.Counter) error {
 	if c.client == nil {

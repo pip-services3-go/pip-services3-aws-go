@@ -16,69 +16,69 @@ import (
 )
 
 /*
- Abstract AWS Lambda function, that acts as a container to instantiate and run components
- and expose them via external entry point.
- *
- When handling calls "cmd" parameter determines which what action shall be called, while
- other parameters are passed to the action itself.
- *
- Container configuration for this Lambda function is stored in "./config/config.yml" file.
- But this path can be overriden by CONFIG_PATH environment variable.
- *
- ### Configuration parameters ###
- *
+Abstract AWS Lambda function, that acts as a container to instantiate and run components
+and expose them via external entry point.
+
+When handling calls "cmd" parameter determines which what action shall be called, while
+other parameters are passed to the action itself.
+
+Container configuration for this Lambda function is stored in "./config/config.yml" file.
+But this path can be overriden by CONFIG_PATH environment variable.
+
+### Configuration parameters ###
+
  - dependencies:
-     - controller:                  override for Controller dependency
+    - controller:                  override for Controller dependency
  - connections:
-     - discovery_key:               (optional) a key to retrieve the connection from [[IDiscovery]]
-     - region:                      (optional) AWS region
+    - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+    - region:                      (optional) AWS region
  - credentials:
-     - store_key:                   (optional) a key to retrieve the credentials from [[ICredentialStore]]
-     - access_id:                   AWS access/client id
-     - access_key:                  AWS access/client id
- *
- ### References ###
- *
- - \*:logger:\*:\*:1.0            (optional) [[ILogger]] components to pass log messages
- - \*:counters:\*:\*:1.0          (optional) [[ICounters]] components to pass collected measurements
- - \*:discovery:\*:\*:1.0         (optional) [[IDiscovery]] services to resolve connection
+    - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
+    - access_id:                   AWS access/client id
+    - access_key:                  AWS access/client id
+
+### References ###
+
+ - \*:logger:\*:\*:1.0            (optional) ILogger components to pass log messages
+ - \*:counters:\*:\*:1.0          (optional) ICounters components to pass collected measurements
+ - \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connection
  - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
- *
- See [[LambdaClient]]
- *
+
+See LambdaClient
+
  ### Example ###
- *
-     class MyLambdaFunction extends LambdaFunction {
-         func (c* LambdaFunction) _controller: IMyController;
-         ...
-         func (c* LambdaFunction) constructor() {
-             base("mygroup", "MyGroup lambda function");
-             c.dependencyResolver.put(
-                 "controller",
-                 new Descriptor("mygroup","controller","*","*","1.0")
-             );
-         }
- *
-         func (c* LambdaFunction) setReferences(references: IReferences){
-             base.setReferences(references);
-             c.controller = c.dependencyResolver.getRequired<IMyController>("controller");
-         }
- *
-         func (c* LambdaFunction) register(){
-             registerAction("get_mydata", null, (params, callback) => {
-                 let correlationId = params.correlation_id;
-                 let id = params.id;
-                 c.controller.getMyData(correlationId, id, callback);
-             });
-             ...
-         }
-     }
- *
-     let lambda = new MyLambdaFunction();
- *
-     service.run((err) => {
-         console.log("MyLambdaFunction is started");
-     });
+ 
+    class MyLambdaFunction extends LambdaFunction {
+        func (c* LambdaFunction) _controller: IMyController;
+        ...
+        func (c* LambdaFunction) constructor() {
+            base("mygroup", "MyGroup lambda function");
+            c.dependencyResolver.put(
+                "controller",
+                new Descriptor("mygroup","controller","*","*","1.0")
+            );
+        }
+ 
+        func (c* LambdaFunction) setReferences(references: IReferences){
+            base.setReferences(references);
+            c.controller = c.dependencyResolver.getRequired<IMyController>("controller");
+        }
+ 
+        func (c* LambdaFunction) register(){
+            registerAction("get_mydata", null, (params, callback) => {
+                let correlationId = params.correlation_id;
+                let id = params.id;
+                c.controller.getMyData(correlationId, id, callback);
+            });
+            ...
+        }
+    }
+ 
+    let lambda = new MyLambdaFunction();
+ 
+    service.run((err) => {
+        console.log("MyLambdaFunction is started");
+    });
 */
 type LambdaFunction struct {
 	*cproc.Container
@@ -106,8 +106,7 @@ type LambdaFunction struct {
 }
 
 /*
-   Creates a new instance of this lambda function.
-   *
+Creates a new instance of this lambda function.
    - name          (optional) a container name (accessible via ContextInfo)
    - description   (optional) a container description (accessible via ContextInfo)
 */
@@ -163,9 +162,8 @@ func (c *LambdaFunction) captureExit(correlationId string) {
 }
 
 /*
- Sets references to dependent components.
- *
- - references 	references to locate the component dependencies.
+Sets references to dependent components.
+  - references 	references to locate the component dependencies.
 */
 func (c *LambdaFunction) SetReferences(references cref.IReferences) {
 	//c.Container.SetReferences(references)
@@ -175,12 +173,11 @@ func (c *LambdaFunction) SetReferences(references cref.IReferences) {
 }
 
 /*
-   Adds instrumentation to log calls and measure call time.
-   It returns a Timing object that is used to end the time measurement.
-   *
+Adds instrumentation to log calls and measure call time.
+It returns a Timing object that is used to end the time measurement.
    - correlationId     (optional) transaction id to trace execution through call chain.
    - name              a method name.
-   Returns Timing object to end the time measurement.
+Returns Timing object to end the time measurement.
 */
 func (c *LambdaFunction) Instrument(correlationId string, name string) *ccount.Timing {
 
@@ -191,11 +188,11 @@ func (c *LambdaFunction) Instrument(correlationId string, name string) *ccount.T
 // InstrumentError method are adds instrumentation to error handling.
 // Parameters:
 //    - correlationId  string  (optional) transaction id to trace execution through call chain.
-//    - name    string          a method name.
+//    - name    string         a method name.
 //    - err     error          an occured error
 //    - result  interface{}    (optional) an execution result
 // Returns:  result interface{}, err error
-//        (optional) an execution callback
+// (optional) an execution callback
 func (c *LambdaFunction) InstrumentError(correlationId string, name string, errIn error,
 	resIn interface{}) (result interface{}, err error) {
 	if errIn != nil {
@@ -206,11 +203,10 @@ func (c *LambdaFunction) InstrumentError(correlationId string, name string, errI
 }
 
 /*
-   Runs this lambda function, loads container configuration,
-   instantiate components and manage their lifecycle,
-   makes this function ready to access action calls.
-   *
-   - callback callback function that receives error or null for success.
+Runs this lambda function, loads container configuration,
+instantiate components and manage their lifecycle,
+makes this function ready to access action calls.
+  - callback callback function that receives error or null for success.
 */
 func (c *LambdaFunction) Run() error {
 	correlationId := c.Info().Name
@@ -225,8 +221,7 @@ func (c *LambdaFunction) Run() error {
 }
 
 /*
-   Registers an action in this lambda function.
-   *
+Registers an action in this lambda function.
    - cmd           a action/command name.
    - schema        a validation schema to validate received parameters.
    - action        an action function that is called when action is invoked.
@@ -324,8 +319,7 @@ func (c *LambdaFunction) Handler(ctx context.Context, event map[string]interface
 }
 
 /*
-   Gets entry point into this lambda function.
-   *
+Gets entry point into this lambda function.
    - event     an incoming event object with invocation parameters.
    - context   a context object with local references.
 */
@@ -340,12 +334,11 @@ func (c *LambdaFunction) GetHandler() func(ctx context.Context, event map[string
 }
 
 /*
-   Calls registered action in this lambda function.
-   "cmd" parameter in the action parameters determin
-   what action shall be called.
-   *
-   This method shall only be used in testing.
-   *
+Calls registered action in this lambda function.
+"cmd" parameter in the action parameters determin
+what action shall be called.
+
+This method shall only be used in testing.
    - params action parameters.
    - callback callback function that receives action result or error.
 */

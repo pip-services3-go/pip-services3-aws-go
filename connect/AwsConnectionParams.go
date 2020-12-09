@@ -18,19 +18,19 @@ The struct is able to compose and parse AWS resource ARNs.
 
 ### Configuration parameters ###
 
-- access_id:     application access id
-- client_id:     alternative to access_id
-- access_key:    application secret key
-- client_key:    alternative to access_key
-- secret_key:    alternative to access_key
+  - access_id:     application access id
+  - client_id:     alternative to access_id
+  - access_key:    application secret key
+  - client_key:    alternative to access_key
+  - secret_key:    alternative to access_key
 
 In addition to standard parameters CredentialParams may contain any number of custom parameters
 
-See [[AwsConnectionResolver]]
+See AwsConnectionResolver
 
 ### Example ###
 
-     connection := NewAwsConnectionParamsFromTuples(
+    connection := NewAwsConnectionParamsFromTuples(
         "region", "us-east-1",
         "access_id", "XXXXXXXXXXXXXXX",
         "secret_key", "XXXXXXXXXXXXXXX",
@@ -38,17 +38,17 @@ See [[AwsConnectionResolver]]
         "bucket", "mybucket"
     );
 
-     region := connection.getRegion();                     // Result: "us-east-1"
-     accessId := connection.getAccessId();                 // Result: "XXXXXXXXXXXXXXX"
-     secretKey := connection.getAccessKey();               // Result: "XXXXXXXXXXXXXXX"
-     pin := connection.getAsNullableString("bucket");      // Result: "mybucket"
+    region := connection.getRegion();                     // Result: "us-east-1"
+    accessId := connection.getAccessId();                 // Result: "XXXXXXXXXXXXXXX"
+    secretKey := connection.getAccessKey();               // Result: "XXXXXXXXXXXXXXX"
+    pin := connection.getAsNullableString("bucket");      // Result: "mybucket"
 */
 type AwsConnectionParams struct {
 	*cconf.ConfigParams
 }
 
 // NewAwsConnectionParams creates an new instance of the connection parameters.
-//  - values 	(optional) an object to be converted into key-value pairs to initialize this connection.
+//   - values 	(optional) an object to be converted into key-value pairs to initialize this connection.
 func NewAwsConnectionParams(values map[string]string) *AwsConnectionParams {
 	c := AwsConnectionParams{}
 	c.ConfigParams = cconf.NewConfigParams(values)
@@ -63,7 +63,7 @@ func NewEmptyAwsConnectionParams() *AwsConnectionParams {
 }
 
 // GetPartition Gets the AWS partition name.
-//  Returns the AWS partition name.
+// Returns the AWS partition name.
 func (c *AwsConnectionParams) GetPartition() string {
 	res := c.GetAsNullableString("partition")
 	if res != nil && *res != "" {
@@ -73,7 +73,7 @@ func (c *AwsConnectionParams) GetPartition() string {
 }
 
 // SetPartition Sets the AWS partition name.
-//  - value a new AWS partition name.
+//   - value a new AWS partition name.
 func (c *AwsConnectionParams) SetPartition(value string) {
 	c.Put("partition", value)
 }
@@ -93,7 +93,7 @@ func (c *AwsConnectionParams) GetService() string {
 }
 
 // SetService sets the AWS service name.
-//  - value a new AWS service name.
+//   - value a new AWS service name.
 func (c *AwsConnectionParams) SetService(value string) {
 	c.Put("service", value)
 }
@@ -109,7 +109,7 @@ func (c *AwsConnectionParams) GetRegion() string {
 }
 
 // SetRegion Sets the AWS region.
-//  - value a new AWS region.
+//   - value a new AWS region.
 func (c *AwsConnectionParams) SetRegion(value string) {
 	c.Put("region", value)
 }
@@ -141,7 +141,7 @@ func (c *AwsConnectionParams) GetResourceType() string {
 }
 
 // SetResourceType sets the AWS resource type.
-// - value a new AWS resource type.
+//   - value a new AWS resource type.
 func (c *AwsConnectionParams) SetResourceType(value string) {
 	c.Put("resource_type", value)
 }
@@ -157,7 +157,7 @@ func (c *AwsConnectionParams) GetResource() string {
 }
 
 // SetResource sets the AWS resource id.
-// - value a new AWS resource id.
+//   - value a new AWS resource id.
 func (c *AwsConnectionParams) SetResource(value string) {
 	c.Put("resource", value)
 }
@@ -193,7 +193,7 @@ func (c *AwsConnectionParams) GetArn() string {
 // SetArn sets the AWS resource ARN.
 // When it sets the value, it automatically parses the ARN
 // and sets individual parameters.
-// - value a new AWS resource ARN.
+//   - value a new AWS resource ARN.
 func (c *AwsConnectionParams) SetArn(value string) {
 
 	c.Put("arn", value)
@@ -236,7 +236,7 @@ func (c *AwsConnectionParams) GetAccessId() string {
 }
 
 // SetAccessId sets the AWS access id.
-// - value the AWS access id.
+//   - value the AWS access id.
 func (c *AwsConnectionParams) SetAccessId(value string) {
 	c.Put("access_id", value)
 }
@@ -256,14 +256,14 @@ func (c *AwsConnectionParams) GetAccessKey() string {
 }
 
 // SetAccessKey sets the AWS client key.
-// - value a new AWS client key.
+//   - value a new AWS client key.
 func (c *AwsConnectionParams) SetAccessKey(value string) {
 	c.Put("access_key", value)
 }
 
 //  NewAwsConnectionParamsFromString creates a new AwsConnectionParams object filled with key-value pairs serialized as a string.
-//  - line 		a string with serialized key-value pairs as "key1=value1;key2=value2;..."
-//  					Example: "Key1=123;Key2=ABC;Key3=2016-09-16T00:00:00.00Z"
+//    - line 	a string with serialized key-value pairs as "key1=value1;key2=value2;..."
+//    Example: "Key1=123;Key2=ABC;Key3=2016-09-16T00:00:00.00Z"
 //  Returns			a new AwsConnectionParams object.
 func NewAwsConnectionParamsFromString(line string) *AwsConnectionParams {
 	strinMap := cdata.NewStringValueMapFromString(line)
@@ -271,7 +271,7 @@ func NewAwsConnectionParamsFromString(line string) *AwsConnectionParams {
 }
 
 //  Validates this connection parameters
-//  - correlationId     (optional) transaction id to trace execution through call chain.
+//    - correlationId    (optional) transaction id to trace execution through call chain.
 //  Returns a ConfigException or null if validation passed successfully.
 func (c *AwsConnectionParams) Validate(correlationId string) *cerr.ApplicationError { //ConfigException
 	arn := c.GetArn()
@@ -301,9 +301,9 @@ func (c *AwsConnectionParams) Validate(correlationId string) *cerr.ApplicationEr
 /*
  Retrieves AwsConnectionParams from configuration parameters.
  The values are retrieves from "connection" and "credential" sections.
- - config 	configuration parameters
+   - config   configuration parameters
  Returns			the generated AwsConnectionParams object.
- See [[NewAwsConnectionParamsMergeConfigs]]
+ See NewAwsConnectionParamsMergeConfigs
 */
 func NewAwsConnectionParamsFromConfig(config *cconf.ConfigParams) *AwsConnectionParams {
 	result := NewEmptyAwsConnectionParams()
@@ -323,9 +323,9 @@ func NewAwsConnectionParamsFromConfig(config *cconf.ConfigParams) *AwsConnection
 
 // NewAwsConnectionParamsMergeConfigs retrieves AwsConnectionParams from multiple configuration parameters.
 // The values are retrieves from "connection" and "credential" sections.
-// - configs 	a list with configuration parameters
-// Returns			the generated AwsConnectionParams object.
-// See [[NewAwsConnectionParamsFromConfig]]
+//   - configs   a list with configuration parameters
+// Returns the generated AwsConnectionParams object.
+// See NewAwsConnectionParamsFromConfig
 func NewAwsConnectionParamsMergeConfigs(configs []*cconf.ConfigParams) *AwsConnectionParams {
 
 	var maps []map[string]string

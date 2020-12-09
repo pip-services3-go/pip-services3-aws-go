@@ -7,8 +7,8 @@ import (
 
 //ConvertComandResult method helps get correct result from JSON by prototype
 //Parameters:
-// - comRes interface{}  input JSON string
-// - prototype reflect.Type output object prototype
+//   - comRes interface{}  input JSON string
+//   - prototype reflect.Type output object prototype
 // Returns: convRes interface{}, err error
 func ConvertComandResult(comRes interface{}, prototype reflect.Type) (convRes interface{}, err error) {
 

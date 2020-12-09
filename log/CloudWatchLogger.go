@@ -24,10 +24,10 @@ import (
  - stream:                        (optional) Cloud Watch Log stream (default: context name)
  - group:                         (optional) Cloud Watch Log group (default: context instance ID or hostname)
  - connections:
-     - discovery_key:               (optional) a key to retrieve the connection from [[IDiscovery]]
+     - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
      - region:                      (optional) AWS region
  - credentials:
-     - store_key:                   (optional) a key to retrieve the credentials from [[ICredentialStore]]
+     - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
      - access_id:                   AWS access/client id
      - access_key:                  AWS access/client id
  - options:
@@ -36,37 +36,37 @@ import (
 
  ### References ###
 
- - \*:context-info:\*:\*:1.0      (optional) [[ContextInfo]] to detect the context id and specify counters source
- - \*:discovery:\*:\*:1.0         (optional) [[IDiscovery]] services to resolve connections
+ - \*:context-info:\*:\*:1.0      (optional) ContextInfo to detect the context id and specify counters source
+ - \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connections
  - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
 
- See [[Counter]] (in the Pip.Services components package)
- See [[CachedCounters]] (in the Pip.Services components package)
- See [[CompositeLogger]] (in the Pip.Services components package)
+ See Counter (in the Pip.Services components package)
+ See CachedCounters (in the Pip.Services components package)
+ See CompositeLogger (in the Pip.Services components package)
 
 
  ### Example ###
 
-     logger := NewLogger();
-     logger.Config(NewConfigParamsFromTuples(
-         "stream", "mystream",
-         "group", "mygroup",
-         "connection.region", "us-east-1",
-         "connection.access_id", "XXXXXXXXXXX",
-         "connection.access_key", "XXXXXXXXXXX",
-     ));
-     logger.SetReferences(NewReferencesFromTuples(
-         NewDescriptor("pip-services", "logger", "console", "default", "1.0"),
-         NewConsoleLogger()
-     ));
+    logger := NewLogger();
+    logger.Config(NewConfigParamsFromTuples(
+        "stream", "mystream",
+        "group", "mygroup",
+        "connection.region", "us-east-1",
+        "connection.access_id", "XXXXXXXXXXX",
+        "connection.access_key", "XXXXXXXXXXX",
+    ));
+    logger.SetReferences(NewReferencesFromTuples(
+        NewDescriptor("pip-services", "logger", "console", "default", "1.0"),
+        NewConsoleLogger()
+    ));
 
-     err:= logger.Open("123")
-         ...
+    err:= logger.Open("123")
+        ...
 
-     logger.SetLevel(Debug);
+    logger.SetLevel(Debug);
 
-     logger.Error("123", ex, "Error occured: %s", ex.Message);
-     logger.Debug("123", "Everything is OK.");
+    logger.Error("123", ex, "Error occured: %s", ex.Message);
+    logger.Debug("123", "Everything is OK.");
 */
 type CloudWatchLogger struct {
 	*clog.CachedLogger
@@ -101,8 +101,8 @@ func NewCloudWatchLogger() *CloudWatchLogger {
 	return c
 }
 
-//  Configure method configures component by passing configuration parameters.
-//  - config    configuration parameters to be set.
+// Configure method configures component by passing configuration parameters.
+//   - config    configuration parameters to be set.
 func (c *CloudWatchLogger) Configure(config *cconf.ConfigParams) {
 	c.CachedLogger.Configure(config)
 	c.connectionResolver.Configure(config)
@@ -112,9 +112,9 @@ func (c *CloudWatchLogger) Configure(config *cconf.ConfigParams) {
 	c.connectTimeout = config.GetAsIntegerWithDefault("options.connect_timeout", c.connectTimeout)
 }
 
-//  SetReferences method sets references to dependent components.
-//  - references 	references to locate the component dependencies.
-//  See [[IReferences]] (in the Pip.Services commons package)
+// SetReferences method sets references to dependent components.
+//   - references 	references to locate the component dependencies.
+// See IReferences (in the Pip.Services commons package)
 func (c *CloudWatchLogger) SetReferences(references cref.IReferences) {
 	c.CachedLogger.SetReferences(references)
 	c.logger.SetReferences(references)
@@ -130,11 +130,11 @@ func (c *CloudWatchLogger) SetReferences(references cref.IReferences) {
 	}
 }
 
-//  Writes a log message to the logger destination.
-//  - level             a log level.
-//  - correlationId     (optional) transaction id to trace execution through call chain.
-//  - error             an error object associated with this message.
-//  - message           a human-readable message to log.
+// Writes a log message to the logger destination.
+//   - level             a log level.
+//   - correlationId     (optional) transaction id to trace execution through call chain.
+//   - error             an error object associated with this message.
+//   - message           a human-readable message to log.
 func (c *CloudWatchLogger) Write(level int, correlationId string, ex error, message string) {
 	if c.Level() < level {
 		return
@@ -149,10 +149,9 @@ func (c *CloudWatchLogger) IsOpen() bool {
 }
 
 /*
-	 Opens the component.
-	 *
-	 - correlationId 	(optional) transaction id to trace execution through call chain.
-     - Returns 			 error or nil no errors occured.
+Opens the component.
+    - correlationId 	(optional) transaction id to trace execution through call chain.
+    - Returns 			 error or nil no errors occured.
 */
 func (c *CloudWatchLogger) Open(correlationId string) error {
 	if c.IsOpen() {
@@ -238,9 +237,9 @@ func (c *CloudWatchLogger) Open(correlationId string) error {
 }
 
 /*
-	 Closes component and frees used resources.
-	 - correlationId 	(optional) transaction id to trace execution through call chain.
-     - Returns 		   error or nil no errors occured.
+Closes component and frees used resources.
+    - correlationId (optional) transaction id to trace execution through call chain.
+    - Returns       error or nil no errors occured.
 */
 func (c *CloudWatchLogger) Close(correlationId string) error {
 	err := c.Save(c.Cache)
@@ -289,10 +288,10 @@ func (c *CloudWatchLogger) formatMessageText(message *clog.LogMessage) string {
 }
 
 /*
- Saves log messages from the cache.
- *
- - messages  a list with log messages
- - Returns   error or nil for success.
+Saves log messages from the cache.
+
+   - messages  a list with log messages
+   - Returns   error or nil for success.
 */
 func (c *CloudWatchLogger) Save(messages []*clog.LogMessage) error {
 	if !c.IsOpen() || messages == nil || len(messages) == 0 {

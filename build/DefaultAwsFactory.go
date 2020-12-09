@@ -10,8 +10,8 @@ import (
 /*
  Creates AWS components by their descriptors.
  *
- See [[CloudWatchLogger]]
- See [[CloudWatchCounters]]
+ See CloudWatchLogger
+ See CloudWatchCounters
 */
 type DefaultAwsFactory struct {
 	cbuild.Factory

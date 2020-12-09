@@ -20,37 +20,37 @@ import (
 )
 
 /*
- Abstract client that calls AWS Lambda Functions.
+Abstract client that calls AWS Lambda Functions.
 
- When making calls "cmd" parameter determines which what action shall be called, while
- other parameters are passed to the action itself.
+When making calls "cmd" parameter determines which what action shall be called, while
+other parameters are passed to the action itself.
 
- ### Configuration parameters ###
+### Configuration parameters ###
 
  - connections:
-     - discovery_key:               (optional) a key to retrieve the connection from [[IDiscovery]]
+     - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
      - region:                      (optional) AWS region
  - credentials:
-     - store_key:                   (optional) a key to retrieve the credentials from [[ICredentialStore]]
+     - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
      - access_id:                   AWS access/client id
      - access_key:                  AWS access/client id
  - options:
      - connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
 
- ### References ###
+### References ###
 
- - \*:logger:\*:\*:1.0            (optional) [[ILogger]] components to pass log messages
- - \*:counters:\*:\*:1.0          (optional) [[ICounters]] components to pass collected measurements
- - \*:discovery:\*:\*:1.0         (optional) [[IDiscovery]] services to resolve connection
+ - \*:logger:\*:\*:1.0            (optional) ILogger components to pass log messages
+ - \*:counters:\*:\*:1.0          (optional) ICounters components to pass collected measurements
+ - \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connection
  - \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
 
- See [[LambdaFunction]]
- See [[CommandableLambdaClient]]
+ See LambdaFunction
+ See CommandableLambdaClient
 
- ### Example ###
+### Example ###
 
      type MyLambdaClient struct  {
-		*LambdaClient
+        *LambdaClient
          ...
 	 }
          func (c* MyLambdaClient) getData(correlationId string, id string)(result MyData, err error){
@@ -64,16 +64,15 @@ import (
 
 
     client = NewMyLambdaClient();
-     client.Configure(NewConfigParamsFromTuples(
-         "connection.region", "us-east-1",
-         "connection.access_id", "XXXXXXXXXXX",
-         "connection.access_key", "XXXXXXXXXXX",
-         "connection.arn", "YYYYYYYYYYYYY"
-     ));
+    client.Configure(NewConfigParamsFromTuples(
+        "connection.region", "us-east-1",
+        "connection.access_id", "XXXXXXXXXXX",
+        "connection.access_key", "XXXXXXXXXXX",
+        "connection.arn", "YYYYYYYYYYYYY"
+    ));
 
-     data, err := client.GetData("123", "1",)
-         ...
-
+    data, err := client.GetData("123", "1",)
+        ...
 */
 type LambdaClient struct {
 	// The reference to AWS Lambda Function.
@@ -105,8 +104,8 @@ func NewLambdaClient() *LambdaClient {
 	return c
 }
 
-//  Configures component by passing configuration parameters.
-//  - config    configuration parameters to be set.
+// Configures component by passing configuration parameters.
+//   - config    configuration parameters to be set.
 func (c *LambdaClient) Configure(config *cconf.ConfigParams) {
 	c.ConnectionResolver.Configure(config)
 	c.DependencyResolver.Configure(config)
@@ -125,10 +124,10 @@ func (c *LambdaClient) SetReferences(references cref.IReferences) {
 	c.DependencyResolver.SetReferences(references)
 }
 
-//  Adds instrumentation to log calls and measure call time.
-//  It returns a Timing object that is used to end the time measurement.
-//  - correlationId     (optional) transaction id to trace execution through call chain.
-//  - name              a method name.
+// Adds instrumentation to log calls and measure call time.
+// It returns a Timing object that is used to end the time measurement.
+//   - correlationId     (optional) transaction id to trace execution through call chain.
+//   - name              a method name.
 //  Returns Timing object to end the time measurement.
 func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.Timing {
 	c.Logger.Trace(correlationId, "Executing %s method", name)
@@ -141,9 +140,9 @@ func (c *LambdaClient) IsOpen() bool {
 	return c.Opened
 }
 
-//  Opens the component.
-//  - correlationId 	(optional) transaction id to trace execution through call chain.
-//  - Return 			 error or nil no errors occured.
+// Opens the component.
+//   - correlationId 	(optional) transaction id to trace execution through call chain.
+//   - Return 			 error or nil no errors occured.
 func (c *LambdaClient) Open(correlationId string) error {
 	if c.IsOpen() {
 		return nil
@@ -179,9 +178,9 @@ func (c *LambdaClient) Open(correlationId string) error {
 	return nil
 }
 
-//  Closes component and frees used resources.
-//  - correlationId 	(optional) transaction id to trace execution through call chain.
-//  - Returns 			 error or null no errors occured.
+// Closes component and frees used resources.
+//   - correlationId 	(optional) transaction id to trace execution through call chain.
+//   - Returns 			 error or null no errors occured.
 func (c *LambdaClient) Close(correlationId string) error {
 	// Todo: close listening?
 	c.Opened = false
@@ -189,12 +188,12 @@ func (c *LambdaClient) Close(correlationId string) error {
 	return nil
 }
 
-//  Performs AWS Lambda Function invocation.
-// 	- prototype reflect.Type type for convert result. Set nil for return raw []byte
-//  - invocationType    an invocation type: "RequestResponse" or "Event"
-//  - cmd               an action name to be called.
-//  - correlationId 	(optional) transaction id to trace execution through call chain.
-//  - args              action arguments
+// Performs AWS Lambda Function invocation.
+// 	 - prototype reflect.Type type for convert result. Set nil for return raw []byte
+//   - invocationType    an invocation type: "RequestResponse" or "Event"
+//   - cmd               an action name to be called.
+//   - correlationId 	(optional) transaction id to trace execution through call chain.
+//   - args              action arguments
 // Returns           result or error.
 
 func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd string, correlationId string, args map[string]interface{}) (result interface{}, err error) {
@@ -243,22 +242,22 @@ func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd
 
 }
 
-//  Calls a AWS Lambda Function action.
-// 	- prototype reflect.Type type for convert result. Set nil for return raw []byte
-//  - cmd               an action name to be called.
-//  - correlationId     (optional) transaction id to trace execution through call chain.
-//  - params            (optional) action parameters.
-//  - Returns           result and error.
+// Calls a AWS Lambda Function action.
+// 	 - prototype reflect.Type type for convert result. Set nil for return raw []byte
+//   - cmd               an action name to be called.
+//   - correlationId     (optional) transaction id to trace execution through call chain.
+//   - params            (optional) action parameters.
+//   - Returns           result and error.
 func (c *LambdaClient) Call(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) (result interface{}, err error) {
 	return c.Invoke(prototype, "RequestResponse", cmd, correlationId, params)
 }
 
-//  Calls a AWS Lambda Function action asynchronously without waiting for response.
-// 	- prototype reflect.Type type for convert result. Set nil for return raw []byte
-//  - cmd               an action name to be called.
-//  - correlationId     (optional) transaction id to trace execution through call chain.
-//  - params            (optional) action parameters.
-//  - Returns           error or null for success.
+// Calls a AWS Lambda Function action asynchronously without waiting for response.
+// 	 - prototype reflect.Type type for convert result. Set nil for return raw []byte
+//   - cmd               an action name to be called.
+//   - correlationId     (optional) transaction id to trace execution through call chain.
+//   - params            (optional) action parameters.
+//   - Returns           error or null for success.
 func (c *LambdaClient) CallOneWay(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) error {
 	_, err := c.Invoke(prototype, "Event", cmd, correlationId, params)
 	return err
