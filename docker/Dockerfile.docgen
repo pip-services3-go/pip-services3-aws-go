@@ -1,11 +1,7 @@
 FROM golang:1.13
-    
-# Get the source from GitHub
-RUN go get -u go101.org/golds/gold
 
 # Set environment variables for Go
-ENV GO111MODULE=on \
-    GOPRIVATE=github.com/pip-services3-go/*
+ENV GO111MODULE=on
 
 WORKDIR /app
 
@@ -16,5 +12,3 @@ WORKDIR /app
 COPY . ./src
 
 ENTRYPOINT godoc -http=0.0.0.0:6060 -v -goroot=. 
-
-
