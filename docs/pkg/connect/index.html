@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>connect - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.13.15";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package connect
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "connect"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="index.html#AwsConnectionParams">type AwsConnectionParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewAwsConnectionParams">func NewAwsConnectionParams(values map[string]string) *AwsConnectionParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewAwsConnectionParamsFromConfig">func NewAwsConnectionParamsFromConfig(config *cconf.ConfigParams) *AwsConnectionParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewAwsConnectionParamsFromString">func NewAwsConnectionParamsFromString(line string) *AwsConnectionParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewAwsConnectionParamsMergeConfigs">func NewAwsConnectionParamsMergeConfigs(configs []*cconf.ConfigParams) *AwsConnectionParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewEmptyAwsConnectionParams">func NewEmptyAwsConnectionParams() *AwsConnectionParams</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetAccessId">func (c *AwsConnectionParams) GetAccessId() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetAccessKey">func (c *AwsConnectionParams) GetAccessKey() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetAccount">func (c *AwsConnectionParams) GetAccount() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetArn">func (c *AwsConnectionParams) GetArn() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetPartition">func (c *AwsConnectionParams) GetPartition() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetRegion">func (c *AwsConnectionParams) GetRegion() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetResource">func (c *AwsConnectionParams) GetResource() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetResourceType">func (c *AwsConnectionParams) GetResourceType() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.GetService">func (c *AwsConnectionParams) GetService() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetAccessId">func (c *AwsConnectionParams) SetAccessId(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetAccessKey">func (c *AwsConnectionParams) SetAccessKey(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetAccount">func (c *AwsConnectionParams) SetAccount(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetArn">func (c *AwsConnectionParams) SetArn(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetPartition">func (c *AwsConnectionParams) SetPartition(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetRegion">func (c *AwsConnectionParams) SetRegion(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetResource">func (c *AwsConnectionParams) SetResource(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetResourceType">func (c *AwsConnectionParams) SetResourceType(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.SetService">func (c *AwsConnectionParams) SetService(value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionParams.Validate">func (c *AwsConnectionParams) Validate(correlationId string) *cerr.ApplicationError</a></dd>
+				
+			
+				
+				<dd><a href="index.html#AwsConnectionResolver">type AwsConnectionResolver</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewAwsConnectionResolver">func NewAwsConnectionResolver() *AwsConnectionResolver</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionResolver.Configure">func (c *AwsConnectionResolver) Configure(config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionResolver.Resolve">func (c *AwsConnectionResolver) Resolve(correlationId string) (connection *AwsConnectionParams, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AwsConnectionResolver.SetReferences">func (c *AwsConnectionResolver) SetReferences(references cref.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/connect/AwsConnectionParams.go">AwsConnectionParams.go</a>
+			
+				<a href="http://localhost:6060/src/connect/AwsConnectionResolver.go">AwsConnectionResolver.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+		
+			
+			
+			<h2 id="AwsConnectionParams">type <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=1528:1584#L36">AwsConnectionParams</a>
+				<a class="permalink" href="index.html#AwsConnectionParams">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Contains connection parameters to authenticate against Amazon Web Services (AWS)
+and connect to specific AWS resource.
+</p>
+<p>
+The struct is able to compose and parse AWS resource ARNs.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<pre>- access_id:     application access id
+- client_id:     alternative to access_id
+- access_key:    application secret key
+- client_key:    alternative to access_key
+- secret_key:    alternative to access_key
+</pre>
+<h3 id="hdr-In_addition_to_standard_parameters_CredentialParams_may_contain_any_number_of_custom_parameters">In addition to standard parameters CredentialParams may contain any number of custom parameters</h3>
+<p>
+See AwsConnectionResolver
+</p>
+<p>
+### Example ###
+</p>
+<pre>connection := NewAwsConnectionParamsFromTuples(
+    &#34;region&#34;, &#34;us-east-1&#34;,
+    &#34;access_id&#34;, &#34;XXXXXXXXXXXXXXX&#34;,
+    &#34;secret_key&#34;, &#34;XXXXXXXXXXXXXXX&#34;,
+    &#34;service&#34;, &#34;s3&#34;,
+    &#34;bucket&#34;, &#34;mybucket&#34;
+);
+
+region := connection.getRegion();                     // Result: &#34;us-east-1&#34;
+accessId := connection.getAccessId();                 // Result: &#34;XXXXXXXXXXXXXXX&#34;
+secretKey := connection.getAccessKey();               // Result: &#34;XXXXXXXXXXXXXXX&#34;
+pin := connection.getAsNullableString(&#34;bucket&#34;);      // Result: &#34;mybucket&#34;
+</pre>
+
+			<pre>type AwsConnectionParams struct {
+    *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/#ConfigParams">ConfigParams</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewAwsConnectionParams">func <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=1770:1844#L42">NewAwsConnectionParams</a>
+					<a class="permalink" href="index.html#NewAwsConnectionParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewAwsConnectionParams(values map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]<a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a></pre>
+				<p>
+NewAwsConnectionParams creates an new instance of the connection parameters.
+</p>
+<pre>- values 	(optional) an object to be converted into key-value pairs to initialize this connection.
+</pre>
+
+				
+				
+			
+				
+				<h3 id="NewAwsConnectionParamsFromConfig">func <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=8416:8502#L298">NewAwsConnectionParamsFromConfig</a>
+					<a class="permalink" href="index.html#NewAwsConnectionParamsFromConfig">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewAwsConnectionParamsFromConfig(config *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/#ConfigParams">ConfigParams</a>) *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a></pre>
+				<p>
+Retrieves AwsConnectionParams from configuration parameters.
+The values are retrieves from &#34;connection&#34; and &#34;credential&#34; sections.
+</p>
+<pre>- config   configuration parameters
+</pre>
+<p>
+Returns			the generated AwsConnectionParams object.
+See NewAwsConnectionParamsMergeConfigs
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewAwsConnectionParamsFromString">func <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=7187:7258#L258">NewAwsConnectionParamsFromString</a>
+					<a class="permalink" href="index.html#NewAwsConnectionParamsFromString">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewAwsConnectionParamsFromString(line <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a></pre>
+				<p>
+NewAwsConnectionParamsFromString creates a new AwsConnectionParams object filled with key-value pairs serialized as a string.
+</p>
+<pre>- line 	a string with serialized key-value pairs as &#34;key1=value1;key2=value2;...&#34;
+Example: &#34;Key1=123;Key2=ABC;Key3=2016-09-16T00:00:00.00Z&#34;
+</pre>
+<p>
+Returns			a new AwsConnectionParams object.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewAwsConnectionParamsMergeConfigs">func <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=9185:9276#L319">NewAwsConnectionParamsMergeConfigs</a>
+					<a class="permalink" href="index.html#NewAwsConnectionParamsMergeConfigs">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewAwsConnectionParamsMergeConfigs(configs []*<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/#ConfigParams">ConfigParams</a>) *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a></pre>
+				<p>
+NewAwsConnectionParamsMergeConfigs retrieves AwsConnectionParams from multiple configuration parameters.
+The values are retrieves from &#34;connection&#34; and &#34;credential&#34; sections.
+</p>
+<pre>- configs   a list with configuration parameters
+</pre>
+<p>
+Returns the generated AwsConnectionParams object.
+See NewAwsConnectionParamsFromConfig
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewEmptyAwsConnectionParams">func <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=2022:2077#L49">NewEmptyAwsConnectionParams</a>
+					<a class="permalink" href="index.html#NewEmptyAwsConnectionParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewEmptyAwsConnectionParams() *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a></pre>
+				<p>
+NewEmptyAwsConnectionParams creates an new instance of the connection parameters.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="AwsConnectionParams.GetAccessId">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=6017:6067#L216">GetAccessId</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetAccessId">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetAccessId() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetAccessId gets the AWS access id.
+Returns the AWS access id.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetAccessKey">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=6468:6519#L236">GetAccessKey</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetAccessKey">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetAccessKey() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetAccessKey gets the AWS client key.
+Returns the AWS client key.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetAccount">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=3483:3532#L109">GetAccount</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetAccount">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetAccount() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetAccount Gets the AWS account id.
+Returns the AWS account id.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetArn">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=4726:4771#L158">GetArn</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetArn">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetArn() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetArn gets the AWS resource ARN.
+If the ARN is not defined it automatically generates it from other properties.
+Returns the AWS resource ARN.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetPartition">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=2249:2300#L57">GetPartition</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetPartition">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetPartition() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetPartition Gets the AWS partition name.
+Returns the AWS partition name.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetRegion">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=3126:3174#L93">GetRegion</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetRegion">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetRegion() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetRegion gets the AWS region.
+Returns the AWS region.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetResource">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=4267:4317#L141">GetResource</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetResource">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetResource() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetResource gets the AWS resource id.
+</p>
+<pre>Returns the AWS resource id.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetResourceType">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=3860:3914#L125">GetResourceType</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetResourceType">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetResourceType() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetResourceType gets the AWS resource type.
+Returns the AWS resource type.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.GetService">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=2658:2707#L73">GetService</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.GetService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) GetService() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetService gets the AWS service name.
+Returns the AWS service name.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetAccessId">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=6308:6363#L230">SetAccessId</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetAccessId">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetAccessId(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetAccessId sets the AWS access id.
+</p>
+<pre>- value the AWS access id.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetAccessKey">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=6767:6823#L250">SetAccessKey</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetAccessKey">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetAccessKey(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetAccessKey sets the AWS client key.
+</p>
+<pre>- value a new AWS client key.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetAccount">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=3694:3748#L119">SetAccount</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetAccount">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetAccount(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetAccount Sets the AWS account id.
+- value the AWS account id.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetArn">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=5402:5452#L187">SetArn</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetArn">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetArn(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetArn sets the AWS resource ARN.
+When it sets the value, it automatically parses the ARN
+and sets individual parameters.
+</p>
+<pre>- value a new AWS resource ARN.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetPartition">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=2495:2551#L67">SetPartition</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetPartition">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetPartition(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetPartition Sets the AWS partition name.
+</p>
+<pre>- value a new AWS partition name.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetRegion">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=3330:3383#L103">SetRegion</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetRegion">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetRegion(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetRegion Sets the AWS region.
+</p>
+<pre>- value a new AWS region.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetResource">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=4487:4542#L151">SetResource</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetResource">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetResource(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetResource sets the AWS resource id.
+</p>
+<pre>- value a new AWS resource id.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetResourceType">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=4097:4156#L135">SetResourceType</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetResourceType">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetResourceType(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetResourceType sets the AWS resource type.
+</p>
+<pre>- value a new AWS resource type.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.SetService">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=2980:3034#L87">SetService</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.SetService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) SetService(value <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+SetService sets the AWS service name.
+</p>
+<pre>- value a new AWS service name.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionParams.Validate">func (*AwsConnectionParams) <a href="http://localhost:6060/src/connect/AwsConnectionParams.go?s=7570:7653#L266">Validate</a>
+					<a class="permalink" href="index.html#AwsConnectionParams.Validate">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>) Validate(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/errors/">cerr</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/errors/#ApplicationError">ApplicationError</a></pre>
+				<p>
+Validates this connection parameters
+</p>
+<pre>- correlationId    (optional) transaction id to trace execution through call chain.
+</pre>
+<p>
+Returns a ConfigException or null if validation passed successfully.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="AwsConnectionResolver">type <a href="http://localhost:6060/src/connect/AwsConnectionResolver.go?s=2030:2216#L46">AwsConnectionResolver</a>
+				<a class="permalink" href="index.html#AwsConnectionResolver">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Helper class to retrieve AWS connection and credential parameters,
+validate them and compose a AwsConnectionParams value.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<pre>- connections:
+    - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+    - region:                      (optional) AWS region
+    - partition:                   (optional) AWS partition
+    - service:                     (optional) AWS service
+    - resource_type:               (optional) AWS resource type
+    - resource:                    (optional) AWS resource id
+    - arn:                         (optional) AWS resource ARN
+- credentials:
+    - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
+    - access_id:                   AWS access/client id
+    - access_key:                  AWS access/client id
+</pre>
+<p>
+### References ###
+</p>
+<pre>- \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connections
+- \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
+
+See ConnectionParams (in the Pip.Services components package)
+See IDiscovery (in the Pip.Services components package)
+
+### Example ###
+
+   config := NewConfigParamsFromTuples(
+        &#34;connection.region&#34;, &#34;us-east1&#34;,
+        &#34;connection.service&#34;, &#34;s3&#34;,
+        &#34;connection.bucket&#34;, &#34;mybucket&#34;,
+        &#34;credential.access_id&#34;, &#34;XXXXXXXXXX&#34;,
+        &#34;credential.access_key&#34;, &#34;XXXXXXXXXX&#34;
+    );
+
+   connectionResolver := NewAwsConnectionResolver();
+   connectionResolver.Configure(config);
+   connectionResolver.SetReferences(references);
+
+   err, connection :=connectionResolver.Resolve(&#34;123&#34;)
+       // Now use connection...
+</pre>
+
+			<pre>type AwsConnectionResolver struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewAwsConnectionResolver">func <a href="http://localhost:6060/src/connect/AwsConnectionResolver.go?s=2218:2272#L55">NewAwsConnectionResolver</a>
+					<a class="permalink" href="index.html#NewAwsConnectionResolver">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewAwsConnectionResolver() *<a href="index.html#AwsConnectionResolver">AwsConnectionResolver</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="AwsConnectionResolver.Configure">func (*AwsConnectionResolver) <a href="http://localhost:6060/src/connect/AwsConnectionResolver.go?s=2542:2611#L64">Configure</a>
+					<a class="permalink" href="index.html#AwsConnectionResolver.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionResolver">AwsConnectionResolver</a>) Configure(config *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configures component by passing configuration parameters.
+</p>
+<pre>- config    configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionResolver.Resolve">func (*AwsConnectionResolver) <a href="http://localhost:6060/src/connect/AwsConnectionResolver.go?s=3317:3423#L83">Resolve</a>
+					<a class="permalink" href="index.html#AwsConnectionResolver.Resolve">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionResolver">AwsConnectionResolver</a>) Resolve(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (connection *<a href="index.html#AwsConnectionParams">AwsConnectionParams</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Resolves connection and credental parameters and generates a single
+AWSConnectionParams value.
+</p>
+<pre>- correlationId     (optional) transaction id to trace execution through call chain.
+- callback 			callback function that receives AWSConnectionParams value or error.
+</pre>
+<p>
+See IDiscovery (in the Pip.Services components package)
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="AwsConnectionResolver.SetReferences">func (*AwsConnectionResolver) <a href="http://localhost:6060/src/connect/AwsConnectionResolver.go?s=2811:2885#L71">SetReferences</a>
+					<a class="permalink" href="index.html#AwsConnectionResolver.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AwsConnectionResolver">AwsConnectionResolver</a>) SetReferences(references <a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+Sets references to dependent components.
+</p>
+<pre>- references 	references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.13.15.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="http://localhost:6060/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

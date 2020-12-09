@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>container - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.13.15";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package container
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "container"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="index.html#CommandableLambdaFunction">type CommandableLambdaFunction</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewCommandableLambdaFunction">func NewCommandableLambdaFunction(name string, description string) *CommandableLambdaFunction</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableLambdaFunction.Register">func (c *CommandableLambdaFunction) Register()</a></dd>
+				
+			
+				
+				<dd><a href="index.html#IRegisterable">type IRegisterable</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#LambdaFunction">type LambdaFunction</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InheriteLambdaFunction">func InheriteLambdaFunction(name string, description string, register IRegisterable) *LambdaFunction</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.Act">func (c *LambdaFunction) Act(params map[string]interface{}) (string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.GetHandler">func (c *LambdaFunction) GetHandler() func(ctx context.Context, event map[string]interface{}) (string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.Handler">func (c *LambdaFunction) Handler(ctx context.Context, event map[string]interface{}) (string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.Instrument">func (c *LambdaFunction) Instrument(correlationId string, name string) *ccount.Timing</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.InstrumentError">func (c *LambdaFunction) InstrumentError(correlationId string, name string, errIn error, resIn interface{}) (result interface{}, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.RegisterAction">func (c *LambdaFunction) RegisterAction(cmd string, schema *cvalid.Schema, action func(params map[string]interface{}) (result interface{}, err error)) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.Run">func (c *LambdaFunction) Run() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaFunction.SetReferences">func (c *LambdaFunction) SetReferences(references cref.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/container/CommandableLambdaFunction.go">CommandableLambdaFunction.go</a>
+			
+				<a href="http://localhost:6060/src/container/IRegisterable.go">IRegisterable.go</a>
+			
+				<a href="http://localhost:6060/src/container/LambdaFunction.go">LambdaFunction.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+		
+			
+			
+			<h2 id="CommandableLambdaFunction">type <a href="http://localhost:6060/src/container/CommandableLambdaFunction.go?s=2087:2145#L47">CommandableLambdaFunction</a>
+				<a class="permalink" href="index.html#CommandableLambdaFunction">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Abstract AWS Lambda function, that acts as a container to instantiate and run components
+and expose them via external entry point. All actions are automatically generated for commands
+defined in ICommandable components. Each command is exposed as an action defined by &#34;cmd&#34; parameter.
+</p>
+<p>
+Container configuration for this Lambda function is stored in &#34;./config/config.yml&#34; file.
+But this path can be overriden by CONFIG_PATH environment variable.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<pre>- dependencies:
+   - controller:                  override for Controller dependency
+- connections:
+   - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+   - region:                      (optional) AWS region
+- credentials:
+   - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
+   - access_id:                   AWS access/client id
+   - access_key:                  AWS access/client id
+
+### References ###
+
+- \*:logger:\*:\*:1.0            (optional) ILogger components to pass log messages
+- \*:counters:\*:\*:1.0          (optional) ICounters components to pass collected measurements
+- \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connection
+- \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
+</pre>
+<p>
+See LambdaClient
+</p>
+<pre>### Example ###
+
+   class MyLambdaFunction extends CommandableLambdaFunction {
+       private _controller: IMyController;
+       ...
+       func (c* CommandableLambdaFunction) constructor() {
+           base(&#34;mygroup&#34;, &#34;MyGroup lambda function&#34;);
+           c.dependencyResolver.put(
+               &#34;controller&#34;,
+               new Descriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;*&#34;,&#34;*&#34;,&#34;1.0&#34;)
+           );
+       }
+   }
+
+   let lambda = new MyLambdaFunction();
+
+   service.run((err) =&gt; {
+       console.log(&#34;MyLambdaFunction is started&#34;);
+   });
+</pre>
+
+			<pre>type CommandableLambdaFunction struct {
+    *<a href="index.html#LambdaFunction">LambdaFunction</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewCommandableLambdaFunction">func <a href="http://localhost:6060/src/container/CommandableLambdaFunction.go?s=2361:2454#L57">NewCommandableLambdaFunction</a>
+					<a class="permalink" href="index.html#NewCommandableLambdaFunction">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewCommandableLambdaFunction(name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, description <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#CommandableLambdaFunction">CommandableLambdaFunction</a></pre>
+				<p>
+Creates a new instance of this lambda function.
+</p>
+<pre>- name          (optional) a container name (accessible via ContextInfo)
+- description   (optional) a container description (accessible via ContextInfo)
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="CommandableLambdaFunction.Register">func (*CommandableLambdaFunction) <a href="http://localhost:6060/src/container/CommandableLambdaFunction.go?s=3407:3453#L88">Register</a>
+					<a class="permalink" href="index.html#CommandableLambdaFunction.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableLambdaFunction">CommandableLambdaFunction</a>) Register()</pre>
+				<p>
+Registers all actions in this lambda function.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="IRegisterable">type <a href="http://localhost:6060/src/container/IRegisterable.go?s=89:174#L1">IRegisterable</a>
+				<a class="permalink" href="index.html#IRegisterable">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+IRegisterable is interface to perform on-demand registrations.
+</p>
+
+			<pre>type IRegisterable interface {
+    <span class="comment">// Perform required registration steps.</span>
+    Register()
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="LambdaFunction">type <a href="http://localhost:6060/src/container/LambdaFunction.go?s=3006:3489#L73">LambdaFunction</a>
+				<a class="permalink" href="index.html#LambdaFunction">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Abstract AWS Lambda function, that acts as a container to instantiate and run components
+and expose them via external entry point.
+</p>
+<p>
+When handling calls &#34;cmd&#34; parameter determines which what action shall be called, while
+other parameters are passed to the action itself.
+</p>
+<p>
+Container configuration for this Lambda function is stored in &#34;./config/config.yml&#34; file.
+But this path can be overriden by CONFIG_PATH environment variable.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<pre>- dependencies:
+   - controller:                  override for Controller dependency
+- connections:
+   - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+   - region:                      (optional) AWS region
+- credentials:
+   - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
+   - access_id:                   AWS access/client id
+   - access_key:                  AWS access/client id
+</pre>
+<p>
+### References ###
+</p>
+<pre>- \*:logger:\*:\*:1.0            (optional) ILogger components to pass log messages
+- \*:counters:\*:\*:1.0          (optional) ICounters components to pass collected measurements
+- \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connection
+- \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
+</pre>
+<p>
+See LambdaClient
+</p>
+<pre>### Example ###
+
+   class MyLambdaFunction extends LambdaFunction {
+       func (c* LambdaFunction) _controller: IMyController;
+       ...
+       func (c* LambdaFunction) constructor() {
+           base(&#34;mygroup&#34;, &#34;MyGroup lambda function&#34;);
+           c.dependencyResolver.put(
+               &#34;controller&#34;,
+               new Descriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;*&#34;,&#34;*&#34;,&#34;1.0&#34;)
+           );
+       }
+
+       func (c* LambdaFunction) setReferences(references: IReferences){
+           base.setReferences(references);
+           c.controller = c.dependencyResolver.getRequired&lt;IMyController&gt;(&#34;controller&#34;);
+       }
+
+       func (c* LambdaFunction) register(){
+           registerAction(&#34;get_mydata&#34;, null, (params, callback) =&gt; {
+               let correlationId = params.correlation_id;
+               let id = params.id;
+               c.controller.getMyData(correlationId, id, callback);
+           });
+           ...
+       }
+   }
+
+   let lambda = new MyLambdaFunction();
+
+   service.run((err) =&gt; {
+       console.log(&#34;MyLambdaFunction is started&#34;);
+   });
+</pre>
+
+			<pre>type LambdaFunction struct {
+    *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-container-go/container/">cproc</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-container-go/container/#Container">Container</a>
+    <a href="index.html#IRegisterable">IRegisterable</a>
+
+    <span class="comment">/*
+       The dependency resolver.
+    */</span>
+<span id="LambdaFunction.DependencyResolver"></span>    DependencyResolver *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#DependencyResolver">DependencyResolver</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="InheriteLambdaFunction">func <a href="http://localhost:6060/src/container/LambdaFunction.go?s=3704:3804#L103">InheriteLambdaFunction</a>
+					<a class="permalink" href="index.html#InheriteLambdaFunction">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func InheriteLambdaFunction(name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, description <a href="http://localhost:6060/pkg/builtin/#string">string</a>, register <a href="index.html#IRegisterable">IRegisterable</a>) *<a href="index.html#LambdaFunction">LambdaFunction</a></pre>
+				<p>
+Creates a new instance of this lambda function.
+</p>
+<pre>- name          (optional) a container name (accessible via ContextInfo)
+- description   (optional) a container description (accessible via ContextInfo)
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="LambdaFunction.Act">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=10284:10359#L336">Act</a>
+					<a class="permalink" href="index.html#LambdaFunction.Act">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) Act(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (<a href="http://localhost:6060/pkg/builtin/#string">string</a>, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.GetHandler">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=9707:9816#L317">GetHandler</a>
+					<a class="permalink" href="index.html#LambdaFunction.GetHandler">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) GetHandler() func(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, event map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (<a href="http://localhost:6060/pkg/builtin/#string">string</a>, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.Handler">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=9017:9116#L288">Handler</a>
+					<a class="permalink" href="index.html#LambdaFunction.Handler">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) Handler(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, event map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (<a href="http://localhost:6060/pkg/builtin/#string">string</a>, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.Instrument">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=5732:5817#L172">Instrument</a>
+					<a class="permalink" href="index.html#LambdaFunction.Instrument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) Instrument(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#Timing">Timing</a></pre>
+				<p>
+Adds instrumentation to log calls and measure call time.
+It returns a Timing object that is used to end the time measurement.
+</p>
+<pre>- correlationId     (optional) transaction id to trace execution through call chain.
+- name              a method name.
+</pre>
+<p>
+Returns Timing object to end the time measurement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.InstrumentError">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=6354:6494#L186">InstrumentError</a>
+					<a class="permalink" href="index.html#LambdaFunction.InstrumentError">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) InstrumentError(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, errIn <a href="http://localhost:6060/pkg/builtin/#error">error</a>,
+    resIn interface{}) (result interface{}, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InstrumentError method are adds instrumentation to error handling.
+Parameters:
+</p>
+<pre>- correlationId  string  (optional) transaction id to trace execution through call chain.
+- name    string         a method name.
+- err     error          an occured error
+- result  interface{}    (optional) an execution result
+</pre>
+<p>
+Returns:  result interface{}, err error
+(optional) an execution callback
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.RegisterAction">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=7432:7589#L219">RegisterAction</a>
+					<a class="permalink" href="index.html#LambdaFunction.RegisterAction">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) RegisterAction(cmd <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/#Schema">Schema</a>,
+    action func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (result interface{}, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Registers an action in this lambda function.
+</p>
+<pre>- cmd           a action/command name.
+- schema        a validation schema to validate received parameters.
+- action        an action function that is called when action is invoked.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.Run">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=6907:6943#L201">Run</a>
+					<a class="permalink" href="index.html#LambdaFunction.Run">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) Run() <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Runs this lambda function, loads container configuration,
+instantiate components and manage their lifecycle,
+makes this function ready to access action calls.
+</p>
+<pre>- callback callback function that receives error or null for success.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaFunction.SetReferences">func (*LambdaFunction) <a href="http://localhost:6060/src/container/LambdaFunction.go?s=5209:5276#L158">SetReferences</a>
+					<a class="permalink" href="index.html#LambdaFunction.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaFunction">LambdaFunction</a>) SetReferences(references <a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+Sets references to dependent components.
+</p>
+<pre>- references 	references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.13.15.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="http://localhost:6060/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

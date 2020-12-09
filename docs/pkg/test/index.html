@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>test - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.13.15";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package test
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "test"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="index.html#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="index.html#Dummy">type Dummy</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummy">func NewDummy(id string, key string, content string) *Dummy</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#DummyClientFixture">type DummyClientFixture</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummyClientFixture">func NewDummyClientFixture(client IDummyClient) *DummyClientFixture</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyClientFixture.TestCrudOperations">func (c *DummyClientFixture) TestCrudOperations(t *testing.T)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#DummyCommandSet">type DummyCommandSet</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummyCommandSet">func NewDummyCommandSet(controller IDummyController) *DummyCommandSet</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#DummyController">type DummyController</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummyController">func NewDummyController() *DummyController</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyController.Create">func (c *DummyController) Create(correlationId string, entity Dummy) (result *Dummy, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyController.DeleteById">func (c *DummyController) DeleteById(correlationId string, id string) (result *Dummy, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyController.GetCommandSet">func (c *DummyController) GetCommandSet() *ccomand.CommandSet</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyController.GetOneById">func (c *DummyController) GetOneById(correlationId string, id string) (result *Dummy, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyController.GetPageByFilter">func (c *DummyController) GetPageByFilter(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (items *DummyDataPage, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DummyController.Update">func (c *DummyController) Update(correlationId string, newEntity Dummy) (result *Dummy, err error)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#DummyDataPage">type DummyDataPage</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummyDataPage">func NewDummyDataPage(total *int64, data []Dummy) *DummyDataPage</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewEmptyDummyDataPage">func NewEmptyDummyDataPage() *DummyDataPage</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#DummyFactory">type DummyFactory</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummyFactory">func NewDummyFactory() *DummyFactory</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#DummySchema">type DummySchema</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDummySchema">func NewDummySchema() *DummySchema</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#IDummyClient">type IDummyClient</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#IDummyController">type IDummyController</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/test/Dummy.go">Dummy.go</a>
+			
+				<a href="http://localhost:6060/src/test/DummyClientFixture.go">DummyClientFixture.go</a>
+			
+				<a href="http://localhost:6060/src/test/DummyCommandSet.go">DummyCommandSet.go</a>
+			
+				<a href="http://localhost:6060/src/test/DummyController.go">DummyController.go</a>
+			
+				<a href="http://localhost:6060/src/test/DummyFactory.go">DummyFactory.go</a>
+			
+				<a href="http://localhost:6060/src/test/DummySchema.go">DummySchema.go</a>
+			
+				<a href="http://localhost:6060/src/test/DumyDataPage.go">DumyDataPage.go</a>
+			
+				<a href="http://localhost:6060/src/test/IDummyClient.go">IDummyClient.go</a>
+			
+				<a href="http://localhost:6060/src/test/IDummyController.go">IDummyController.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+		
+			
+			
+			<h2 id="Dummy">type <a href="http://localhost:6060/src/test/Dummy.go?s=14:125#L1">Dummy</a>
+				<a class="permalink" href="index.html#Dummy">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type Dummy struct {
+<span id="Dummy.Id"></span>    Id      <a href="http://localhost:6060/pkg/builtin/#string">string</a> `json:&#34;id&#34;`
+<span id="Dummy.Key"></span>    Key     <a href="http://localhost:6060/pkg/builtin/#string">string</a> `json:&#34;key&#34;`
+<span id="Dummy.Content"></span>    Content <a href="http://localhost:6060/pkg/builtin/#string">string</a> `json:&#34;content&#34;`
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummy">func <a href="http://localhost:6060/src/test/Dummy.go?s=127:186#L1">NewDummy</a>
+					<a class="permalink" href="index.html#NewDummy">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummy(id <a href="http://localhost:6060/pkg/builtin/#string">string</a>, key <a href="http://localhost:6060/pkg/builtin/#string">string</a>, content <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#Dummy">Dummy</a></pre>
+				
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="DummyClientFixture">type <a href="http://localhost:6060/src/test/DummyClientFixture.go?s=143:198#L1">DummyClientFixture</a>
+				<a class="permalink" href="index.html#DummyClientFixture">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type DummyClientFixture struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummyClientFixture">func <a href="http://localhost:6060/src/test/DummyClientFixture.go?s=200:267#L4">NewDummyClientFixture</a>
+					<a class="permalink" href="index.html#NewDummyClientFixture">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummyClientFixture(client <a href="index.html#IDummyClient">IDummyClient</a>) *<a href="index.html#DummyClientFixture">DummyClientFixture</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="DummyClientFixture.TestCrudOperations">func (*DummyClientFixture) <a href="http://localhost:6060/src/test/DummyClientFixture.go?s=329:390#L9">TestCrudOperations</a>
+					<a class="permalink" href="index.html#DummyClientFixture.TestCrudOperations">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyClientFixture">DummyClientFixture</a>) TestCrudOperations(t *<a href="http://localhost:6060/pkg/testing/">testing</a>.<a href="http://localhost:6060/pkg/testing/#T">T</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DummyCommandSet">type <a href="http://localhost:6060/src/test/DummyCommandSet.go?s=391:471#L3">DummyCommandSet</a>
+				<a class="permalink" href="index.html#DummyCommandSet">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type DummyCommandSet struct {
+    <a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/commands/">ccomand</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/commands/#CommandSet">CommandSet</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummyCommandSet">func <a href="http://localhost:6060/src/test/DummyCommandSet.go?s=473:542#L8">NewDummyCommandSet</a>
+					<a class="permalink" href="index.html#NewDummyCommandSet">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummyCommandSet(controller <a href="index.html#IDummyController">IDummyController</a>) *<a href="index.html#DummyCommandSet">DummyCommandSet</a></pre>
+				
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="DummyController">type <a href="http://localhost:6060/src/test/DummyController.go?s=166:246#L1">DummyController</a>
+				<a class="permalink" href="index.html#DummyController">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type DummyController struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummyController">func <a href="http://localhost:6060/src/test/DummyController.go?s=248:290#L3">NewDummyController</a>
+					<a class="permalink" href="index.html#NewDummyController">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummyController() *<a href="index.html#DummyController">DummyController</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="DummyController.Create">func (*DummyController) <a href="http://localhost:6060/src/test/DummyController.go?s=1541:1636#L62">Create</a>
+					<a class="permalink" href="index.html#DummyController.Create">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyController">DummyController</a>) Create(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, entity <a href="index.html#Dummy">Dummy</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DummyController.DeleteById">func (*DummyController) <a href="http://localhost:6060/src/test/DummyController.go?s=2085:2181#L82">DeleteById</a>
+					<a class="permalink" href="index.html#DummyController.DeleteById">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyController">DummyController</a>) DeleteById(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, id <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DummyController.GetCommandSet">func (*DummyController) <a href="http://localhost:6060/src/test/DummyController.go?s=365:426#L9">GetCommandSet</a>
+					<a class="permalink" href="index.html#DummyController.GetCommandSet">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyController">DummyController</a>) GetCommandSet() *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/commands/">ccomand</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/commands/#CommandSet">CommandSet</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DummyController.GetOneById">func (*DummyController) <a href="http://localhost:6060/src/test/DummyController.go?s=1294:1390#L52">GetOneById</a>
+					<a class="permalink" href="index.html#DummyController.GetOneById">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyController">DummyController</a>) GetOneById(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, id <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DummyController.GetPageByFilter">func (*DummyController) <a href="http://localhost:6060/src/test/DummyController.go?s=533:686#L16">GetPageByFilter</a>
+					<a class="permalink" href="index.html#DummyController.GetPageByFilter">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyController">DummyController</a>) GetPageByFilter(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, filter *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#FilterParams">FilterParams</a>, paging *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#PagingParams">PagingParams</a>) (items *<a href="index.html#DummyDataPage">DummyDataPage</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DummyController.Update">func (*DummyController) <a href="http://localhost:6060/src/test/DummyController.go?s=1773:1871#L70">Update</a>
+					<a class="permalink" href="index.html#DummyController.Update">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DummyController">DummyController</a>) Update(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, newEntity <a href="index.html#Dummy">Dummy</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DummyDataPage">type <a href="http://localhost:6060/src/test/DumyDataPage.go?s=14:102#L1">DummyDataPage</a>
+				<a class="permalink" href="index.html#DummyDataPage">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type DummyDataPage struct {
+<span id="DummyDataPage.Total"></span>    Total *<a href="http://localhost:6060/pkg/builtin/#int64">int64</a>  `json:&#34;total&#34;`
+<span id="DummyDataPage.Data"></span>    Data  []<a href="index.html#Dummy">Dummy</a> `json:&#34;data&#34;`
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummyDataPage">func <a href="http://localhost:6060/src/test/DumyDataPage.go?s=178:242#L2">NewDummyDataPage</a>
+					<a class="permalink" href="index.html#NewDummyDataPage">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummyDataPage(total *<a href="http://localhost:6060/pkg/builtin/#int64">int64</a>, data []<a href="index.html#Dummy">Dummy</a>) *<a href="index.html#DummyDataPage">DummyDataPage</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NewEmptyDummyDataPage">func <a href="http://localhost:6060/src/test/DumyDataPage.go?s=104:147#L1">NewEmptyDummyDataPage</a>
+					<a class="permalink" href="index.html#NewEmptyDummyDataPage">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewEmptyDummyDataPage() *<a href="index.html#DummyDataPage">DummyDataPage</a></pre>
+				
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="DummyFactory">type <a href="http://localhost:6060/src/test/DummyFactory.go?s=165:288#L1">DummyFactory</a>
+				<a class="permalink" href="index.html#DummyFactory">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type DummyFactory struct {
+    *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/build/">cbuild</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/build/#Factory">Factory</a>
+<span id="DummyFactory.Descriptor"></span>    Descriptor           *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#Descriptor">Descriptor</a>
+<span id="DummyFactory.ControllerDescriptor"></span>    ControllerDescriptor *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#Descriptor">Descriptor</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummyFactory">func <a href="http://localhost:6060/src/test/DummyFactory.go?s=290:326#L4">NewDummyFactory</a>
+					<a class="permalink" href="index.html#NewDummyFactory">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummyFactory() *<a href="index.html#DummyFactory">DummyFactory</a></pre>
+				
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="DummySchema">type <a href="http://localhost:6060/src/test/DummySchema.go?s=168:216#L1">DummySchema</a>
+				<a class="permalink" href="index.html#DummySchema">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type DummySchema struct {
+    <a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/#ObjectSchema">ObjectSchema</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDummySchema">func <a href="http://localhost:6060/src/test/DummySchema.go?s=218:252#L2">NewDummySchema</a>
+					<a class="permalink" href="index.html#NewDummySchema">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDummySchema() *<a href="index.html#DummySchema">DummySchema</a></pre>
+				
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="IDummyClient">type <a href="http://localhost:6060/src/test/IDummyClient.go?s=88:551#L1">IDummyClient</a>
+				<a class="permalink" href="index.html#IDummyClient">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type IDummyClient interface {
+    GetDummies(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, filter *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#FilterParams">FilterParams</a>, paging *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#PagingParams">PagingParams</a>) (result *<a href="index.html#DummyDataPage">DummyDataPage</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    GetDummyById(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, dummyId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    CreateDummy(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, dummy <a href="index.html#Dummy">Dummy</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    UpdateDummy(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, dummy <a href="index.html#Dummy">Dummy</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    DeleteDummy(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, dummyId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="IDummyController">type <a href="http://localhost:6060/src/test/IDummyController.go?s=93:544#L1">IDummyController</a>
+				<a class="permalink" href="index.html#IDummyController">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type IDummyController interface {
+    GetPageByFilter(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, filter *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#FilterParams">FilterParams</a>, paging *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#PagingParams">PagingParams</a>) (result *<a href="index.html#DummyDataPage">DummyDataPage</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    GetOneById(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, id <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    Create(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, entity <a href="index.html#Dummy">Dummy</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    Update(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, entity <a href="index.html#Dummy">Dummy</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+    DeleteById(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, id <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (result *<a href="index.html#Dummy">Dummy</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="../index.html">..</a></td>
+			</tr>
+			
+
+			
+				<tr>
+				
+					<td class="pkg-name" style="padding-left: 0px;">
+						<a href="clients/index.html">clients</a>
+					</td>
+				
+					<td class="pkg-synopsis">
+						
+					</td>
+				</tr>
+			
+				<tr>
+				
+					<td class="pkg-name" style="padding-left: 0px;">
+						<a href="container/index.html">container</a>
+					</td>
+				
+					<td class="pkg-synopsis">
+						
+					</td>
+				</tr>
+			
+				<tr>
+				
+					<td class="pkg-name" style="padding-left: 0px;">
+						<a href="count/index.html">count</a>
+					</td>
+				
+					<td class="pkg-synopsis">
+						
+					</td>
+				</tr>
+			
+				<tr>
+				
+					<td class="pkg-name" style="padding-left: 0px;">
+						<a href="log/index.html">log</a>
+					</td>
+				
+					<td class="pkg-synopsis">
+						
+					</td>
+				</tr>
+			
+		</table>
+	</div>
+
+
+
+<div id="footer">
+Build version go1.13.15.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="http://localhost:6060/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

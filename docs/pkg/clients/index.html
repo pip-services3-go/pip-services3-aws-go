@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>clients - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.13.15";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package clients
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "clients"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="index.html#ConvertComandResult">func ConvertComandResult(comRes interface{}, prototype reflect.Type) (convRes interface{}, err error)</a></dd>
+			
+			
+				
+				<dd><a href="index.html#CommandableLambdaClient">type CommandableLambdaClient</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewCommandableLambdaClient">func NewCommandableLambdaClient(name string) *CommandableLambdaClient</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableLambdaClient.CallCommand">func (c *CommandableLambdaClient) CallCommand(prototype reflect.Type, cmd string, correlationId string, params *cdata.AnyValueMap) (result interface{}, err error)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#LambdaClient">type LambdaClient</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewLambdaClient">func NewLambdaClient() *LambdaClient</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Call">func (c *LambdaClient) Call(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) (result interface{}, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.CallOneWay">func (c *LambdaClient) CallOneWay(prototype reflect.Type, cmd string, correlationId string, params map[string]interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Close">func (c *LambdaClient) Close(correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Configure">func (c *LambdaClient) Configure(config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Instrument">func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.Timing</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Invoke">func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd string, correlationId string, args map[string]interface{}) (result interface{}, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.IsOpen">func (c *LambdaClient) IsOpen() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Open">func (c *LambdaClient) Open(correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.SetReferences">func (c *LambdaClient) SetReferences(references cref.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/clients/CommandableLambdaClient.go">CommandableLambdaClient.go</a>
+			
+				<a href="http://localhost:6060/src/clients/Convert.go">Convert.go</a>
+			
+				<a href="http://localhost:6060/src/clients/LambdaClient.go">LambdaClient.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+			
+			
+			<h2 id="ConvertComandResult">func <a href="http://localhost:6060/src/clients/Convert.go?s=290:391#L3">ConvertComandResult</a>
+				<a class="permalink" href="index.html#ConvertComandResult">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func ConvertComandResult(comRes interface{}, prototype <a href="http://localhost:6060/pkg/reflect/">reflect</a>.<a href="http://localhost:6060/pkg/reflect/#Type">Type</a>) (convRes interface{}, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+			<p>
+ConvertComandResult method helps get correct result from JSON by prototype
+Parameters:
+</p>
+<pre>- comRes interface{}  input JSON string
+- prototype reflect.Type output object prototype
+</pre>
+<p>
+Returns: convRes interface{}, err error
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="CommandableLambdaClient">type <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2008:2075#L56">CommandableLambdaClient</a>
+				<a class="permalink" href="index.html#CommandableLambdaClient">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Abstract client that calls commandable AWS Lambda Functions.
+</p>
+<p>
+Commandable services are generated automatically for ICommandable objects.
+Each command is exposed as action determined by &#34;cmd&#34; parameter.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<p>
+- connections:
+</p>
+<pre>- discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+- region:                      (optional) AWS region
+</pre>
+<p>
+- credentials:
+</p>
+<pre>- store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
+- access_id:                   AWS access/client id
+- access_key:                  AWS access/client id
+</pre>
+<p>
+- options:
+</p>
+<pre>- connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
+</pre>
+<p>
+### References ###
+</p>
+<p>
+- \*:logger:\*:\*:1.0            (optional) ILogger components to pass log messages
+- \*:counters:\*:\*:1.0          (optional) ICounters components to pass collected measurements
+- \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connection
+- \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
+</p>
+<h3 id="hdr-See_LambdaFunction">See LambdaFunction</h3>
+<p>
+### Example ###
+</p>
+<pre>type MyLambdaClient struct {
+     *CommandableLambdaClient
+}
+     ...
+
+     func (c* MyLambdaClient) GetData(correlationId string, id string)(result MyDataPage, err error) {
+
+       return c.callCommand(MyDataPageType,
+             &#34;get_data&#34;,
+             correlationId,
+             map[string]interface{}{ &#34;id&#34;: id })
+
+     }
+     ...
+
+  client := NewMyLambdaClient();
+ client.Configure(NewConfigParamsFromTuples(
+     &#34;connection.region&#34;, &#34;us-east-1&#34;,
+     &#34;connection.access_id&#34;, &#34;XXXXXXXXXXX&#34;,
+     &#34;connection.access_key&#34;, &#34;XXXXXXXXXXX&#34;,
+     &#34;connection.arn&#34;, &#34;YYYYYYYYYYYYY&#34;
+ ));
+
+ res, err := client.GetData(&#34;123&#34;, &#34;1&#34;)
+     ...
+</pre>
+
+			<pre>type CommandableLambdaClient struct {
+    *<a href="index.html#LambdaClient">LambdaClient</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewCommandableLambdaClient">func <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2149:2218#L63">NewCommandableLambdaClient</a>
+					<a class="permalink" href="index.html#NewCommandableLambdaClient">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewCommandableLambdaClient(name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#CommandableLambdaClient">CommandableLambdaClient</a></pre>
+				<p>
+Creates a new instance of this client.
+</p>
+<pre>- name a service name.
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="CommandableLambdaClient.CallCommand">func (*CommandableLambdaClient) <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2752:2914#L79">CallCommand</a>
+					<a class="permalink" href="index.html#CommandableLambdaClient.CallCommand">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableLambdaClient">CommandableLambdaClient</a>) CallCommand(prototype <a href="http://localhost:6060/pkg/reflect/">reflect</a>.<a href="http://localhost:6060/pkg/reflect/#Type">Type</a>, cmd <a href="http://localhost:6060/pkg/builtin/#string">string</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, params *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/data/#AnyValueMap">AnyValueMap</a>) (result interface{}, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Calls a remote action in AWS Lambda function.
+The name of the action is added as &#34;cmd&#34; parameter
+to the action parameters.
+</p>
+<pre>- prototype reflect.Type type for convert result. Set nil for return raw []byte
+- cmd               an action name
+- correlationId     (optional) transaction id to trace execution through call chain.
+- params            command parameters.
+- Return           result or error.
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="LambdaClient">type <a href="http://localhost:6060/src/clients/LambdaClient.go?s=2686:3177#L67">LambdaClient</a>
+				<a class="permalink" href="index.html#LambdaClient">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Abstract client that calls AWS Lambda Functions.
+</p>
+<p>
+When making calls &#34;cmd&#34; parameter determines which what action shall be called, while
+other parameters are passed to the action itself.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<pre>- connections:
+    - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+    - region:                      (optional) AWS region
+- credentials:
+    - store_key:                   (optional) a key to retrieve the credentials from ICredentialStore
+    - access_id:                   AWS access/client id
+    - access_key:                  AWS access/client id
+- options:
+    - connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
+</pre>
+<p>
+### References ###
+</p>
+<pre>- \*:logger:\*:\*:1.0            (optional) ILogger components to pass log messages
+- \*:counters:\*:\*:1.0          (optional) ICounters components to pass collected measurements
+- \*:discovery:\*:\*:1.0         (optional) IDiscovery services to resolve connection
+- \*:credential-store:\*:\*:1.0  (optional) Credential stores to resolve credentials
+
+See LambdaFunction
+See CommandableLambdaClient
+</pre>
+<p>
+### Example ###
+</p>
+<pre>     type MyLambdaClient struct  {
+        *LambdaClient
+         ...
+	 }
+         func (c* MyLambdaClient) getData(correlationId string, id string)(result MyData, err error){
+
+            timing := c.Instrument(correlationId, &#34;myclient.get_data&#34;);
+            callRes, callErr := c.Call(MyDataPageType ,&#34;get_data&#34; correlationId, map[string]interface{ &#34;id&#34;: id })
+            timing.EndTiming();
+            return callRes, callErr
+         }
+         ...
+
+    client = NewMyLambdaClient();
+    client.Configure(NewConfigParamsFromTuples(
+        &#34;connection.region&#34;, &#34;us-east-1&#34;,
+        &#34;connection.access_id&#34;, &#34;XXXXXXXXXXX&#34;,
+        &#34;connection.access_key&#34;, &#34;XXXXXXXXXXX&#34;,
+        &#34;connection.arn&#34;, &#34;YYYYYYYYYYYYY&#34;
+    ));
+
+    data, err := client.GetData(&#34;123&#34;, &#34;1&#34;,)
+        ...
+</pre>
+
+			<pre>type LambdaClient struct {
+    <span class="comment">// The reference to AWS Lambda Function.</span>
+<span id="LambdaClient.Lambda"></span>    Lambda *<a href="http://localhost:6060/pkg/github.com/aws/aws-sdk-go/service/lambda/">lambda</a>.<a href="http://localhost:6060/pkg/github.com/aws/aws-sdk-go/service/lambda/#Lambda">Lambda</a>
+    <span class="comment">// The opened flag.</span>
+<span id="LambdaClient.Opened"></span>    Opened <a href="http://localhost:6060/pkg/builtin/#bool">bool</a>
+    <span class="comment">// The AWS connection parameters</span>
+<span id="LambdaClient.Connection"></span>    Connection *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-aws-go/connect/">awscon</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-aws-go/connect/#AwsConnectionParams">AwsConnectionParams</a>
+
+    <span class="comment">// The dependencies resolver.</span>
+<span id="LambdaClient.DependencyResolver"></span>    DependencyResolver *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#DependencyResolver">DependencyResolver</a>
+    <span class="comment">// The connection resolver.</span>
+<span id="LambdaClient.ConnectionResolver"></span>    ConnectionResolver *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-aws-go/connect/">awscon</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-aws-go/connect/#AwsConnectionResolver">AwsConnectionResolver</a>
+    <span class="comment">// The logger.</span>
+<span id="LambdaClient.Logger"></span>    Logger *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/log/#CompositeLogger">CompositeLogger</a>
+    <span class="comment">//The performance counters.</span>
+<span id="LambdaClient.Counters"></span>    Counters *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#CompositeCounters">CompositeCounters</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewLambdaClient">func <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3179:3215#L85">NewLambdaClient</a>
+					<a class="permalink" href="index.html#NewLambdaClient">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewLambdaClient() *<a href="index.html#LambdaClient">LambdaClient</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="LambdaClient.Call">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=8305:8453#L241">Call</a>
+					<a class="permalink" href="index.html#LambdaClient.Call">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Call(prototype <a href="http://localhost:6060/pkg/reflect/">reflect</a>.<a href="http://localhost:6060/pkg/reflect/#Type">Type</a>, cmd <a href="http://localhost:6060/pkg/builtin/#string">string</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (result interface{}, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Calls a AWS Lambda Function action.
+</p>
+<pre>	 - prototype reflect.Type type for convert result. Set nil for return raw []byte
+  - cmd               an action name to be called.
+  - correlationId     (optional) transaction id to trace execution through call chain.
+  - params            (optional) action parameters.
+  - Returns           result and error.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.CallOneWay">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=8953:9081#L251">CallOneWay</a>
+					<a class="permalink" href="index.html#LambdaClient.CallOneWay">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) CallOneWay(prototype <a href="http://localhost:6060/pkg/reflect/">reflect</a>.<a href="http://localhost:6060/pkg/reflect/#Type">Type</a>, cmd <a href="http://localhost:6060/pkg/builtin/#string">string</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Calls a AWS Lambda Function action asynchronously without waiting for response.
+</p>
+<pre>	 - prototype reflect.Type type for convert result. Set nil for return raw []byte
+  - cmd               an action name to be called.
+  - correlationId     (optional) transaction id to trace execution through call chain.
+  - params            (optional) action parameters.
+  - Returns           error or null for success.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.Close">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=6182:6238#L174">Close</a>
+					<a class="permalink" href="index.html#LambdaClient.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Close(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Closes component and frees used resources.
+</p>
+<pre>- correlationId 	(optional) transaction id to trace execution through call chain.
+- Returns 			 error or null no errors occured.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.Configure">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3638:3698#L99">Configure</a>
+					<a class="permalink" href="index.html#LambdaClient.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Configure(config *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configures component by passing configuration parameters.
+</p>
+<pre>- config    configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.Instrument">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=4551:4634#L122">Instrument</a>
+					<a class="permalink" href="index.html#LambdaClient.Instrument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Instrument(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#Timing">Timing</a></pre>
+				<p>
+Adds instrumentation to log calls and measure call time.
+It returns a Timing object that is used to end the time measurement.
+</p>
+<pre> - correlationId     (optional) transaction id to trace execution through call chain.
+ - name              a method name.
+Returns Timing object to end the time measurement.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.Invoke">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=6742:6913#L189">Invoke</a>
+					<a class="permalink" href="index.html#LambdaClient.Invoke">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Invoke(prototype <a href="http://localhost:6060/pkg/reflect/">reflect</a>.<a href="http://localhost:6060/pkg/reflect/#Type">Type</a>, invocationType <a href="http://localhost:6060/pkg/builtin/#string">string</a>, cmd <a href="http://localhost:6060/pkg/builtin/#string">string</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, args map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (result interface{}, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.IsOpen">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=4862:4898#L129">IsOpen</a>
+					<a class="permalink" href="index.html#LambdaClient.IsOpen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) IsOpen() <a href="http://localhost:6060/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Checks if the component is opened.
+Returns true if the component has been opened and false otherwise.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.Open">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=5082:5137#L136">Open</a>
+					<a class="permalink" href="index.html#LambdaClient.Open">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Open(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Opens the component.
+</p>
+<pre>- correlationId 	(optional) transaction id to trace execution through call chain.
+- Return 			 error or nil no errors occured.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaClient.SetReferences">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3993:4058#L110">SetReferences</a>
+					<a class="permalink" href="index.html#LambdaClient.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) SetReferences(references <a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+Sets references to dependent components.
+</p>
+<p>
+- references 	references to locate the component dependencies.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.13.15.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="http://localhost:6060/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>
