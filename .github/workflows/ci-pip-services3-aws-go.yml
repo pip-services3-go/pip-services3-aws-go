@@ -37,6 +37,6 @@ jobs:
 
     ############# Clear #############
 
-    - name: Install prereq and save build number
+    - name: Clean up
       uses: pip-devops/actions/node/clear@v1
     
