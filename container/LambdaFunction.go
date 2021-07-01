@@ -47,7 +47,7 @@ But this path can be overriden by CONFIG_PATH environment variable.
 See LambdaClient
 
  ### Example ###
- 
+
     class MyLambdaFunction extends LambdaFunction {
         func (c* LambdaFunction) _controller: IMyController;
         ...
@@ -58,12 +58,12 @@ See LambdaClient
                 new Descriptor("mygroup","controller","*","*","1.0")
             );
         }
- 
+
         func (c* LambdaFunction) setReferences(references: IReferences){
             base.setReferences(references);
             c.controller = c.dependencyResolver.getRequired<IMyController>("controller");
         }
- 
+
         func (c* LambdaFunction) register(){
             registerAction("get_mydata", null, (params, callback) => {
                 let correlationId = params.correlation_id;
@@ -73,9 +73,9 @@ See LambdaClient
             ...
         }
     }
- 
+
     let lambda = new MyLambdaFunction();
- 
+
     service.run((err) => {
         console.log("MyLambdaFunction is started");
     });
@@ -179,9 +179,9 @@ It returns a Timing object that is used to end the time measurement.
    - name              a method name.
 Returns Timing object to end the time measurement.
 */
-func (c *LambdaFunction) Instrument(correlationId string, name string) *ccount.Timing {
-
+func (c *LambdaFunction) Instrument(correlationId string, name string) *ccount.CounterTiming {
 	c.Logger().Trace(correlationId, "Executing %s method", name)
+	c.counters.IncrementOne(name + ".exec_count")
 	return c.counters.BeginTiming(name + ".exec_time")
 }
 

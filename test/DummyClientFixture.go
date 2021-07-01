@@ -21,6 +21,9 @@ func (c *DummyClientFixture) TestCrudOperations(t *testing.T) {
 	dummy1 := Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
 	dummy2 := Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
 
+	dummy1.Id = cdata.IdGenerator.NextLong()
+	dummy2.Id = cdata.IdGenerator.NextLong()
+
 	// Create one dummy
 	dummy, err := c.client.CreateDummy("", dummy1)
 	assert.Nil(t, err)
@@ -38,10 +41,10 @@ func (c *DummyClientFixture) TestCrudOperations(t *testing.T) {
 	dummy2 = *dummy
 
 	// Get all dummies
-	dummies, err := c.client.GetDummies("", cdata.NewEmptyFilterParams(), cdata.NewPagingParams(0, 5, false))
+	dummies, err := c.client.GetDummies("", cdata.NewEmptyFilterParams(), cdata.NewPagingParams(0, 15, false))
 	assert.Nil(t, err)
 	assert.NotNil(t, dummies)
-	assert.Len(t, dummies.Data, 2)
+	assert.True(t, len(dummies.Data) >= 2)
 
 	// Update the dummy
 	dummy1.Content = "Updated Content 1"

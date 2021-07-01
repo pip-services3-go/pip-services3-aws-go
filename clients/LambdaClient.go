@@ -17,6 +17,7 @@ import (
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
 	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
 )
 
 /*
@@ -90,6 +91,8 @@ type LambdaClient struct {
 	Logger *clog.CompositeLogger
 	//The performance counters.
 	Counters *ccount.CompositeCounters
+	// The tracer.
+	Tracer *ctrace.CompositeTracer
 }
 
 func NewLambdaClient() *LambdaClient {
@@ -129,8 +132,9 @@ func (c *LambdaClient) SetReferences(references cref.IReferences) {
 //   - correlationId     (optional) transaction id to trace execution through call chain.
 //   - name              a method name.
 //  Returns Timing object to end the time measurement.
-func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.Timing {
+func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.CounterTiming {
 	c.Logger.Trace(correlationId, "Executing %s method", name)
+	c.Counters.IncrementOne(name + ".exec_count")
 	return c.Counters.BeginTiming(name + ".exec_time")
 }
 
@@ -235,6 +239,7 @@ func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd
 			"Failed to invoke lambda function").WithCause(err)
 		return nil, err
 	}
+
 	if prototype != nil {
 		return ConvertComandResult(data.Payload, prototype)
 	}

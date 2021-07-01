@@ -72,8 +72,8 @@ func (c *DummyController) GetOneById(correlationId string, id string) (result *D
 func (c *DummyController) Create(correlationId string, entity Dummy) (result *Dummy, err error) {
 	if entity.Id == "" {
 		entity.Id = cdata.IdGenerator.NextLong()
-		c.entities = append(c.entities, entity)
 	}
+	c.entities = append(c.entities, entity)
 	return &entity, nil
 }
 
