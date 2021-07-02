@@ -82,12 +82,9 @@ func (c *CommandableLambdaFunction) registerCommandSet(commandSet *ccomands.Comm
 
 			args := crun.NewParametersFromValue(params)
 			timing := c.Instrument(correlationId, c.Info().Name+"."+command.Name())
-			execRes, execErr := command.Execute(correlationId, args)
-			timing.EndTiming()
-			instrRes, instrErr := c.InstrumentError(correlationId,
-				c.Info().Name+"."+command.Name(),
-				execErr, execRes)
-			return instrRes, instrErr
+			result, errRes := command.Execute(correlationId, args)
+			timing.EndTiming(errRes)
+			return result, errRes
 		})
 	}
 }

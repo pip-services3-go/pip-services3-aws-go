@@ -6,13 +6,16 @@ import (
 	"os"
 	"os/signal"
 
+	awsserv "github.com/pip-services3-go/pip-services3-aws-go/services"
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
 	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
 	"github.com/pip-services3-go/pip-services3-components-go/log"
+	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
 	cproc "github.com/pip-services3-go/pip-services3-container-go/container"
+	rpcserv "github.com/pip-services3-go/pip-services3-rpc-go/services"
 )
 
 /*
@@ -83,25 +86,19 @@ See LambdaClient
 type LambdaFunction struct {
 	*cproc.Container
 	IRegisterable
-	/*
-	   The performanc counters.
-	*/
+
+	references cref.IReferences
+	// The performanc counters.
 	counters *ccount.CompositeCounters
-	/*
-	   The dependency resolver.
-	*/
+	// The tracer.
+	tracer *ctrace.CompositeTracer
+	// The dependency resolver.
 	DependencyResolver *cref.DependencyResolver
-	/*
-	   The map of registred validation schemas.
-	*/
+	// The map of registred validation schemas
 	schemas map[string]*cvalid.Schema
-	/*
-	   The map of registered actions.
-	*/
+	// The map of registered actions.
 	actions map[string]func(map[string]interface{}) (interface{}, error)
-	/*
-	   The default path to config file.
-	*/
+	// The default path to config file
 	configPath string
 }
 
@@ -113,6 +110,7 @@ Creates a new instance of this lambda function.
 func InheriteLambdaFunction(name string, description string, register IRegisterable) *LambdaFunction {
 	c := &LambdaFunction{
 		counters:           ccount.NewCompositeCounters(),
+		tracer:             ctrace.NewCompositeTracer(nil),
 		DependencyResolver: cref.NewDependencyResolver(),
 		schemas:            make(map[string]*cvalid.Schema, 0),
 		actions:            make(map[string]func(map[string]interface{}) (interface{}, error), 0),
@@ -167,6 +165,7 @@ Sets references to dependent components.
 */
 func (c *LambdaFunction) SetReferences(references cref.IReferences) {
 	//c.Container.SetReferences(references)
+	c.references = references
 	c.counters.SetReferences(references)
 	c.DependencyResolver.SetReferences(references)
 	c.Register()
@@ -179,10 +178,14 @@ It returns a Timing object that is used to end the time measurement.
    - name              a method name.
 Returns Timing object to end the time measurement.
 */
-func (c *LambdaFunction) Instrument(correlationId string, name string) *ccount.CounterTiming {
+func (c *LambdaFunction) Instrument(correlationId string, name string) *rpcserv.InstrumentTiming {
 	c.Logger().Trace(correlationId, "Executing %s method", name)
 	c.counters.IncrementOne(name + ".exec_count")
-	return c.counters.BeginTiming(name + ".exec_time")
+
+	counterTiming := c.counters.BeginTiming(name + ".exec_time")
+	traceTiming := c.tracer.BeginTrace(correlationId, name, "")
+	return rpcserv.NewInstrumentTiming(correlationId, name, "exec",
+		c.Logger(), c.counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are adds instrumentation to error handling.
@@ -218,6 +221,60 @@ func (c *LambdaFunction) Run() error {
 	c.captureErrors(correlationId)
 	c.captureExit(correlationId)
 	return c.Open(correlationId)
+}
+
+//  Opens the component.
+//  - correlationId 	(optional) transaction id to trace execution through call chain.
+func (c *LambdaFunction) Open(correlationId string) error {
+	if c.IsOpen() {
+		return nil
+	}
+
+	err := c.Container.Open(correlationId)
+	if err != nil {
+		return err
+	}
+
+	c.RegisterServices()
+	return nil
+}
+
+// Registers all lambda services in the container.
+func (c *LambdaFunction) RegisterServices() {
+	// Extract regular and commandable Lambda services from references
+	servicesRefs := c.references.GetOptional(
+		cref.NewDescriptor("*", "service", "lambda", "*", "*"),
+	)
+
+	services := make([]awsserv.ILambdaService, 0)
+
+	if servicesRefs != nil {
+		for _, service := range servicesRefs {
+			if s, ok := service.(awsserv.ILambdaService); ok {
+				services = append(services, s)
+			}
+		}
+	}
+
+	cmdServicesRefs := c.references.GetOptional(
+		cref.NewDescriptor("*", "service", "commandable-lambda", "*", "*"),
+	)
+
+	if cmdServicesRefs != nil {
+		for _, service := range cmdServicesRefs {
+			if s, ok := service.(awsserv.ILambdaService); ok {
+				services = append(services, s)
+			}
+		}
+	}
+
+	// Register actions defined in those services
+	for _, service := range services {
+		actions := service.GetActions()
+		for _, action := range actions {
+			c.RegisterAction(action.Cmd, action.Schema, action.Action)
+		}
+	}
 }
 
 /*

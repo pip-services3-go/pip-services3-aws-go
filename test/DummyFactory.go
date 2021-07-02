@@ -7,8 +7,10 @@ import (
 
 type DummyFactory struct {
 	*cbuild.Factory
-	Descriptor           *cref.Descriptor
-	ControllerDescriptor *cref.Descriptor
+	Descriptor                 *cref.Descriptor
+	ControllerDescriptor       *cref.Descriptor
+	LambdaServiceDescriptor    *cref.Descriptor
+	CmdLambdaServiceDescriptor *cref.Descriptor
 }
 
 func NewDummyFactory() *DummyFactory {
