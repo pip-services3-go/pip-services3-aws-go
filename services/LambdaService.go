@@ -1,339 +1,315 @@
 package services
 
-// import { IOpenable } from 'pip-services3-commons-nodex';
-// import { IConfigurable } from 'pip-services3-commons-nodex';
-// import { IReferenceable } from 'pip-services3-commons-nodex';
-// import { IReferences } from 'pip-services3-commons-nodex';
-// import { ConfigParams } from 'pip-services3-commons-nodex';
-// import { DependencyResolver } from 'pip-services3-commons-nodex';
-// import { BadRequestException } from 'pip-services3-commons-nodex';
-// import { CompositeLogger } from 'pip-services3-components-nodex';
-// import { CompositeCounters } from 'pip-services3-components-nodex';
-// import { CompositeTracer } from 'pip-services3-components-nodex';
-// import { InstrumentTiming } from 'pip-services3-rpc-nodex';
-// import { Schema } from 'pip-services3-commons-nodex';
+import (
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
+	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
+	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
+	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
+	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
+	rpcserv "github.com/pip-services3-go/pip-services3-rpc-go/services"
+)
 
-// import { LambdaAction } from './LambdaAction';
-// import { ILambdaService } from './ILambdaService';
+type ILambdaServiceOverrides interface {
+	Register()
+}
 
-// /**
-//  * Abstract service that receives remove calls via AWS Lambda protocol.
-//  *
-//  * This service is intended to work inside LambdaFunction container that
-//  * exploses registered actions externally.
-//  *
-//  * ### Configuration parameters ###
-//  *
-//  * - dependencies:
-//  *   - controller:            override for Controller dependency
-//  *
-//  * ### References ###
-//  *
-//  * - <code>\*:logger:\*:\*:1.0</code>               (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
-//  * - <code>\*:counters:\*:\*:1.0</code>             (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
-//  *
-//  * @see [[LambdaClient]]
-//  *
-//  * ### Example ###
-//  *
-//  *     class MyLambdaService extends LambdaService {
-//  *        private _controller: IMyController;
-//  *        ...
-//  *        public constructor() {
-//  *           base('v1.myservice');
-//  *           this._dependencyResolver.put(
-//  *               "controller",
-//  *               new Descriptor("mygroup","controller","*","*","1.0")
-//  *           );
-//  *        }
-//  *
-//  *        public setReferences(references: IReferences): void {
-//  *           base.setReferences(references);
-//  *           this._controller = this._dependencyResolver.getRequired<IMyController>("controller");
-//  *        }
-//  *
-//  *        public register(): void {
-//  *            registerAction("get_mydata", null, async (params) => {
-//  *                let correlationId = params.correlation_id;
-//  *                let id = params.id;
-//  *                return await this._controller.getMyData(correlationId, id);
-//  *            });
-//  *            ...
-//  *        }
-//  *     }
-//  *
-//  *     let service = new MyLambdaService();
-//  *     service.configure(ConfigParams.fromTuples(
-//  *         "connection.protocol", "http",
-//  *         "connection.host", "localhost",
-//  *         "connection.port", 8080
-//  *     ));
-//  *     service.setReferences(References.fromTuples(
-//  *        new Descriptor("mygroup","controller","default","default","1.0"), controller
-//  *     ));
-//  *
-//  *     service.open("123");
-//  *     console.log("The GRPC service is running on port 8080");
-//  */
-// export abstract class LambdaService implements ILambdaService, IOpenable, IConfigurable,
-//     IReferenceable {
+/*
+Abstract service that receives remove calls via AWS Lambda protocol.
 
-//     private _name: string;
-//     private _actions: LambdaAction[] = [];
-//     private _interceptors: any[] = [];
-//     private _opened: boolean;
+This service is intended to work inside LambdaFunction container that
+exploses registered actions externally.
 
-//     /**
-//      * The dependency resolver.
-//      */
-//     protected _dependencyResolver: DependencyResolver = new DependencyResolver();
-//     /**
-//      * The logger.
-//      */
-//     protected _logger: CompositeLogger = new CompositeLogger();
-//     /**
-//      * The performance counters.
-//      */
-//     protected _counters: CompositeCounters = new CompositeCounters();
-//     /**
-//      * The tracer.
-//      */
-//     protected _tracer: CompositeTracer = new CompositeTracer();
+### Configuration parameters ###
 
-//     /**
-//      * Creates an instance of this service.
-//      * @param name a service name to generate action cmd.
-//      */
-//     public constructor(name?: string) {
-//         this._name = name;
-//     }
+- dependencies:
+  - controller:            override for Controller dependency
 
-//     /**
-//      * Configures component by passing configuration parameters.
-//      *
-//      * @param config    configuration parameters to be set.
-//      */
-//     public configure(config: ConfigParams): void {
-//         this._dependencyResolver.configure(config);
-//     }
+### References ###
 
-//     /**
-//      * Sets references to dependent components.
-//      *
-//      * @param references 	references to locate the component dependencies.
-//      */
-//     public setReferences(references: IReferences): void {
-//         this._logger.setReferences(references);
-//         this._counters.setReferences(references);
-//         this._tracer.setReferences(references);
-//         this._dependencyResolver.setReferences(references);
-//     }
+- *:logger:*:*:1.0               (optional) [[ILogger]] components to pass log messages
+- *:counters:*:*:1.0             (optional) [[ICounters]] components to pass collected measurements
 
-//     /**
-//      * Get all actions supported by the service.
-//      * @returns an array with supported actions.
-//      */
-//     public getActions(): LambdaAction[] {
-//         return this._actions;
-//     }
+See [[LambdaClient]]
 
-//     /**
-//      * Adds instrumentation to log calls and measure call time.
-//      * It returns a Timing object that is used to end the time measurement.
-//      *
-//      * @param correlationId     (optional) transaction id to trace execution through call chain.
-//      * @param name              a method name.
-//      * @returns Timing object to end the time measurement.
-//      */
-//     protected instrument(correlationId: string, name: string): InstrumentTiming {
-//         this._logger.trace(correlationId, "Executing %s method", name);
-//         this._counters.incrementOne(name + ".exec_count");
+### Example ###
 
-//         let counterTiming = this._counters.beginTiming(name + ".exec_time");
-//         let traceTiming = this._tracer.beginTrace(correlationId, name, null);
-//         return new InstrumentTiming(correlationId, name, "exec",
-//             this._logger, this._counters, counterTiming, traceTiming);
-//     }
+    struct MyLambdaService struct  {
+       LambdaService
+       controller IMyController
+    }
+       ...
+       func NewMyLambdaService()* MyLambdaService {
+          c:= &MyLambdaService{}
+          c.LambdaService = NewLambdaService("v1.myservice")
+          c.DependencyResolver.Put(
+              "controller",
+              cref.NewDescriptor("mygroup","controller","*","*","1.0")
+          )
+          return c
+       }
 
-//     /**
-//      * Checks if the component is opened.
-//      *
-//      * @returns true if the component has been opened and false otherwise.
-//      */
-//     public isOpen(): boolean {
-//         return this._opened;
-//     }
+       func (c * LambdaService)  SetReferences(references: IReferences){
+          c.LambdaService.setReferences(references);
+          ref := c.DependencyResolver.GetRequired("controller")
+          c.controller = ref.(IMyController)
+       }
 
-//     /**
-//      * Opens the component.
-//      *
-//      * @param correlationId 	(optional) transaction id to trace execution through call chain.
-//      */
-//     public async open(correlationId: string): Promise<void> {
-//         if (this._opened) {
-//             return;
-//         }
+       func (c * LambdaService)  Register(){
+           c.RegisterAction("get_mydata", nil,  func(params map[string]interface{})(interface{}, error) {
+                correlationId := params.GetAsString("correlation_id")
+                id := params.GetAsString("id")
+               return  c.controller.GetMyData(correlationId, id);
+           });
+           ...
+       }
 
-//         this.register();
+     service := NewMyLambdaService();
+    service.Configure(NewConfigParamsFromTuples(
+        "connection.protocol", "http",
+        "connection.host", "localhost",
+        "connection.port", 8080
+    ));
+    service.SetReferences(cref.NewReferencesFromTuples(
+       cref.NewDescriptor("mygroup","controller","default","default","1.0"), controller
+    ));
 
-//         this._opened = true;
-//     }
+    service.Open("123");
+    fmt.Println("The Lambda 'v1.myservice' service is running on port 8080");
+*/
+type LambdaService struct { // ILambdaService, IOpenable, IConfigurable, IReferenceable
 
-//     /**
-//      * Closes component and frees used resources.
-//      *
-//      * @param correlationId 	(optional) transaction id to trace execution through call chain.
-//      */
-//     public async close(correlationId: string): Promise<void> {
-//         if (!this._opened) {
-//             return;
-//         }
+	name         string
+	actions      []*LambdaAction
+	interceptors []func(params map[string]interface{}, next func(params map[string]interface{}) (interface{}, error)) (interface{}, error)
+	opened       bool
 
-//         this._opened = false;
-//         this._actions = [];
-//         this._interceptors = [];
-//     }
+	Overrides ILambdaServiceOverrides
 
-//     protected applyValidation(schema: Schema, action: (params: any) => Promise<any>): (params: any) => Promise<any> {
-//         // Create an action function
-//         let actionWrapper = async (params) => {
-//             // Validate object
-//             if (schema && params) {
-//                 // Perform validation
-//                 let correlationId = params.correlation_id;
-//                 let err = schema.validateAndReturnException(correlationId, params, false);
-//                 if (err) {
-//                     throw err;
-//                 }
-//             }
+	// The dependency resolver.
+	DependencyResolver *cref.DependencyResolver
+	// The logger.
+	Logger *clog.CompositeLogger
+	//The performance counters.
+	Counters *ccount.CompositeCounters
+	//The tracer.
+	Tracer *ctrace.CompositeTracer
+}
 
-//             let result = await action.call(this, params);
-//             return result;
-//         };
+// Creates an instance of this service.
+// -  name a service name to generate action cmd. RestService()
+func InheritLambdaService(overrides ILambdaServiceOverrides, name string) *LambdaService {
+	return &LambdaService{
+		Overrides:          overrides,
+		name:               name,
+		actions:            make([]*LambdaAction, 0),
+		interceptors:       make([]func(params map[string]interface{}, next func(params map[string]interface{}) (interface{}, error)) (interface{}, error), 0),
+		DependencyResolver: cref.NewDependencyResolver(),
+		Logger:             clog.NewCompositeLogger(),
+		Counters:           ccount.NewCompositeCounters(),
+		Tracer:             ctrace.NewCompositeTracer(nil),
+	}
+}
 
-//         return actionWrapper;
-//     }
+// Configures component by passing configuration parameters.
+// -  config    configuration parameters to be set.
+func (c *LambdaService) Configure(config *cconf.ConfigParams) {
+	c.DependencyResolver.Configure(config)
+}
 
-//     protected applyInterceptors(action: (params: any) => Promise<any>): (params: any) => Promise<any> {
-//         let actionWrapper = action;
+// Sets references to dependent components.
+// -  references 	references to locate the component dependencies.
+func (c *LambdaService) SetReferences(references cref.IReferences) {
+	c.Logger.SetReferences(references)
+	c.Counters.SetReferences(references)
+	c.Tracer.SetReferences(references)
+	c.DependencyResolver.SetReferences(references)
+}
 
-//         for (let index = this._interceptors.length - 1; index >= 0; index--) {
-//             let interceptor = this._interceptors[index];
-//             actionWrapper = ((action) => {
-//                 return (params) => {
-//                     return interceptor(params, action);
-//                 };
-//             })(actionWrapper);
-//         }
+// Get all actions supported by the service.
+// Returns an array with supported actions.
+func (c *LambdaService) GetActions() []*LambdaAction {
+	return c.actions
+}
 
-//         return actionWrapper;
-//     }
+/*
+   Adds instrumentation to log calls and measure call time.
+   It returns a Timing object that is used to end the time measurement.
+    *
+   -  correlationId     (optional) transaction id to trace execution through call chain.
+   -  name              a method name.
+   @returns Timing object to end the time measurement.
+*/
+func (c *LambdaService) Instrument(correlationId string, name string) *rpcserv.InstrumentTiming {
+	c.Logger.Trace(correlationId, "Executing %s method", name)
+	c.Counters.IncrementOne(name + ".exec_count")
 
-//     protected generateActionCmd(name: string): string {
-//         let cmd = name;
-//         if (this._name != null) {
-//             cmd = this._name + "." + cmd;
-//         }
-//         return cmd;
-//     }
+	counterTiming := c.Counters.BeginTiming(name + ".exec_time")
+	traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
+	return rpcserv.NewInstrumentTiming(correlationId, name, "exec",
+		c.Logger, c.Counters, counterTiming, traceTiming)
+}
 
-//     /**
-//      * Registers a action in AWS Lambda function.
-//      *
-//      * @param name          an action name
-//      * @param schema        a validation schema to validate received parameters.
-//      * @param action        an action function that is called when operation is invoked.
-//      */
-//     protected registerAction(name: string, schema: Schema, action: (params: any) => Promise<any>): void {
-//         let actionWrapper = this.applyValidation(schema, action);
-//         actionWrapper = this.applyInterceptors(actionWrapper);
+//    Checks if the component is opened.
+//    Returns true if the component has been opened and false otherwise.
+func (c *LambdaService) IsOpen() bool {
+	return c.opened
+}
 
-//         let self = this;
-//         let registeredAction: LambdaAction = {
-//             cmd: this.generateActionCmd(name),
-//             schema: schema,
-//             action: (params) => { return actionWrapper.call(self, params); }
-//         };
-//         this._actions.push(registeredAction);
-//     }
+//    Opens the component.
+//    -  correlationId 	(optional) transaction id to trace execution through call chain.
+func (c *LambdaService) Open(correlationId string) error {
+	if c.opened {
+		return nil
+	}
 
-//     /**
-//      * Registers an action with authorization.
-//      *
-//      * @param name          an action name
-//      * @param schema        a validation schema to validate received parameters.
-//      * @param authorize     an authorization interceptor
-//      * @param action        an action function that is called when operation is invoked.
-//      */
-//     protected registerActionWithAuth(name: string, schema: Schema,
-//         authorize: (call: any, next: (call: any) => Promise<any>) => Promise<any>,
-//         action: (call: any) => Promise<any>): void {
+	c.Register()
 
-//         let actionWrapper = this.applyValidation(schema, action);
-//         // Add authorization just before validation
-//         actionWrapper = (call) => {
-//             return authorize(call, actionWrapper);
-//         };
-//         actionWrapper = this.applyInterceptors(actionWrapper);
+	c.opened = true
+	return nil
+}
 
-//         let self = this;
-//         let registeredAction: LambdaAction = {
-//             cmd: this.generateActionCmd(name),
-//             schema: schema,
-//             action: (params) => { return actionWrapper.call(self, params); }
-//         };
-//         this._actions.push(registeredAction);
-//     }
+// Closes component and frees used resources.
+// -  correlationId 	(optional) transaction id to trace execution through call chain.
+func (c *LambdaService) Close(correlationId string) error {
+	if !c.opened {
+		return nil
+	}
 
-//     /**
-//      * Registers a middleware for actions in AWS Lambda service.
-//      *
-//      * @param action        an action function that is called when middleware is invoked.
-//      */
-//     protected registerInterceptor(action: (params: any, next: (params: any) => Promise<any>) => Promise<any>): void {
-//         this._interceptors.push(action);
-//     }
+	c.opened = false
+	c.actions = make([]*LambdaAction, 0)
+	c.interceptors = make([]func(params map[string]interface{}, next func(params map[string]interface{}) (interface{}, error)) (interface{}, error), 0)
+	return nil
+}
 
-//     /**
-//      * Registers all service routes in HTTP endpoint.
-//      *
-//      * This method is called by the service and must be overriden
-//      * in child classes.
-//      */
-//     protected abstract register(): void;
+func (c *LambdaService) ApplyValidation(schema *cvalid.Schema, action func(params map[string]interface{}) (interface{}, error)) func(map[string]interface{}) (interface{}, error) {
+	// Create an action function
+	actionWrapper := func(params map[string]interface{}) (interface{}, error) {
+		// Validate object
+		if schema != nil && params != nil {
+			// Perform validation
+			correlationId, _ := params["correlation_id"].(string)
+			err := schema.ValidateAndReturnError(correlationId, params, false)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return action(params)
+	}
 
-//     /**
-//      * Calls registered action in this lambda function.
-//      * "cmd" parameter in the action parameters determin
-//      * what action shall be called.
-//      *
-//      * This method shall only be used in testing.
-//      *
-//      * @param params action parameters.
-//      */
-//      public async act(params: any): Promise<any> {
-//         let cmd: string = params.cmd;
-//         let correlationId = params.correlation_id;
+	return actionWrapper
+}
 
-//         if (cmd == null) {
-//             throw new BadRequestException(
-//                 correlationId,
-//                 'NO_COMMAND',
-//                 'Cmd parameter is missing'
-//             );
-//         }
+func (c *LambdaService) ApplyInterceptors(action func(map[string]interface{}) (interface{}, error)) func(map[string]interface{}) (interface{}, error) {
+	actionWrapper := action
 
-//         const action: LambdaAction = this._actions.find(a => a.cmd == cmd);
-//         if (action == null) {
-//             throw new BadRequestException(
-//                 correlationId,
-//                 'NO_ACTION',
-//                 'Action ' + cmd + ' was not found'
-//             )
-//             .withDetails('command', cmd);
-//         }
+	for index := len(c.interceptors) - 1; index >= 0; index-- {
+		interceptor := c.interceptors[index]
+		actionWrapper = (func(action func(map[string]interface{}) (interface{}, error)) func(map[string]interface{}) (interface{}, error) {
+			return func(params map[string]interface{}) (interface{}, error) {
+				return interceptor(params, action)
+			}
+		})(actionWrapper)
+	}
 
-//         return action.action(params);
-//     }
+	return actionWrapper
+}
 
-// }
+func (c *LambdaService) GenerateActionCmd(name string) string {
+	cmd := name
+	if c.name != "" {
+		cmd = c.name + "." + cmd
+	}
+	return cmd
+}
+
+// Registers a action in AWS Lambda function.
+// -  name          an action name
+// -  schema        a validation schema to validate received parameters.
+// -  action        an action function that is called when operation is invoked.
+func (c *LambdaService) RegisterAction(name string, schema *cvalid.Schema, action func(params map[string]interface{}) (interface{}, error)) {
+	actionWrapper := c.ApplyValidation(schema, action)
+	actionWrapper = c.ApplyInterceptors(actionWrapper)
+
+	registeredAction := &LambdaAction{
+		Cmd:    c.GenerateActionCmd(name),
+		Schema: schema,
+		Action: func(params map[string]interface{}) (interface{}, error) { return actionWrapper(params) },
+	}
+	c.actions = append(c.actions, registeredAction)
+}
+
+// Registers an action with authorization.
+// -  name          an action name
+// -  schema        a validation schema to validate received parameters.
+// -  authorize     an authorization interceptor
+// -  action        an action function that is called when operation is invoked.
+func (c *LambdaService) RegisterActionWithAuth(name string, schema *cvalid.Schema,
+	authorize func(params map[string]interface{}, next func(map[string]interface{}) (interface{}, error)) (interface{}, error),
+	action func(params map[string]interface{}) (interface{}, error)) {
+
+	actionWrapper := c.ApplyValidation(schema, action)
+	// Add authorization just before validation
+	actionWrapper = func(params map[string]interface{}) (interface{}, error) {
+		return authorize(params, actionWrapper)
+	}
+	actionWrapper = c.ApplyInterceptors(actionWrapper)
+
+	registeredAction := &LambdaAction{
+		Cmd:    c.GenerateActionCmd(name),
+		Schema: schema,
+		Action: func(params map[string]interface{}) (interface{}, error) { return actionWrapper(params) },
+	}
+	c.actions = append(c.actions, registeredAction)
+}
+
+// Registers a middleware for actions in AWS Lambda service.
+// -  action        an action function that is called when middleware is invoked.
+func (c *LambdaService) RegisterInterceptor(action func(params map[string]interface{}, next func(params map[string]interface{}) (interface{}, error)) (interface{}, error)) {
+	c.interceptors = append(c.interceptors, action)
+}
+
+// Registers all service routes in HTTP endpoint.
+// This method is called by the service and must be overriden
+// in child classes.
+func (c *LambdaService) Register() {
+	c.Overrides.Register()
+}
+
+// Calls registered action in this lambda function.
+// "cmd" parameter in the action parameters determin
+// what action shall be called.
+// This method shall only be used in testing.
+// -  params action parameters.
+func (c *LambdaService) Act(params map[string]interface{}) (interface{}, error) {
+	cmd, ok := params["cmd"].(string)
+	correlationId, _ := params["correlation_id"].(string)
+
+	if !ok || cmd == "" {
+		return nil, cerr.NewBadRequestError(
+			correlationId,
+			"NO_COMMAND",
+			"Cmd parameter is missing",
+		)
+	}
+
+	var action *LambdaAction
+	for _, act := range c.actions {
+		if act.Cmd == cmd {
+			action = act
+			break
+		}
+	}
+
+	if action == nil {
+		return nil, cerr.NewBadRequestError(
+			correlationId,
+			"NO_ACTION",
+			"Action "+cmd+" was not found",
+		).
+			WithDetails("command", cmd)
+	}
+
+	return action.Action(params)
+}

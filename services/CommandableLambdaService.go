@@ -1,95 +1,104 @@
 package services
 
-// import { ICommandable } from 'pip-services3-commons-nodex';
-// import { CommandSet } from 'pip-services3-commons-nodex';
-// import { Parameters } from 'pip-services3-commons-nodex';
+import (
+	ccomands "github.com/pip-services3-go/pip-services3-commons-go/commands"
+	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
+)
 
-// import { LambdaService } from './LambdaService';
+/*
+Abstract service that receives commands via AWS Lambda protocol
+to operations automatically generated for commands defined in [[https://pip-services3-nodex.github.io/pip-services3-commons-nodex/interfaces/commands.icommandable.html ICommandable components]].
+Each command is exposed as invoke method that receives command name and parameters.
 
-// /**
-//  * Abstract service that receives commands via AWS Lambda protocol
-//  * to operations automatically generated for commands defined in [[https://pip-services3-nodex.github.io/pip-services3-commons-nodex/interfaces/commands.icommandable.html ICommandable components]].
-//  * Each command is exposed as invoke method that receives command name and parameters.
-//  * 
-//  * Commandable services require only 3 lines of code to implement a robust external
-//  * Lambda-based remote interface.
-//  * 
-//  * This service is intended to work inside LambdaFunction container that
-//  * exploses registered actions externally.
-//  * 
-//  * ### Configuration parameters ###
-//  * 
-//  * - dependencies:
-//  *   - controller:            override for Controller dependency
-//  * 
-//  * ### References ###
-//  * 
-//  * - <code>\*:logger:\*:\*:1.0</code>               (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
-//  * - <code>\*:counters:\*:\*:1.0</code>             (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
-//  * 
-//  * @see [[CommandableLambdaClient]]
-//  * @see [[LambdaService]]
-//  * 
-//  * ### Example ###
-//  * 
-//  *     class MyCommandableLambdaService extends CommandableLambdaService {
-//  *        public constructor() {
-//  *           base();
-//  *           this._dependencyResolver.put(
-//  *               "controller",
-//  *               new Descriptor("mygroup","controller","*","*","1.0")
-//  *           );
-//  *        }
-//  *     }
-//  * 
-//  *     let service = new MyCommandableLambdaService();
-//  *     service.setReferences(References.fromTuples(
-//  *        new Descriptor("mygroup","controller","default","default","1.0"), controller
-//  *     ));
-//  * 
-//  *     await service.open("123");
-//  *     console.log("The AWS Lambda service is running");
-//  */
-// export abstract class CommandableLambdaService extends LambdaService {
-//     private _commandSet: CommandSet;
+Commandable services require only 3 lines of code to implement a robust external
+Lambda-based remote interface.
 
-//     /**
-//      * Creates a new instance of the service.
-//      * 
-//      * @param name a service name.
-//      */
-//     public constructor(name: string) {
-//         super(name);
-//         this._dependencyResolver.put('controller', 'none');
-//     }
+This service is intended to work inside LambdaFunction container that
+exploses registered actions externally.
 
-//     /**
-//      * Registers all actions in AWS Lambda function.
-//      */
-//     public register(): void {
-//         let controller: ICommandable = this._dependencyResolver.getOneRequired<ICommandable>('controller');
-//         this._commandSet = controller.getCommandSet();
+### Configuration parameters ###
 
-//         let commands = this._commandSet.getCommands();
-//         for (let index = 0; index < commands.length; index++) {
-//             let command = commands[index];
-//             let name = command.getName();
+- dependencies:
+  - controller:            override for Controller dependency
 
-//             this.registerAction(name, null, (params) => {
-//                 let correlationId = params != null ? params.correlation_id : null;
- 
-//                 let args = Parameters.fromValue(params);
-//                 args.remove("correlation_id");
+### References ###
 
-//                 let timing = this.instrument(correlationId, name);
-//                 try {
-//                     return command.execute(correlationId, args);
-//                 } catch (ex) {
-//                     timing.endFailure(ex);
-//                 } finally {
-//                     timing.endTiming();
-//                 }
-//             });
-//         }
-//     }
-// }
+- *:logger:*:*:1.0               (optional) [[ILogger]] components to pass log messages
+- *:counters:*:*:1.0             (optional) [[ICounters]] components to pass collected measurements
+
+See [[CommandableLambdaClient]]
+See [[LambdaService]]
+
+### Example ###
+
+    struct MyCommandableLambdaService struct  {
+	  *CommandableLambdaService
+	}
+       func NewMyCommandableLambdaService(): MyCommandableLambdaService {
+          c:= &MyCommandableLambdaService{
+			CommandableLambdaService: NewCommandableLambdaService("v1.service")
+		  }
+          c.DependencyResolver.Put(
+              "controller",
+              cref.NewDescriptor("mygroup","controller","*","*","1.0")
+          )
+		  return c
+       }
+
+
+    service := NewMyCommandableLambdaService();
+    service.SetReferences(NewReferencesFromTuples(
+       NewDescriptor("mygroup","controller","default","default","1.0"), controller
+    ));
+
+    service.Open("123");
+    fmt.Println("The AWS Lambda 'v1.service' service is running");
+*/
+type CommandableLambdaService struct {
+	*LambdaService
+	commandSet *ccomands.CommandSet
+}
+
+// Creates a new instance of the service.
+// - name a service name.
+func InheritCommandableLambdaService(overrides ILambdaServiceOverrides, name string) *CommandableLambdaService {
+	c := &CommandableLambdaService{
+		LambdaService: InheritLambdaService(overrides, name),
+	}
+
+	c.DependencyResolver.Put("controller", "none")
+	return c
+}
+
+//   Registers all actions in AWS Lambda function.
+func (c *CommandableLambdaService) Register() {
+	resCtrl, depErr := c.DependencyResolver.GetOneRequired("controller")
+	if depErr != nil {
+		return
+	}
+	controller, ok := resCtrl.(ccomands.ICommandable)
+	if !ok {
+		c.Logger.Error("CommandableHttpService", nil, "Can't cast Controller to ICommandable")
+		return
+	}
+
+	c.commandSet = controller.GetCommandSet()
+
+	commands := c.commandSet.Commands()
+	for index := 0; index < len(commands); index++ {
+		command := commands[index]
+		name := command.Name()
+		c.RegisterAction(name, nil, func(params map[string]interface{}) (interface{}, error) {
+			correlationId, _ := params["correlation_id"].(string)
+
+			args := crun.NewParametersFromValue(params)
+			args.Remove("correlation_id")
+
+			timing := c.Instrument(correlationId, name)
+			result, err := command.Execute(correlationId, args)
+			timing.EndTiming(err)
+			return result, err
+
+		})
+	}
+}

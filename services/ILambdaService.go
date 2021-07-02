@@ -9,5 +9,5 @@ type ILambdaService interface {
 	 * Get all actions supported by the service.
 	 * Returns an array with supported actions.
 	 */
-	getActions() []*LambdaAction
+	GetActions() []*LambdaAction
 }
