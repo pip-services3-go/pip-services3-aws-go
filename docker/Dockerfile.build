@@ -16,5 +16,5 @@ COPY . .
 RUN go mod tidy
 
 # Build the project
-RUN go build -o /app/run_service /app/bin/lambda/service/main.go 
-RUN go build -o /app/run_container /app/bin/lambda/container/main.go
+RUN go build -o /app/main_service /app/bin/lambda/service/main.go 
+RUN go build -o /app/main_container /app/bin/lambda/container/main.go
