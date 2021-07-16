@@ -3,6 +3,7 @@ package clients
 import (
 	"encoding/json"
 	"reflect"
+	"strconv"
 	"sync"
 	"time"
 
@@ -240,10 +241,18 @@ func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd
 		return nil, err
 	}
 
-	if prototype != nil {
-		return ConvertComandResult(data.Payload, prototype)
+	if data.Payload != nil && len(data.Payload) > 0 {
+		unesccapedResult, err := strconv.Unquote(string(data.Payload))
+		if err != nil {
+			return nil, err
+		}
+		if prototype != nil {
+			return ConvertComandResult(([]byte)(unesccapedResult), prototype)
+		}
+		return ([]byte)(unesccapedResult), nil
 	}
-	return data.Payload, nil
+
+	return nil, nil
 
 }
 

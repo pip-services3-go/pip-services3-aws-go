@@ -1,0 +1,7 @@
+---
+- descriptor: "pip-services:logger:console:default:1.0"
+  level: "trace"
+
+# In service mode uncomment one of next dependencies
+- descriptor: "pip-services-dummies:service:lambda:default:1.0"
+#- descriptor: "pip-services-dummies:service:commandable-lambda:1.0"

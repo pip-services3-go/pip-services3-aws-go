@@ -18,7 +18,7 @@ type DummyLambdaService struct {
 
 func NewDummyLambdaService() *DummyLambdaService {
 	c := &DummyLambdaService{}
-	c.LambdaService = awsserv.InheritLambdaService(c, "dummies")
+	c.LambdaService = awsserv.InheritLambdaService(c, "dummy")
 
 	c.DependencyResolver.Put("controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
 	return c

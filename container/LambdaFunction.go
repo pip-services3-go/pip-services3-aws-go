@@ -107,7 +107,7 @@ Creates a new instance of this lambda function.
    - name          (optional) a container name (accessible via ContextInfo)
    - description   (optional) a container description (accessible via ContextInfo)
 */
-func InheriteLambdaFunction(name string, description string, register IRegisterable) *LambdaFunction {
+func InheriteLambdaFunction(name string, description string, register IContainerable) *LambdaFunction {
 	c := &LambdaFunction{
 		counters:           ccount.NewCompositeCounters(),
 		tracer:             ctrace.NewCompositeTracer(nil),
@@ -117,7 +117,7 @@ func InheriteLambdaFunction(name string, description string, register IRegistera
 		configPath:         "./config/config.yml",
 		IRegisterable:      register,
 	}
-	c.Container = cproc.InheritContainer(name, description, c)
+	c.Container = cproc.InheritContainer(name, description, register)
 	c.SetLogger(log.NewConsoleLogger())
 	return c
 }
@@ -164,7 +164,6 @@ Sets references to dependent components.
   - references 	references to locate the component dependencies.
 */
 func (c *LambdaFunction) SetReferences(references cref.IReferences) {
-	//c.Container.SetReferences(references)
 	c.references = references
 	c.counters.SetReferences(references)
 	c.DependencyResolver.SetReferences(references)
@@ -272,6 +271,7 @@ func (c *LambdaFunction) RegisterServices() {
 	for _, service := range services {
 		actions := service.GetActions()
 		for _, action := range actions {
+			c.Logger().Debug("RegisterServices", "Register commmand: %v", action.Cmd)
 			c.RegisterAction(action.Cmd, action.Schema, action.Action)
 		}
 	}

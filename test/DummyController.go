@@ -100,10 +100,9 @@ func (c *DummyController) DeleteById(correlationId string, id string) (result *D
 			} else {
 				c.entities = append(c.entities[:i], c.entities[i+1:]...)
 			}
-		} else {
-			i++
+			return &entity, nil
 		}
-		return &entity, nil
+		i++
 	}
 	return nil, nil
 }

@@ -53,18 +53,25 @@ func (c *DummyLambdaFunction) getOneById(params map[string]interface{}) (interfa
 func (c *DummyLambdaFunction) create(params map[string]interface{}) (interface{}, error) {
 	correlationId, _ := params["correlation_id"].(string)
 	val, _ := json.Marshal(params["dummy"])
-	var entity awstest.Dummy
+	var entity = awstest.Dummy{}
 	json.Unmarshal(val, &entity)
-	return c.controller.Create(
+
+	c.Logger().Debug(correlationId, "Create method called Dummy %v", entity)
+
+	res, err := c.controller.Create(
 		correlationId,
 		entity,
 	)
+
+	c.Logger().Debug(correlationId, "Create method called Result: %v Err: %v", res, err)
+
+	return res, err
 }
 
 func (c *DummyLambdaFunction) update(params map[string]interface{}) (interface{}, error) {
 	correlationId, _ := params["correlation_id"].(string)
 	val, _ := json.Marshal(params["dummy"])
-	var entity awstest.Dummy
+	var entity = awstest.Dummy{}
 	json.Unmarshal(val, &entity)
 	return c.controller.Update(
 		correlationId,
@@ -74,10 +81,16 @@ func (c *DummyLambdaFunction) update(params map[string]interface{}) (interface{}
 
 func (c *DummyLambdaFunction) deleteById(params map[string]interface{}) (interface{}, error) {
 	correlationId, _ := params["correlation_id"].(string)
-	return c.controller.DeleteById(
+
+	c.Logger().Debug(correlationId, "DeleteById method called Id %v", params["dummy_id"].(string))
+
+	res, err := c.controller.DeleteById(
 		correlationId,
 		params["dummy_id"].(string),
 	)
+	c.Logger().Debug(correlationId, "DeleteById method called Result: %v Err: %v", res, err)
+
+	return res, err
 }
 
 func (c *DummyLambdaFunction) Register() {
@@ -113,7 +126,3 @@ func (c *DummyLambdaFunction) Register() {
 			WithOptionalProperty("dummy_id", cconv.String).Schema,
 		c.deleteById)
 }
-
-// func main() {
-// 	lambda.Start(NewDummyLambdaFunction().GetHandler())
-// }

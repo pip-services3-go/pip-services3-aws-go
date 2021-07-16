@@ -18,7 +18,3 @@ func NewDummyCommandableLambdaFunction() *DummyCommandableLambdaFunction {
 	c.AddFactory(awstest.NewDummyFactory())
 	return c
 }
-
-// func main() {
-// 	lambda.Start(NewDummyCommandableLambdaFunction().GetHandler())
-// }

@@ -43,7 +43,7 @@ func TestDummyCommandableLambdaService(t *testing.T) {
 
 	// Create one dummy
 	params["dummy"] = _dummy1
-	params["cmd"] = "dummies.create_dummy"
+	params["cmd"] = "dummy.create_dummy"
 
 	resBody, bodyErr := lambda.Act(params)
 	assert.Nil(t, bodyErr)
@@ -60,7 +60,7 @@ func TestDummyCommandableLambdaService(t *testing.T) {
 
 	// Create another dummy
 	params["dummy"] = _dummy2
-	params["cmd"] = "dummies.create_dummy"
+	params["cmd"] = "dummy.create_dummy"
 
 	resBody, bodyErr = lambda.Act(params)
 	assert.Nil(t, bodyErr)
@@ -75,7 +75,7 @@ func TestDummyCommandableLambdaService(t *testing.T) {
 
 	// Get all dummies
 	delete(params, "dummy")
-	params["cmd"] = "dummies.get_dummies"
+	params["cmd"] = "dummy.get_dummies"
 	resBody, bodyErr = lambda.Act(params)
 	assert.Nil(t, bodyErr)
 
@@ -90,7 +90,7 @@ func TestDummyCommandableLambdaService(t *testing.T) {
 	dummy1.Content = "Updated Content 1"
 
 	params["dummy"] = dummy1
-	params["cmd"] = "dummies.update_dummy"
+	params["cmd"] = "dummy.update_dummy"
 
 	resBody, bodyErr = lambda.Act(params)
 	assert.Nil(t, bodyErr)
@@ -105,7 +105,7 @@ func TestDummyCommandableLambdaService(t *testing.T) {
 	// Delete dummy
 	delete(params, "dummy")
 	params["dummy_id"] = dummy1.Id
-	params["cmd"] = "dummies.delete_dummy"
+	params["cmd"] = "dummy.delete_dummy"
 	resBody, bodyErr = lambda.Act(params)
 	assert.Nil(t, bodyErr)
 
@@ -114,7 +114,7 @@ func TestDummyCommandableLambdaService(t *testing.T) {
 	*dummies.Total = 0
 
 	params["dummy_id"] = dummy1.Id
-	params["cmd"] = "dummies.get_dummy_by_id"
+	params["cmd"] = "dummy.get_dummy_by_id"
 
 	resBody, bodyErr = lambda.Act(params)
 	assert.Nil(t, bodyErr)
