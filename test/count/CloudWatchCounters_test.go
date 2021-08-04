@@ -20,7 +20,7 @@ func TestCloudWatchCounters(t *testing.T) {
 	AWS_ACCESS_KEY := os.Getenv("AWS_ACCESS_KEY")
 
 	if AWS_REGION == "" || AWS_ACCESS_ID == "" || AWS_ACCESS_KEY == "" {
-		panic("AWS keys not sets!")
+		return
 	}
 
 	counters = awscount.NewCloudWatchCounters()

@@ -15,7 +15,7 @@ func TestDummyLambdaClient(t *testing.T) {
 	awsAccessKey := os.Getenv("AWS_ACCESS_KEY")
 
 	if lambdaArn == "" || awsAccessId == "" || awsAccessKey == "" {
-		panic("AWS keys not sets!")
+		return
 	}
 
 	lambdaConfig := cconf.NewConfigParamsFromTuples(
