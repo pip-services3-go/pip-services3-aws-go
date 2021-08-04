@@ -85,7 +85,7 @@ See LambdaClient
 */
 type LambdaFunction struct {
 	*cproc.Container
-	IRegisterable
+	Overrides ILambdaFunctionOverrides
 
 	references cref.IReferences
 	// The performanc counters.
@@ -107,7 +107,7 @@ Creates a new instance of this lambda function.
    - name          (optional) a container name (accessible via ContextInfo)
    - description   (optional) a container description (accessible via ContextInfo)
 */
-func InheriteLambdaFunction(name string, description string, register IContainerable) *LambdaFunction {
+func InheriteLambdaFunction(overrides ILambdaFunctionOverrides, name string, description string) *LambdaFunction {
 	c := &LambdaFunction{
 		counters:           ccount.NewCompositeCounters(),
 		tracer:             ctrace.NewCompositeTracer(nil),
@@ -115,9 +115,9 @@ func InheriteLambdaFunction(name string, description string, register IContainer
 		schemas:            make(map[string]*cvalid.Schema, 0),
 		actions:            make(map[string]func(map[string]interface{}) (interface{}, error), 0),
 		configPath:         "./config/config.yml",
-		IRegisterable:      register,
+		Overrides:          overrides,
 	}
-	c.Container = cproc.InheritContainer(name, description, register)
+	c.Container = cproc.InheritContainer(name, description, overrides)
 	c.SetLogger(log.NewConsoleLogger())
 	return c
 }
@@ -167,7 +167,7 @@ func (c *LambdaFunction) SetReferences(references cref.IReferences) {
 	c.references = references
 	c.counters.SetReferences(references)
 	c.DependencyResolver.SetReferences(references)
-	c.Register()
+	c.Overrides.Register()
 }
 
 /*

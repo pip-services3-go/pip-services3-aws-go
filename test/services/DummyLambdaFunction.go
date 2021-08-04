@@ -11,7 +11,7 @@ type DummyLambdaFunction struct {
 
 func NewDummyLambdaFunction() *DummyLambdaFunction {
 	c := &DummyLambdaFunction{}
-	c.LambdaFunction = awscont.InheriteLambdaFunction("dummy", "Dummy lambda function", c)
+	c.LambdaFunction = awscont.InheriteLambdaFunction(c, "dummy", "Dummy lambda function")
 	c.AddFactory(awstest.NewDummyFactory())
 	c.AddFactory(NewDummyLambdaServiceFactory())
 	return c

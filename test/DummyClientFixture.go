@@ -21,8 +21,8 @@ func (c *DummyClientFixture) TestCrudOperations(t *testing.T) {
 	dummy1 := Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
 	dummy2 := Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
 
-	// dummy1.Id = cdata.IdGenerator.NextLong()
-	// dummy2.Id = cdata.IdGenerator.NextLong()
+	dummy1.Id = cdata.IdGenerator.NextLong()
+	dummy2.Id = cdata.IdGenerator.NextLong()
 
 	// Create one dummy
 	dummy, err := c.client.CreateDummy("", dummy1)

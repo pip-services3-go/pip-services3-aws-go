@@ -66,7 +66,7 @@ Creates a new instance of this lambda function.
 */
 func NewCommandableLambdaFunction(name string, description string) *CommandableLambdaFunction {
 	c := &CommandableLambdaFunction{}
-	c.LambdaFunction = InheriteLambdaFunction(name, description, c)
+	c.LambdaFunction = InheriteLambdaFunction(c, name, description)
 	c.DependencyResolver.Put("controller", "none")
 	return c
 }

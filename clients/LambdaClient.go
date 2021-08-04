@@ -242,9 +242,10 @@ func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd
 	}
 
 	if data.Payload != nil && len(data.Payload) > 0 {
-		unesccapedResult, err := strconv.Unquote(string(data.Payload))
+
+		unesccapedResult, err := strconv.Unquote((string)(data.Payload))
 		if err != nil {
-			return nil, err
+			unesccapedResult = (string)(data.Payload)
 		}
 		if prototype != nil {
 			return ConvertComandResult(([]byte)(unesccapedResult), prototype)
