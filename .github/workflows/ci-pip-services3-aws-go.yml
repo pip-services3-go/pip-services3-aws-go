@@ -43,7 +43,7 @@ jobs:
     ############# Clear #############
 
     - name: Clean up
-      uses: pip-devops/actions/node/clear@v1
+      uses: pip-devops/actions/go/clear@v1
 
   metrics:
     needs: ci
