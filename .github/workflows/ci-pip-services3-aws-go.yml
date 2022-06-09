@@ -34,7 +34,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Tag with the build number
+    - name: Release by tag with the build number
       uses: tvdias/github-tagger@v0.0.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
