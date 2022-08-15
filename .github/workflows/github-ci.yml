@@ -1,0 +1,103 @@
+name: Pip.Services AWS Go Delivery
+
+# Configure trigger rules
+on: 
+  push:
+    paths:
+    - '**'
+    - '!README.md'
+
+jobs:
+  # Setup job
+  setup:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@main
+
+    - name: Pull delivery scripts
+      shell: bash
+      run: |
+        rm -rf script-delivery-ps
+        git clone ${{ secrets.SCRIPTS_DELIVERY_PS_GIT_URL }} script-delivery-ps
+
+    - name: Execute increment script
+      shell: bash
+      run: ./script-delivery-ps/setup/increment/increment.ps1
+
+    - name: Execute prerequisites script
+      shell: bash
+      run: ./script-delivery-ps/setup/prereqs/prereqs.ps1
+
+    - name: Cache intermediate data
+      uses: actions/cache@v3
+      with:
+        path: |
+          script-delivery-ps
+          component*.json
+        key: delivery-${{ github.run_id }}-${{ github.run_attempt }}
+
+  # Authoring job
+  authoring:
+    needs: setup
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@main
+
+    - name: Get cached intermediate data
+      uses: actions/cache@v3
+      with:
+        path: |
+          script-delivery-ps
+          component*.json
+        key: delivery-${{ github.run_id }}-${{ github.run_attempt }}
+
+    - name: Execute build script
+      shell: bash
+      run: script-delivery-ps/authoring/build/build.ps1
+
+    - name: Execute test script
+      shell: bash
+      run: ./script-delivery-ps/authoring/test/test.ps1
+
+    - name: Execute package script
+      shell: bash
+      run: ./script-delivery-ps/authoring/package/package.ps1
+
+    - name: Execute publish script
+      shell: bash
+      run: ./script-delivery-ps/authoring/publish/publish.ps1
+
+    - name: Execute tag script
+      shell: bash
+      run: ./script-delivery-ps/authoring/tag/tag.ps1
+
+    - name: Execute clean script
+      if: always()
+      shell: bash
+      run: ./script-delivery-ps/authoring/clean/clean.ps1
+
+  # Measure job
+  measure:
+    needs: authoring
+    if: always()
+    runs-on: ubuntu-20.04
+
+    steps: 
+    - name: Get cached intermediate data
+      uses: actions/cache@v3
+      with:
+        path: |
+          script-delivery-ps
+          component*.json
+        key: delivery-${{ github.run_id }}-${{ github.run_attempt }}
+
+    - name: Execute measure script
+      env:
+        name: $(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
+      run: ./script-delivery-ps/measure/measure.ps1 ${{ github.repository_owner }} ${{ env.name }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} ${{ secrets.AWS_S3_BUCKET }} ${{ secrets.GITHUB_TOKEN }}
+      shell: bash

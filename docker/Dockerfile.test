@@ -1,10 +1,21 @@
-FROM golang:1.16
+# Start with the golang v1.13 image
+FROM golang:1.13
 
-# Set environment variables for Go
+# Setting environment variables for Go
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
-    GOARCH=amd64
+    GOARCH=amd64 \
+    GOPRIVATE=github.com/pip-services3-go/*
+
+# Copy local ssh keys
+COPY docker/id_rsa /root/.ssh/
+
+# Setup ssh access to git repositories
+RUN chmod 600 /root/.ssh/id_rsa* \
+    && ssh-keyscan github.com >> ~/.ssh/known_hosts \
+    && ssh-keyscan gitlab.com >> ~/.ssh/known_hosts \
+    && git config --global --add url."git@github.com:".insteadOf "https://github.com/"
 
 # Set a working directory
 WORKDIR /app
@@ -14,6 +25,7 @@ COPY . .
 
 # Install all go_modules
 RUN go mod tidy
+RUN go mod download
 
 # Specify the command from running tests
-CMD go test -v ./test/...
+CMD go test -v ./test/..
