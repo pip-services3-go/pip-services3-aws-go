@@ -1,12 +1,12 @@
-# Start with the golang v1.13 image
-FROM golang:1.13
+# Start with the golang v1.16 image
+FROM golang:1.16
 
 # Setting environment variables for Go
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
-    GOARCH=amd64 \
-    GOPRIVATE=github.com/pip-services3-go/*
+    GOARCH=amd64 
+    # GOPRIVATE=github.com/pip-services3-go/*
 
 # Copy local ssh keys
 COPY docker/id_rsa /root/.ssh/
