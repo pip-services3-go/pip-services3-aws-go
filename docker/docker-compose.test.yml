@@ -5,4 +5,4 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.test
-    image: ${IMAGE:-pipdevs/test}
+    image: ${IMAGE:-pipservices/test}
