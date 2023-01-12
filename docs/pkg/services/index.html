@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>services - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.16.15";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package services
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "services"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="index.html#CommandableLambdaService">type CommandableLambdaService</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InheritCommandableLambdaService">func InheritCommandableLambdaService(overrides ILambdaServiceOverrides, name string) *CommandableLambdaService</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableLambdaService.Register">func (c *CommandableLambdaService) Register()</a></dd>
+				
+			
+				
+				<dd><a href="index.html#ILambdaService">type ILambdaService</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#ILambdaServiceOverrides">type ILambdaServiceOverrides</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#LambdaAction">type LambdaAction</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#LambdaService">type LambdaService</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InheritLambdaService">func InheritLambdaService(overrides ILambdaServiceOverrides, name string) *LambdaService</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.Act">func (c *LambdaService) Act(params map[string]interface{}) (interface{}, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.ApplyInterceptors">func (c *LambdaService) ApplyInterceptors(action func(map[string]interface{}) (interface{}, error)) func(map[string]interface{}) (interface{}, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.ApplyValidation">func (c *LambdaService) ApplyValidation(schema *cvalid.Schema, action func(params map[string]interface{}) (interface{}, error)) func(map[string]interface{}) (interface{}, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.Close">func (c *LambdaService) Close(correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.Configure">func (c *LambdaService) Configure(config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.GenerateActionCmd">func (c *LambdaService) GenerateActionCmd(name string) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.GetActions">func (c *LambdaService) GetActions() []*LambdaAction</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.Instrument">func (c *LambdaService) Instrument(correlationId string, name string) *rpcserv.InstrumentTiming</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.IsOpen">func (c *LambdaService) IsOpen() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.Open">func (c *LambdaService) Open(correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.Register">func (c *LambdaService) Register()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.RegisterAction">func (c *LambdaService) RegisterAction(name string, schema *cvalid.Schema, action func(params map[string]interface{}) (interface{}, error))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.RegisterActionWithAuth">func (c *LambdaService) RegisterActionWithAuth(name string, schema *cvalid.Schema, authorize func(params map[string]interface{}, next func(map[string]interface{}) (interface{}, error)) (interface{}, error), action func(params map[string]interface{}) (interface{}, error))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.RegisterInterceptor">func (c *LambdaService) RegisterInterceptor(action func(params map[string]interface{}, next func(params map[string]interface{}) (interface{}, error)) (interface{}, error))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaService.SetReferences">func (c *LambdaService) SetReferences(references cref.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/services/CommandableLambdaService.go">CommandableLambdaService.go</a>
+			
+				<a href="http://localhost:6060/src/services/ILambdaService.go">ILambdaService.go</a>
+			
+				<a href="http://localhost:6060/src/services/LambdaAction.go">LambdaAction.go</a>
+			
+				<a href="http://localhost:6060/src/services/LambdaService.go">LambdaService.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+		
+			
+			
+			<h2 id="CommandableLambdaService">type <a href="http://localhost:6060/src/services/CommandableLambdaService.go?s=1921:2013#L47">CommandableLambdaService</a>
+				<a class="permalink" href="index.html#CommandableLambdaService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Abstract service that receives commands via AWS Lambda protocol
+to operations automatically generated for commands defined in [[<a href="https://pip-services3-nodex.github.io/pip-services3-commons-nodex/interfaces/commands.icommandable.html">https://pip-services3-nodex.github.io/pip-services3-commons-nodex/interfaces/commands.icommandable.html</a> ICommandable components]].
+Each command is exposed as invoke method that receives command name and parameters.
+</p>
+<p>
+Commandable services require only 3 lines of code to implement a robust external
+Lambda-based remote interface.
+</p>
+<p>
+This service is intended to work inside LambdaFunction container that
+exploses registered actions externally.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<p>
+- dependencies:
+</p>
+<pre>- controller:            override for Controller dependency
+</pre>
+<p>
+### References ###
+</p>
+<p>
+- *:logger:*:*:1.0               (optional) [[ILogger]] components to pass log messages
+- *:counters:*:*:1.0             (optional) [[ICounters]] components to pass collected measurements
+</p>
+<p>
+See [[CommandableLambdaClient]]
+See [[LambdaService]]
+</p>
+<p>
+### Example ###
+</p>
+<pre>    struct MyCommandableLambdaService struct  {
+	  *CommandableLambdaService
+	}
+       func NewMyCommandableLambdaService(): MyCommandableLambdaService {
+          c:= &amp;MyCommandableLambdaService{
+			CommandableLambdaService: NewCommandableLambdaService(&#34;v1.service&#34;)
+		  }
+          c.DependencyResolver.Put(
+              &#34;controller&#34;,
+              cref.NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;*&#34;,&#34;*&#34;,&#34;1.0&#34;)
+          )
+		  return c
+       }
+
+    service := NewMyCommandableLambdaService();
+    service.SetReferences(NewReferencesFromTuples(
+       NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;default&#34;,&#34;default&#34;,&#34;1.0&#34;), controller
+    ));
+
+    service.Open(&#34;123&#34;);
+    fmt.Println(&#34;The AWS Lambda &#39;v1.service&#39; service is running&#34;);
+</pre>
+
+			<pre>type CommandableLambdaService struct {
+    *<a href="index.html#LambdaService">LambdaService</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="InheritCommandableLambdaService">func <a href="http://localhost:6060/src/services/CommandableLambdaService.go?s=2087:2197#L54">InheritCommandableLambdaService</a>
+					<a class="permalink" href="index.html#InheritCommandableLambdaService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func InheritCommandableLambdaService(overrides <a href="index.html#ILambdaServiceOverrides">ILambdaServiceOverrides</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#CommandableLambdaService">CommandableLambdaService</a></pre>
+				<p>
+Creates a new instance of the service.
+- name a service name.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="CommandableLambdaService.Register">func (*CommandableLambdaService) <a href="http://localhost:6060/src/services/CommandableLambdaService.go?s=2415:2460#L64">Register</a>
+					<a class="permalink" href="index.html#CommandableLambdaService.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableLambdaService">CommandableLambdaService</a>) Register()</pre>
+				<p>
+Registers all actions in AWS Lambda function.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ILambdaService">type <a href="http://localhost:6060/src/services/ILambdaService.go?s=173:343#L1">ILambdaService</a>
+				<a class="permalink" href="index.html#ILambdaService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+*
+</p>
+<pre>* An interface that allows to integrate lambda services into lambda function containers
+* and connect their actions to the function calls.
+</pre>
+
+			<pre>type ILambdaService interface {
+    <span class="comment">/**
+     * Get all actions supported by the service.
+     * Returns an array with supported actions.
+     */</span>
+    GetActions() []*<a href="index.html#LambdaAction">LambdaAction</a>
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ILambdaServiceOverrides">type <a href="http://localhost:6060/src/services/LambdaService.go?s=600:656#L4">ILambdaServiceOverrides</a>
+				<a class="permalink" href="index.html#ILambdaServiceOverrides">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type ILambdaServiceOverrides interface {
+    Register()
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="LambdaAction">type <a href="http://localhost:6060/src/services/LambdaAction.go?s=108:344#L1">LambdaAction</a>
+				<a class="permalink" href="index.html#LambdaAction">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type LambdaAction struct {
+
+    <span class="comment">//Command to call the action</span>
+<span id="LambdaAction.Cmd"></span>    Cmd <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+
+    <span class="comment">//Schema to validate action parameters</span>
+<span id="LambdaAction.Schema"></span>    Schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/#Schema">Schema</a>
+
+    <span class="comment">//Action to be executed</span>
+<span id="LambdaAction.Action"></span>    Action func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="LambdaService">type <a href="http://localhost:6060/src/services/LambdaService.go?s=2781:3363#L71">LambdaService</a>
+				<a class="permalink" href="index.html#LambdaService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Abstract service that receives remove calls via AWS Lambda protocol.
+</p>
+<p>
+This service is intended to work inside LambdaFunction container that
+exploses registered actions externally.
+</p>
+<p>
+### Configuration parameters ###
+</p>
+<p>
+- dependencies:
+</p>
+<pre>- controller:            override for Controller dependency
+</pre>
+<p>
+### References ###
+</p>
+<p>
+- *:logger:*:*:1.0               (optional) [[ILogger]] components to pass log messages
+- *:counters:*:*:1.0             (optional) [[ICounters]] components to pass collected measurements
+</p>
+<p>
+See [[LambdaClient]]
+</p>
+<p>
+### Example ###
+</p>
+<pre>struct MyLambdaService struct  {
+   LambdaService
+   controller IMyController
+}
+   ...
+   func NewMyLambdaService()* MyLambdaService {
+      c:= &amp;MyLambdaService{}
+      c.LambdaService = NewLambdaService(&#34;v1.myservice&#34;)
+      c.DependencyResolver.Put(
+          &#34;controller&#34;,
+          cref.NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;*&#34;,&#34;*&#34;,&#34;1.0&#34;)
+      )
+      return c
+   }
+
+   func (c * LambdaService)  SetReferences(references: IReferences){
+      c.LambdaService.setReferences(references);
+      ref := c.DependencyResolver.GetRequired(&#34;controller&#34;)
+      c.controller = ref.(IMyController)
+   }
+
+   func (c * LambdaService)  Register(){
+       c.RegisterAction(&#34;get_mydata&#34;, nil,  func(params map[string]interface{})(interface{}, error) {
+            correlationId := params.GetAsString(&#34;correlation_id&#34;)
+            id := params.GetAsString(&#34;id&#34;)
+           return  c.controller.GetMyData(correlationId, id);
+       });
+       ...
+   }
+
+ service := NewMyLambdaService();
+service.Configure(NewConfigParamsFromTuples(
+    &#34;connection.protocol&#34;, &#34;http&#34;,
+    &#34;connection.host&#34;, &#34;localhost&#34;,
+    &#34;connection.port&#34;, 8080
+));
+service.SetReferences(cref.NewReferencesFromTuples(
+   cref.NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;default&#34;,&#34;default&#34;,&#34;1.0&#34;), controller
+));
+
+service.Open(&#34;123&#34;);
+fmt.Println(&#34;The Lambda &#39;v1.myservice&#39; service is running on port 8080&#34;);
+</pre>
+
+			<pre>type LambdaService struct {
+<span id="LambdaService.Overrides"></span>    Overrides <a href="index.html#ILambdaServiceOverrides">ILambdaServiceOverrides</a>
+
+    <span class="comment">// The dependency resolver.</span>
+<span id="LambdaService.DependencyResolver"></span>    DependencyResolver *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#DependencyResolver">DependencyResolver</a>
+    <span class="comment">// The logger.</span>
+<span id="LambdaService.Logger"></span>    Logger *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/log/#CompositeLogger">CompositeLogger</a>
+    <span class="comment">//The performance counters.</span>
+<span id="LambdaService.Counters"></span>    Counters *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#CompositeCounters">CompositeCounters</a>
+    <span class="comment">//The tracer.</span>
+<span id="LambdaService.Tracer"></span>    Tracer *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/trace/">ctrace</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/trace/#CompositeTracer">CompositeTracer</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="InheritLambdaService">func <a href="http://localhost:6060/src/services/LambdaService.go?s=3473:3561#L92">InheritLambdaService</a>
+					<a class="permalink" href="index.html#InheritLambdaService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func InheritLambdaService(overrides <a href="index.html#ILambdaServiceOverrides">ILambdaServiceOverrides</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#LambdaService">LambdaService</a></pre>
+				<p>
+Creates an instance of this service.
+-  name a service name to generate action cmd. RestService()
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="LambdaService.Act">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=10523:10602#L275">Act</a>
+					<a class="permalink" href="index.html#LambdaService.Act">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) Act(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Calls registered action in this lambda function.
+&#34;cmd&#34; parameter in the action parameters determin
+what action shall be called.
+This method shall only be used in testing.
+-  params action parameters.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.ApplyInterceptors">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=7141:7290#L194">ApplyInterceptors</a>
+					<a class="permalink" href="index.html#LambdaService.ApplyInterceptors">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) ApplyInterceptors(action func(map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)) func(map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.ApplyValidation">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=6524:6701#L176">ApplyValidation</a>
+					<a class="permalink" href="index.html#LambdaService.ApplyValidation">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) ApplyValidation(schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/#Schema">Schema</a>, action func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)) func(map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.Close">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=6200:6257#L165">Close</a>
+					<a class="permalink" href="index.html#LambdaService.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) Close(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Closes component and frees used resources.
+-  correlationId 	(optional) transaction id to trace execution through call chain.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.Configure">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=4193:4254#L107">Configure</a>
+					<a class="permalink" href="index.html#LambdaService.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) Configure(config *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configures component by passing configuration parameters.
+-  config    configuration parameters to be set.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.GenerateActionCmd">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=7730:7791#L209">GenerateActionCmd</a>
+					<a class="permalink" href="index.html#LambdaService.GenerateActionCmd">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) GenerateActionCmd(name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.GetActions">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=4745:4797#L122">GetActions</a>
+					<a class="permalink" href="index.html#LambdaService.GetActions">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) GetActions() []*<a href="index.html#LambdaAction">LambdaAction</a></pre>
+				<p>
+Get all actions supported by the service.
+Returns an array with supported actions.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.Instrument">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=5160:5255#L134">Instrument</a>
+					<a class="permalink" href="index.html#LambdaService.Instrument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) Instrument(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-rpc-go/services/">rpcserv</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-rpc-go/services/#InstrumentTiming">InstrumentTiming</a></pre>
+				<p>
+Adds instrumentation to log calls and measure call time.
+It returns a Timing object that is used to end the time measurement.
+</p>
+<pre>*
+</pre>
+<p>
+-  correlationId     (optional) transaction id to trace execution through call chain.
+-  name              a method name.
+@returns Timing object to end the time measurement.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.IsOpen">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=5735:5772#L146">IsOpen</a>
+					<a class="permalink" href="index.html#LambdaService.IsOpen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) IsOpen() <a href="http://localhost:6060/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Checks if the component is opened.
+Returns true if the component has been opened and false otherwise.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.Open">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=5917:5973#L152">Open</a>
+					<a class="permalink" href="index.html#LambdaService.Open">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) Open(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Opens the component.
+-  correlationId 	(optional) transaction id to trace execution through call chain.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.Register">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=10235:10269#L266">Register</a>
+					<a class="permalink" href="index.html#LambdaService.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) Register()</pre>
+				<p>
+Registers all service routes in HTTP endpoint.
+This method is called by the service and must be overriden
+in child classes.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.RegisterAction">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=8118:8257#L221">RegisterAction</a>
+					<a class="permalink" href="index.html#LambdaService.RegisterAction">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) RegisterAction(name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/#Schema">Schema</a>, action func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>))</pre>
+				<p>
+Registers a action in AWS Lambda function.
+-  name          an action name
+-  schema        a validation schema to validate received parameters.
+-  action        an action function that is called when operation is invoked.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.RegisterActionWithAuth">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=8910:9185#L238">RegisterActionWithAuth</a>
+					<a class="permalink" href="index.html#LambdaService.RegisterActionWithAuth">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) RegisterActionWithAuth(name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/validate/#Schema">Schema</a>,
+    authorize func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}, next func(map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>),
+    action func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>))</pre>
+				<p>
+Registers an action with authorization.
+-  name          an action name
+-  schema        a validation schema to validate received parameters.
+-  authorize     an authorization interceptor
+-  action        an action function that is called when operation is invoked.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.RegisterInterceptor">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=9869:10040#L259">RegisterInterceptor</a>
+					<a class="permalink" href="index.html#LambdaService.RegisterInterceptor">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) RegisterInterceptor(action func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}, next func(params map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]interface{}) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)) (interface{}, <a href="http://localhost:6060/pkg/builtin/#error">error</a>))</pre>
+				<p>
+Registers a middleware for actions in AWS Lambda service.
+-  action        an action function that is called when middleware is invoked.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LambdaService.SetReferences">func (*LambdaService) <a href="http://localhost:6060/src/services/LambdaService.go?s=4417:4483#L113">SetReferences</a>
+					<a class="permalink" href="index.html#LambdaService.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#LambdaService">LambdaService</a>) SetReferences(references <a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/">cref</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-commons-go/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+Sets references to dependent components.
+-  references 	references to locate the component dependencies.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.16.15.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

@@ -2,7 +2,7 @@
     "name":  "pip-services3-aws-go",
     "type": "module",
     "language": "go",
-    "version": "1.0.5",
+    "version": "1.0.1",
     "build": 0,
     "registry": "pipservices",
     "artifacts": [

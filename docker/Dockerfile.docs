@@ -5,7 +5,7 @@ ENV GO111MODULE=on
 
 WORKDIR /app
 
-RUN go install golang.org/x/tools/cmd/godoc
+RUN go install golang.org/x/tools/cmd/godoc@latest
 
 WORKDIR /app
 

@@ -14,7 +14,7 @@
 
 
 
-<script>var goVersion = "go1.13.15";</script>
+<script>var goVersion = "go1.16.15";</script>
 <script src="../../lib/godoc/godocs.js" defer></script>
 </head>
 <body>
@@ -146,7 +146,7 @@
 					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Configure">func (c *LambdaClient) Configure(config *cconf.ConfigParams)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Instrument">func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.Timing</a></dd>
+					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Instrument">func (c *LambdaClient) Instrument(correlationId string, name string) *ccount.CounterTiming</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="index.html#LambdaClient.Invoke">func (c *LambdaClient) Invoke(prototype reflect.Type, invocationType string, cmd string, correlationId string, args map[string]interface{}) (result interface{}, err error)</a></dd>
@@ -215,7 +215,7 @@ Returns: convRes interface{}, err error
 		
 			
 			
-			<h2 id="CommandableLambdaClient">type <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2008:2075#L56">CommandableLambdaClient</a>
+			<h2 id="CommandableLambdaClient">type <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2073:2143#L56">CommandableLambdaClient</a>
 				<a class="permalink" href="index.html#CommandableLambdaClient">&#xb6;</a>
 				
 				
@@ -304,7 +304,7 @@ Each command is exposed as action determined by &#34;cmd&#34; parameter.
 
 			
 				
-				<h3 id="NewCommandableLambdaClient">func <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2149:2218#L63">NewCommandableLambdaClient</a>
+				<h3 id="NewCommandableLambdaClient">func <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2221:2290#L63">NewCommandableLambdaClient</a>
 					<a class="permalink" href="index.html#NewCommandableLambdaClient">&#xb6;</a>
 					
 					
@@ -322,7 +322,7 @@ Creates a new instance of this client.
 
 			
 				
-				<h3 id="CommandableLambdaClient.CallCommand">func (*CommandableLambdaClient) <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2752:2914#L79">CallCommand</a>
+				<h3 id="CommandableLambdaClient.CallCommand">func (*CommandableLambdaClient) <a href="http://localhost:6060/src/clients/CommandableLambdaClient.go?s=2840:3002#L79">CallCommand</a>
 					<a class="permalink" href="index.html#CommandableLambdaClient.CallCommand">&#xb6;</a>
 					
 					
@@ -347,7 +347,7 @@ to the action parameters.
 		
 			
 			
-			<h2 id="LambdaClient">type <a href="http://localhost:6060/src/clients/LambdaClient.go?s=2686:3177#L67">LambdaClient</a>
+			<h2 id="LambdaClient">type <a href="http://localhost:6060/src/clients/LambdaClient.go?s=2847:3404#L69">LambdaClient</a>
 				<a class="permalink" href="index.html#LambdaClient">&#xb6;</a>
 				
 				
@@ -427,6 +427,8 @@ See CommandableLambdaClient
 <span id="LambdaClient.Logger"></span>    Logger *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/log/#CompositeLogger">CompositeLogger</a>
     <span class="comment">//The performance counters.</span>
 <span id="LambdaClient.Counters"></span>    Counters *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#CompositeCounters">CompositeCounters</a>
+    <span class="comment">// The tracer.</span>
+<span id="LambdaClient.Tracer"></span>    Tracer *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/trace/">ctrace</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/trace/#CompositeTracer">CompositeTracer</a>
     <span class="comment">// contains filtered or unexported fields</span>
 }
 </pre>
@@ -441,7 +443,7 @@ See CommandableLambdaClient
 
 			
 				
-				<h3 id="NewLambdaClient">func <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3179:3215#L85">NewLambdaClient</a>
+				<h3 id="NewLambdaClient">func <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3408:3444#L89">NewLambdaClient</a>
 					<a class="permalink" href="index.html#NewLambdaClient">&#xb6;</a>
 					
 					
@@ -454,7 +456,7 @@ See CommandableLambdaClient
 
 			
 				
-				<h3 id="LambdaClient.Call">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=8305:8453#L241">Call</a>
+				<h3 id="LambdaClient.Call">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=8995:9143#L256">Call</a>
 					<a class="permalink" href="index.html#LambdaClient.Call">&#xb6;</a>
 					
 					
@@ -475,7 +477,7 @@ Calls a AWS Lambda Function action.
 				
 			
 				
-				<h3 id="LambdaClient.CallOneWay">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=8953:9081#L251">CallOneWay</a>
+				<h3 id="LambdaClient.CallOneWay">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=9653:9781#L266">CallOneWay</a>
 					<a class="permalink" href="index.html#LambdaClient.CallOneWay">&#xb6;</a>
 					
 					
@@ -496,7 +498,7 @@ Calls a AWS Lambda Function action asynchronously without waiting for response.
 				
 			
 				
-				<h3 id="LambdaClient.Close">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=6182:6238#L174">Close</a>
+				<h3 id="LambdaClient.Close">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=6555:6611#L179">Close</a>
 					<a class="permalink" href="index.html#LambdaClient.Close">&#xb6;</a>
 					
 					
@@ -514,7 +516,7 @@ Closes component and frees used resources.
 				
 			
 				
-				<h3 id="LambdaClient.Configure">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3638:3698#L99">Configure</a>
+				<h3 id="LambdaClient.Configure">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3881:3941#L103">Configure</a>
 					<a class="permalink" href="index.html#LambdaClient.Configure">&#xb6;</a>
 					
 					
@@ -531,12 +533,12 @@ Configures component by passing configuration parameters.
 				
 			
 				
-				<h3 id="LambdaClient.Instrument">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=4551:4634#L122">Instrument</a>
+				<h3 id="LambdaClient.Instrument">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=4817:4907#L126">Instrument</a>
 					<a class="permalink" href="index.html#LambdaClient.Instrument">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Instrument(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#Timing">Timing</a></pre>
+				<pre>func (c *<a href="index.html#LambdaClient">LambdaClient</a>) Instrument(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-go/pip-services3-components-go/count/#CounterTiming">CounterTiming</a></pre>
 				<p>
 Adds instrumentation to log calls and measure call time.
 It returns a Timing object that is used to end the time measurement.
@@ -551,7 +553,7 @@ Returns Timing object to end the time measurement.
 				
 			
 				
-				<h3 id="LambdaClient.Invoke">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=6742:6913#L189">Invoke</a>
+				<h3 id="LambdaClient.Invoke">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=7130:7301#L194">Invoke</a>
 					<a class="permalink" href="index.html#LambdaClient.Invoke">&#xb6;</a>
 					
 					
@@ -563,7 +565,7 @@ Returns Timing object to end the time measurement.
 				
 			
 				
-				<h3 id="LambdaClient.IsOpen">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=4862:4898#L129">IsOpen</a>
+				<h3 id="LambdaClient.IsOpen">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=5190:5226#L134">IsOpen</a>
 					<a class="permalink" href="index.html#LambdaClient.IsOpen">&#xb6;</a>
 					
 					
@@ -579,7 +581,7 @@ Returns true if the component has been opened and false otherwise.
 				
 			
 				
-				<h3 id="LambdaClient.Open">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=5082:5137#L136">Open</a>
+				<h3 id="LambdaClient.Open">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=5417:5472#L141">Open</a>
 					<a class="permalink" href="index.html#LambdaClient.Open">&#xb6;</a>
 					
 					
@@ -597,7 +599,7 @@ Opens the component.
 				
 			
 				
-				<h3 id="LambdaClient.SetReferences">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=3993:4058#L110">SetReferences</a>
+				<h3 id="LambdaClient.SetReferences">func (*LambdaClient) <a href="http://localhost:6060/src/clients/LambdaClient.go?s=4247:4312#L114">SetReferences</a>
 					<a class="permalink" href="index.html#LambdaClient.SetReferences">&#xb6;</a>
 					
 					
@@ -626,13 +628,13 @@ Sets references to dependent components.
 
 
 <div id="footer">
-Build version go1.13.15.<br>
+Build version go1.16.15.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
 and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
-<a href="http://localhost:6060/doc/tos.html">Terms of Service</a> |
-<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
 </div>
 
 </div><!-- .container -->
