@@ -24,7 +24,8 @@ jobs:
       shell: bash
       run: |
         rm -rf script-delivery-ps
-        git clone ${{ secrets.SCRIPTS_DELIVERY_PS_GIT_URL }} script-delivery-ps
+        git clone ${{ secrets.SCRIPTS_DELIVERY_PS_GIT_URL }} eic-templates-cicd-ps
+        cp -r eic-templates-cicd-ps/script-delivery-ps script-delivery-ps
 
     - name: Execute increment script
       shell: bash
@@ -102,5 +103,5 @@ jobs:
     - name: Execute measure script
       env:
         name: $(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
-      run: ./script-delivery-ps/measure/measure.ps1 ${{ github.repository_owner }} ${{ env.name }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} ${{ secrets.AWS_S3_BUCKET }} ${{ secrets.GITHUB_TOKEN }}
+      run: ./script-delivery-ps/measure/measure.ps1 ${{ github.repository_owner }} ${{ env.name }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} ${{ secrets.AWS_S3_BUCKET }} ${{ secrets.AWS_S3_BUCKET_FOLDER }} ${{ secrets.GITHUB_TOKEN }}
       shell: bash
